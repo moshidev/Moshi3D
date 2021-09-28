@@ -37,11 +37,11 @@ x: $(exe)
 $(exe): $(units_o) makefile
 	$(compiler) -o $(exe) $(units_o) $(ld_libs)
 
-%.o : %.cc
-	$(compiler) -c -o $(obj)/$@ $(cc_flags) $<
+$(obj)/%.o : %.cc
+	$(compiler) -c -o $@ $(cc_flags) $<
 
-%.o : %.cpp
-	$(compiler) -c -o $(obj)/$@ $(cc_flags) $<
+$(obj)/%.o : %.cpp
+	$(compiler) -c -o $@ $(cc_flags) $<
 
 $(units_cc) : $(headers)
 	touch $(units_cc)
