@@ -10,7 +10,7 @@
 #ifndef MALLA3D_H_INCLUDED
 #define MALLA3D_H_INCLUDED
 
-#include "aux.h"
+#include "_aux.h"
 
 // *****************************************************************************
 //

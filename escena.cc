@@ -1,6 +1,6 @@
 
 
-#include "aux.h"     // includes de OpenGL/glut/glew, windows, y librería std de C++
+#include "_aux.h"     // includes de OpenGL/glut/glew, windows, y librería std de C++
 #include "escena.h"
 #include "malla.h" // objetos: Cubo y otros....
 
