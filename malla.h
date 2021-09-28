@@ -18,30 +18,30 @@
 //
 // *****************************************************************************
 
-class Malla3D
-{
-   public:
+class Malla3D {
+  public:
+    // dibuja el objeto en modo inmediato
+    void draw_ModoInmediato();
 
-   // dibuja el objeto en modo inmediato
-   void draw_ModoInmediato();
+    // dibuja el objeto en modo diferido (usando VBOs)
+    void draw_ModoDiferido();
 
-   // dibuja el objeto en modo diferido (usando VBOs)
-   void draw_ModoDiferido();
+    // función que redibuja el objeto
+    // está función llama a 'draw_ModoInmediato' (modo inmediato)
+    // o bien a 'draw_ModoDiferido' (modo diferido, VBOs)
+    void draw();
 
-   // función que redibuja el objeto
-   // está función llama a 'draw_ModoInmediato' (modo inmediato)
-   // o bien a 'draw_ModoDiferido' (modo diferido, VBOs)
-   void draw() ;
+  protected:
+    void
+    calcular_normales(); // calcula tabla de normales de vértices (práctica 3)
 
-   protected:
+    std::vector<Tupla3f> v; // tabla de coordenadas de vértices (una tupla por
+                            // vértice, con tres floats)
+    std::vector<Tupla3i> f; // una terna de 3 enteros por cada cara o triángulo
 
-   void calcular_normales() ; // calcula tabla de normales de vértices (práctica 3)
-
-   std::vector<Tupla3f> v ;   // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
-   std::vector<Tupla3i> f ; // una terna de 3 enteros por cada cara o triángulo
-
-   // completar: tabla de colores, tabla de normales de vértices
-} ;
-
+  public:
+    virtual ~Malla3D() = 0;
+    // completar: tabla de colores, tabla de normales de vértices
+};
 
 #endif

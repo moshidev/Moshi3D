@@ -3,18 +3,18 @@
 
 class Ejes {
 
-private:
-	float axisSize;
-	float vertexArray[18];
-	float colorArray[18];
+  private:
+    float axis_size;
+    float vertex_array[18];
+    float color_array[18];
 
-public:
-	Ejes();
-	void changeAxisSize( float newSize );
-	void draw();
+  public:
+    Ejes();
+    void changeAxisSize(float new_size);
+    void draw();
 
-private:
-	void createArrayData();
-	
+  private:
+    void createArrayData();
 };
-#endif
+
+#endif /* _EJES_H */

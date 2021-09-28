@@ -11,6 +11,7 @@
 #define CUBO_H_INCLUDED
 
 #include "_aux.h"
+#include "malla.h"
 
 // *****************************************************************************
 //
@@ -22,14 +23,9 @@
 // Cubo con centro en el origen y lado unidad por defecto
 // (tiene 9 vertices y 6 caras)
 
-class Cubo : public Malla3D
-{
-   public:
-   Cubo(float l=1) ;
+class Cubo : public Malla3D {
+  public:
+    Cubo(float l = 1);
+};
 
-} ;
-
-
-
-
-#endif
+#endif /* CUBO_H_INCLUDED */

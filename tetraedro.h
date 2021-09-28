@@ -11,6 +11,7 @@
 #define TETRAEDRO_H_INCLUDED
 
 #include "_aux.h"
+#include "malla.h"
 
 // *****************************************************************************
 //
@@ -19,16 +20,11 @@
 // *****************************************************************************
 
 // *****************************************************************************
-// Tetraedro con centro en el origen 
+// Tetraedro con centro en el origen
 
-class Tetraedro: public Malla3D
-{
-   public:
-      Tetraedro();
+class Tetraedro : public Malla3D {
+  public:
+    Tetraedro();
+};
 
-} ;
-
-
-
-
-#endif
+#endif /* TETRAEDRO_H_INCLUDED */
