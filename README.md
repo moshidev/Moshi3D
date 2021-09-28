@@ -1,0 +1,1 @@
+# Prácticas para la asignatura Ingeniería Gráfica
