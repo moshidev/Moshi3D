@@ -22,8 +22,9 @@ Escena *escena = nullptr;
 
 void draw_scene(void)
 {
-    if (escena != nullptr)
+    if (escena != nullptr) {
         escena->dibujar();
+    }
     glutSwapBuffers();
 }
 
@@ -37,8 +38,9 @@ void draw_scene(void)
 
 void change_window_size(int newWidth, int newHeight)
 {
-    if (escena != nullptr)
+    if (escena != nullptr) {
         escena->redimensionar(newWidth, newHeight);
+    }
     glutPostRedisplay();
 }
 
@@ -81,8 +83,9 @@ void normal_keys(unsigned char tecla, int x, int y)
 
 void special_keys(int tecla, int x, int y)
 {
-    if (escena != NULL)
+    if (escena != NULL) {
         escena->teclaEspecial(tecla, x, y);
+    }
     glutPostRedisplay();
 }
 

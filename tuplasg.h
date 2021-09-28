@@ -317,8 +317,9 @@ inline std::ostream &operator<<(std::ostream &os, const TuplaG<T, n> &der)
     os << "(";
     for (unsigned i = 0; i < n; i++) {
         os << der(i);
-        if (i + 1 < n)
+        if (i + 1 < n) {
             os << ",";
+        }
     }
     os << ")";
     return os;
