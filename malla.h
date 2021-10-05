@@ -21,19 +21,18 @@
 class Malla3D {
   public:
     // dibuja el objeto en modo inmediato
-    void draw_ModoInmediato();
+    void draw_immediate();
 
     // dibuja el objeto en modo diferido (usando VBOs)
-    void draw_ModoDiferido();
+    void draw_buffered();
 
     // función que redibuja el objeto
-    // está función llama a 'draw_ModoInmediato' (modo inmediato)
-    // o bien a 'draw_ModoDiferido' (modo diferido, VBOs)
+    // está función llama a 'draw_immediate' (modo inmediato)
+    // o bien a 'draw_buffered' (modo diferido, VBOs)
     void draw();
 
   protected:
-    void
-    calcular_normales(); // calcula tabla de normales de vértices (práctica 3)
+    void calcular_normales(); // calcula tabla de normales de vértices (práctica 3)
 
     std::vector<Tupla3f> v; // tabla de coordenadas de vértices (una tupla por
                             // vértice, con tres floats)
