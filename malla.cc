@@ -14,7 +14,10 @@ Malla3D::~Malla3D() {}
 
 void Malla3D::draw_immediate()
 {
-    
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(3, GL_FLOAT, 0, v.data());
+    glDrawElements(GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data());
+    glDisableClientState(GL_VERTEX_ARRAY);
 }
 // -----------------------------------------------------------------------------
 // Visualización en modo diferido con 'glDrawElements' (usando VBOs)
