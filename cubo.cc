@@ -4,12 +4,28 @@
 
 Cubo::Cubo(float lado)
 {
+   float offset = lado/2;
+   
+   v.push_back({offset, offset, offset});
+   v.push_back({offset, offset, -offset});
+   v.push_back({offset, -offset, offset});
+   v.push_back({offset, -offset, -offset});
+   v.push_back({-offset, offset, offset});
+   v.push_back({-offset, offset, -offset});
+   v.push_back({-offset, -offset, offset});
+   v.push_back({-offset, -offset, -offset});
 
-   // inicializar la tabla de vértices
-
-   // inicializar la tabla de caras o triángulos:
-   // (es importante en cada cara ordenar los vértices en sentido contrario
-   //  de las agujas del reloj, cuando esa cara se observa desde el exterior del cubo)
-
+   f.push_back({0, 1, 2});
+   f.push_back({0, 2, 6});
+   f.push_back({0, 4, 5});
+   f.push_back({0, 5, 1});
+   f.push_back({0, 6, 4});
+   f.push_back({1, 3, 2});
+   f.push_back({1, 5, 7});
+   f.push_back({1, 7, 3});
+   f.push_back({2, 3, 6});
+   f.push_back({3, 7, 6});
+   f.push_back({4, 6, 7});
+   f.push_back({4, 7, 5});
 }
 
