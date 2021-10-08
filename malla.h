@@ -20,23 +20,25 @@
 
 class Malla3D {
   public:
-    // dibuja el objeto en modo inmediato
     void draw_immediate();
 
-    // dibuja el objeto en modo diferido (usando VBOs)
     void draw_buffered();
 
-    // función que redibuja el objeto
-    // está función llama a 'draw_immediate' (modo inmediato)
-    // o bien a 'draw_buffered' (modo diferido, VBOs)
+    /** función que redibuja el objeto
+     * está función llama a 'draw_immediate' (modo inmediato)
+     * o bien a 'draw_buffered' (modo diferido, VBOs)
+     */
     void draw();
+
+    static GLuint Malla3D::create_VBO(GLuint target, GLsizeiptr size, const void* data, GLuint usage=GL_STATIC_DRAW);
 
   protected:
     void calcular_normales(); // calcula tabla de normales de vértices (práctica 3)
 
-    std::vector<Tupla3f> v; // tabla de coordenadas de vértices (una tupla por
-                            // vértice, con tres floats)
-    std::vector<Tupla3i> f; // una terna de 3 enteros por cada cara o triángulo
+    std::vector<Tupla3f> vertices;
+    std::vector<Tupla3i> triangles;
+    GLuint vertices_VBO_id {0};
+    GLuint triangles_VBO_id {0};
 
   public:
     virtual ~Malla3D() = 0;
