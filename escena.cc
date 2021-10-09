@@ -16,6 +16,8 @@ Escena::Escena()
 
     ejes.changeAxisSize(5000);
 
+    cubo = new Cubo(100);
+    tetraedro = new Tetraedro(100);
     // crear los objetos de la escena....
     // .......completar: ...
     // .....
@@ -53,6 +55,9 @@ void Escena::dibujar()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla
     change_observer();
     ejes.draw();
+    //cubo->draw();
+    //tetraedro->draw();
+
     // COMPLETAR
     //   Dibujar los diferentes elementos de la escena
     // Habrá que tener en esta primera práctica una variable que indique qué
@@ -76,8 +81,9 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y)
     bool salir = false;
     switch (toupper(tecla)) {
     case 'Q':
-        if (modoMenu != NADA)
+        if (modoMenu != NADA) {
             modoMenu = NADA;
+        }
         else {
             salir = true;
         }
@@ -100,9 +106,9 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y)
 }
 //**************************************************************************
 
-void Escena::teclaEspecial(int Tecla1, int x, int y)
+void Escena::teclaEspecial(int tecla1, int x, int y)
 {
-    switch (Tecla1) {
+    switch (tecla1) {
     case GLUT_KEY_LEFT:
         observer_angle_y--;
         break;
@@ -144,12 +150,12 @@ void Escena::change_projection(const float ratio_xy)
 // Funcion que se invoca cuando cambia el tamaño de la ventana
 //***************************************************************************
 
-void Escena::redimensionar(int newWidth, int newHeight)
+void Escena::redimensionar(int new_width, int new_height)
 {
-    window_width = newWidth / 10;
-    window_height = newHeight / 10;
-    change_projection(float(newHeight) / float(newWidth));
-    glViewport(0, 0, newWidth, newHeight);
+    window_width = new_width / 10;
+    window_height = new_height / 10;
+    change_projection(float(new_height) / float(new_width));
+    glViewport(0, 0, new_width, new_height);
 }
 
 //**************************************************************************

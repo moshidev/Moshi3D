@@ -31,8 +31,8 @@ class Escena {
     menu modoMenu = NADA;
     // Objetos de la escena
     Ejes ejes;
-    Cubo *cubo = nullptr;           // es importante inicializarlo a 'nullptr'
-    Tetraedro *tetraedro = nullptr; // es importante inicializarlo a 'nullptr'
+    Cubo *cubo {nullptr};           
+    Tetraedro *tetraedro {nullptr}; 
 
   public:
     Escena();
