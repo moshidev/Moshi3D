@@ -30,13 +30,13 @@ class Malla3D {
      */
     void draw();
 
-    static GLuint Malla3D::create_VBO(GLuint target, GLsizeiptr size, const void* data, GLuint usage=GL_STATIC_DRAW);
+    static GLuint create_VBO(GLuint target, GLsizeiptr size, const void* data, GLuint usage=GL_STATIC_DRAW);
 
   protected:
     void calcular_normales(); // calcula tabla de normales de vértices (práctica 3)
 
     std::vector<Tupla3f> vertices;
-    std::vector<Tupla3i> triangles;
+    std::vector<Tupla3u> triangles;
     GLuint vertices_VBO_id {0};
     GLuint triangles_VBO_id {0};
 
