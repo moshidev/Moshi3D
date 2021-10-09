@@ -13,18 +13,9 @@
 #include "_aux.h"
 #include "malla.h"
 
-// *****************************************************************************
-//
-// clases derivadas de Malla3D (definen constructores específicos)
-//
-// *****************************************************************************
-
-// *****************************************************************************
-// Tetraedro con centro en el origen
-
 class Tetraedro : public Malla3D {
   public:
-    Tetraedro();
+    Tetraedro(float l = 1);
 };
 
 #endif /* TETRAEDRO_H_INCLUDED */
