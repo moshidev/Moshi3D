@@ -36,9 +36,10 @@ class Malla3D {
     void calcular_normales(); // calcula tabla de normales de vértices (práctica 3)
 
     std::vector<Tupla3f> vertices;
-    std::vector<Tupla3u> triangles;
+    std::vector<Tupla3u> indices;
+  private:
     GLuint vertices_VBO_id {0};
-    GLuint triangles_VBO_id {0};
+    GLuint indices_VBO_id {0};
 
   public:
     virtual ~Malla3D() = 0;
