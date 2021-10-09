@@ -12,6 +12,7 @@ Malla3D::~Malla3D() {}
 
 void Malla3D::draw_immediate()
 {
+    glEnable(GL_CULL_FACE);
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, vertices.data());
     glDrawElements(GL_TRIANGLES, 3*triangles.size(), GL_UNSIGNED_INT, triangles.data());
@@ -20,22 +21,38 @@ void Malla3D::draw_immediate()
 // -----------------------------------------------------------------------------
 // Visualización en modo diferido con 'glDrawElements' (usando VBOs)
 
+void set_vertex_pointer(GLuint vertex_vbo_id) {
+    glBindBuffer(GL_ARRAY_BUFFER, vertex_vbo_id);
+    glVertexPointer(3, GL_FLOAT, 0, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void draw_elements_from_indices(GLuint indices_vbo_id, GLsizei count) {
+    glEnable(GL_CULL_FACE);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_vbo_id);
+    glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glDisableClientState(GL_VERTEX_ARRAY);
+}
+
 void Malla3D::draw_buffered()
 {
-    if (vertices_VBO_id & triangles_VBO_id == 0) {
-        vertices_VBO_id = create_VBO(GL_ARRAY_BUFFER, 3*vertices.size(), vertices.data());
-        triangles_VBO_id = create_VBO(GL_ELEMENT_ARRAY_BUFFER, 3*triangles.size(), triangles.data());
+    if (vertices_VBO_id == 0) {
+        vertices_VBO_id = create_VBO(GL_ARRAY_BUFFER, sizeof(Tupla3f)*vertices.size(), vertices.data());
+    }
+    if (triangles_VBO_id == 0) {
+        triangles_VBO_id = create_VBO(GL_ELEMENT_ARRAY_BUFFER, sizeof(Tupla3u)*triangles.size(), triangles.data());
     }
 
-    
+    glEnable(GL_CULL_FACE);
+    set_vertex_pointer(vertices_VBO_id);
+    draw_elements_from_indices(triangles_VBO_id, 3*triangles.size());
 }
-// -----------------------------------------------------------------------------
-// Función de visualización de la malla,
-// puede llamar a  draw_immediate o bien a draw_buffered
 
 void Malla3D::draw()
 {
-    draw_immediate();
+    draw_buffered();
 }
 
 GLuint Malla3D::create_VBO(GLuint target, GLsizeiptr size, const void* data, GLuint usage) {
