@@ -2,7 +2,7 @@
 #include "malla.h"
 #include "_aux.h"
 
-void ImmediateRenderer::render(const Malla3D& m) const {
+void ImmediateRenderer::render(Malla3D& m) const {
     const GLvoid* vertices_data = m.get_vertices_data();
     const GLvoid* indices_data = m.get_indices_data();
     const GLsizei indices_size = m.get_indices_size();
