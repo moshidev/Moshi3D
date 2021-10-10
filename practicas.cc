@@ -3,7 +3,7 @@
 //
 // F.J. melero
 //
-// GPL
+// GPLv3
 //**************************************************************************
 
 #include "_aux.h" // includes de OpenGL, windows, y librería std de C++

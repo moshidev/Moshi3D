@@ -1,3 +1,8 @@
+/**
+ * Daniel Pedrosa Montes © <pedrosam.sh@gmail.com>
+ * GPLv3 License.
+ */
+
 #include "immediate_renderer.h"
 #include "malla.h"
 #include "_aux.h"

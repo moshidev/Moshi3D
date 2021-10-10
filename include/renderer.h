@@ -1,6 +1,6 @@
 /**
  * Daniel Pedrosa Montes © <pedrosam.sh@gmail.com>
- * MIT License.
+ * GPLv3 License.
  */
 
 #ifndef MOSHI3D_RENDERER_H_
