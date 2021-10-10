@@ -18,19 +18,21 @@
 //
 // *****************************************************************************
 
+class Renderer;
+
 class Malla3D {
   public:
     void draw_immediate();
 
     void draw_buffered();
 
-    /** función que redibuja el objeto
-     * está función llama a 'draw_immediate' (modo inmediato)
-     * o bien a 'draw_buffered' (modo diferido, VBOs)
-     */
-    void draw();
+    virtual void draw(const Renderer& r);
 
     static GLuint create_VBO(GLuint target, GLsizeiptr size, const void* data, GLuint usage=GL_STATIC_DRAW);
+
+    inline const GLvoid* get_vertices_data(void) const { return vertices.data(); }
+    inline const GLvoid* get_indices_data(void) const { return indices.data(); }
+    inline GLsizei get_indices_size(void) const { return 3*indices.size(); }
 
   protected:
     void calcular_normales(); // calcula tabla de normales de vértices (práctica 3)

@@ -1,3 +1,4 @@
+#include "renderer.h"
 #include "malla.h"
 #include "_aux.h"
 #include <iostream>
@@ -50,9 +51,8 @@ void Malla3D::draw_buffered()
     draw_elements_from_indices(indices_VBO_id, 3*indices.size());
 }
 
-void Malla3D::draw()
-{
-    draw_buffered();
+void Malla3D::draw(const Renderer& r) {
+    r.render(*this);
 }
 
 GLuint Malla3D::create_VBO(GLuint target, GLsizeiptr size, const void* data, GLuint usage) {
