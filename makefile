@@ -10,16 +10,16 @@
 
 exe             := pracs_exe
 obj				:= obj
-units_cc        := $(wildcard *.cc) $(wildcard *.cpp)
+units_cc        := $(wildcard *.cc) $(wildcard *.cpp) $(wildcard renderers/*.cpp)
 units_o         := $(addprefix $(obj)/, $(addsuffix .o, $(basename $(units_cc))))
-headers         := $(wildcard *.h*)
+headers         := $(wildcard *.h*) $(wildcard include/*.h*)
 uname           := $(shell uname -s)
 en_macos        := $(findstring Darwin,$(uname))
 en_linux        := $(findstring Linux,$(uname))
 compiler        := $(if $(en_linux), g++, clang++ )
 sistoper        := $(if $(en_macos), macOS, Linux )
 
-cc_flags_common := -std=c++11 -g -I/usr/include -I.
+cc_flags_common := -std=c++11 -g -I/usr/include -I. -I./include
 cc_flags_linux  := -DLINUX
 cc_flags_macos  := -DMACOS
 cc_flags        := $(cc_flags_common) $(if $(en_linux), $(cc_flags_linux), $(cc_flags_macos))
@@ -35,13 +35,13 @@ x: $(exe)
 	./$(exe)
 
 $(exe): $(units_o) makefile
-	$(compiler) -o $(exe) $(units_o) $(ld_libs)
+	$(compiler) -o $(exe) $(addprefix $(obj)/, $(notdir $(units_o))) $(ld_libs)
 
 $(obj)/%.o : %.cc
-	$(compiler) -c -o $@ $(cc_flags) $<
+	$(compiler) -c -o $(obj)/$(notdir $@) $(cc_flags) $<
 
 $(obj)/%.o : %.cpp
-	$(compiler) -c -o $@ $(cc_flags) $<
+	$(compiler) -c -o $(obj)/$(notdir $@) $(cc_flags) $<
 
 $(units_cc) : $(headers)
 	touch $(units_cc)
