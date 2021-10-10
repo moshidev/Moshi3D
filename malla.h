@@ -37,14 +37,14 @@ class Malla3D {
     /**
      * @brief returns a GL_ARRAY_BUFFER VBO id with the data inside vertices. The first call
      * to this function will allocate a new VBO for this data.
-     * @warning the VBO_id returned should never be deallocated or modified
+     * @warning the VBO_id returned should never be deallocated or modified.
      */
     GLuint get_vertices_VBO_id(void);
 
     /**
      * @brief returns a GL_ELEMENT_ARRAY_BUFFER id with the data inside indices. The first call
      * to this function will allocate a new VBO for this data.
-     * @warning the VBO_id returned should never be deallocated or modified
+     * @warning the VBO_id returned should never be deallocated or modified.
      */
     GLuint get_indices_VBO_id(void);
 
