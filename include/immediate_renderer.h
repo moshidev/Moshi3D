@@ -10,7 +10,7 @@
 
 class ImmediateRenderer : public Renderer {
     public:
-    void render(const Malla3D& m) const;
+    void render(Malla3D& m) const;
 };
 
 #endif /* MOSHI3D_IMMEDIATE_RENDERER_H_ */

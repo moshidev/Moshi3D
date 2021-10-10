@@ -34,6 +34,9 @@ class Malla3D {
     inline const GLvoid* get_indices_data(void) const { return indices.data(); }
     inline GLsizei get_indices_size(void) const { return 3*indices.size(); }
 
+    GLuint get_vertices_VBO_id(void);
+    GLuint get_indices_VBO_id(void);
+
   protected:
     void calcular_normales(); // calcula tabla de normales de vértices (práctica 3)
 

@@ -10,7 +10,7 @@ class Malla3D;
 
 class Renderer {
     public:
-    virtual void render(const Malla3D& m) const = 0;
+    virtual void render(Malla3D& m) const = 0;
 };
 
 #endif /* MOSHI3D_RENDERER_H_ */
