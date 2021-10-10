@@ -1,0 +1,16 @@
+/**
+ * Daniel Pedrosa Montes © <pedrosam.sh@gmail.com>
+ * MIT License.
+ */
+
+#ifndef MOSHI3D_RENDERER_H_
+#define MOSHI3D_RENDERER_H_
+
+class Malla3D;
+
+class Renderer {
+    public:
+    virtual void render(const Malla3D& m) const = 0;
+};
+
+#endif /* MOSHI3D_RENDERER_H_ */
