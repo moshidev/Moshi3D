@@ -8,10 +8,10 @@
 static bool menu_principal(Escena& e, unsigned char tecla, int x, int y);
 static bool menu_seleccion_objeto(Escena& e, unsigned char tecla, int x, int y);
 static bool menu_seleccion_modo_visualizacion(Escena& e, unsigned char tecla, int x, int y);
-static bool menu_modo_dibujado(Escena& e, unsigned char tecla, int x, int y);
+static bool menu_seleccion_modo_dibujado(Escena& e, unsigned char tecla, int x, int y);
 
 Escena::Escena()
-: menu_actual{menu_principal}
+: menu_actual{menu_principal}, renderer{&immediate_renderer}
 {
     front_plane = 50.0;
     back_plane = 2000.0;
@@ -92,7 +92,7 @@ bool menu_principal(Escena& e, unsigned char tecla, int x, int y) {
         break;
     case 'D':
         std::cout << "Entramos al menú selección de modo de dibujado" << std::endl;
-        e.menu_actual = menu_seleccion_objeto;
+        e.menu_actual = menu_seleccion_modo_dibujado;
         break;
     case 'Q':
         std::cout << "Presionada la letra Q -> programa finalizado" << std::endl;
@@ -136,11 +136,35 @@ bool menu_seleccion_objeto(Escena& e, unsigned char tecla, int x, int y) {
 }
 
 bool menu_seleccion_modo_visualizacion(Escena& e, unsigned char tecla, int x, int y) {
-    return true;
+    std::cout << "Sin implementar!!!" << std::endl;
+    e.menu_actual = menu_principal;
+    return false;
 }
 
-bool menu_modo_dibujado(Escena& e, unsigned char tecla, int x, int y) {
-    return true;
+bool menu_seleccion_modo_dibujado(Escena& e, unsigned char tecla, int x, int y) {
+    switch (tecla)
+    {
+    case '1':
+        std::cout << "Visualizamos objetos usando glDrawElements" << std::endl;
+        e.set_immediate_draw();
+        break;
+    case '2':
+        std::cout << "Visualizamos objetos usando VBOs" << std::endl;
+        e.set_buffered_draw();
+        break;
+    case 'Q':
+        std::cout << "Salimos del modo selección de objeto" << std::endl;
+        e.menu_actual = menu_principal;
+        break;
+    default:
+        std::cout << "Opciones disponibles:\n";
+        std::cout << "'1': Visualizamos objetos usando glDrawElements.\n";
+        std::cout << "'2': Visualizamos objetos usando VBOs.\n";
+        std::cout << "'Q': Volvemos al menú principal." << std::endl;
+        break;
+    }
+
+    return false;
 }
 
 bool Escena::teclaPulsada(unsigned char tecla, int x, int y)

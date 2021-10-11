@@ -5,6 +5,9 @@
 #include "ejes.h"
 #include "malla.h"
 #include "tetraedro.h"
+#include "renderer.h"
+#include "immediate_renderer.h"
+#include "buffered_renderer.h"
 
 typedef enum { NADA, SELOBJETO, SELVISUALIZACION, SELDIBUJADO } menu;
 
@@ -36,6 +39,11 @@ class Escena {
     Tetraedro *tetrahedron {nullptr};
     Malla3D* objeto_actual {nullptr};
 
+    // Renderizadores
+    ImmediateRenderer immediate_renderer;
+    BufferedRenderer buffered_renderer;
+    Renderer* renderer;
+
   public:
     bool (*menu_actual)(Escena& e, unsigned char tecla, int x, int y);
     
@@ -45,8 +53,8 @@ class Escena {
 
     void dibujar();
 
-    void set_buffered_draw(void);
-    void set_immediate_draw(void);
+    inline void set_buffered_draw(void) { renderer = &buffered_renderer; }
+    inline void set_immediate_draw(void) { renderer = &immediate_renderer; }
 
     void render_points(bool t);
     void render_lines(bool t);
