@@ -1,6 +1,8 @@
 #include "escena.h"
 #include "_aux.h" // includes de OpenGL/glut/glew, windows, y librería std de C++
 #include "malla.h" // objetos: Cubo y otros....
+#include "immediate_renderer.h"
+#include "buffered_renderer.h"
 
 //**************************************************************************
 // constructor de la escena (no puede usar ordenes de OpenGL)
@@ -16,8 +18,8 @@ Escena::Escena()
 
     ejes.changeAxisSize(5000);
 
-    cubo = new Cubo(100);
-    tetraedro = new Tetraedro(100);
+    cube = new Cube(100);
+    tetrahedron = new Tetraedro(100);
     // crear los objetos de la escena....
     // .......completar: ...
     // .....
@@ -52,18 +54,45 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
 
 void Escena::dibujar()
 {
+    BufferedRenderer renderer;
+    static int i = 0;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla
     change_observer();
     ejes.draw();
-    //cubo->draw();
-    //tetraedro->draw();
 
-    // COMPLETAR
-    //   Dibujar los diferentes elementos de la escena
-    // Habrá que tener en esta primera práctica una variable que indique qué
-    // objeto se ha de visualizar y hacer cubo.draw()
-    // o
-    // tetraedro.draw()
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glShadeModel(GL_FLAT);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_FLAT);
+
+    float colores[8*3];
+    float chess[8*3];
+    for (int i = 0; i < 8; i++) {
+        colores[i*3] = 1.0 * (i & 0x1);
+        colores[i*3+1] = 1.0 * ((i & 0x2) >> 1);
+        colores[i*3+2] = 1.0 * ((i & 0x4) >> 2);
+    }
+    for (int i = 0; i < 8; i+=2) {
+        chess[i*3] = 1;
+        chess[i*3+1] = 0;
+        chess[i*3+2] = 0;
+        chess[i*3+3] = 0;
+        chess[i*3+4] = 1;
+        chess[i*3+5] = 0;
+    }
+    std::vector<Tupla3f> c;
+    c.resize(8);
+    for (int i = 0; i < 8; i++) {
+        c[i] = {1.0 * (i & 0x1), 1.0 * ((i & 0x2) >> 1), 1.0 * ((i & 0x4) >> 2)};
+    }
+    std::swap(c[4], c[5]);
+    std::swap(c[6], c[7]);
+    
+    cube->set_color_array(c);
+    cube->draw(renderer);
+    //tetrahedron->draw(renderer);
+    
+    //tetrahedron->draw(renderer);
 }
 
 //**************************************************************************
@@ -76,50 +105,26 @@ void Escena::dibujar()
 
 bool Escena::teclaPulsada(unsigned char tecla, int x, int y)
 {
-    using namespace std;
-    cout << "Tecla pulsada: '" << tecla << "'" << endl;
-    bool salir = false;
-    switch (toupper(tecla)) {
-    case 'Q':
-        if (modoMenu != NADA) {
-            modoMenu = NADA;
-        }
-        else {
-            salir = true;
-        }
-        break;
-    case 'O':
-        // ESTAMOS EN MODO SELECCION DE OBJETO
-        modoMenu = SELOBJETO;
-        break;
-    case 'V':
-        // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
-        modoMenu = SELVISUALIZACION;
-        break;
-    case 'D':
-        // ESTAMOS EN MODO SELECCION DE DIBUJADO
-        modoMenu = SELDIBUJADO;
-        break;
-        // COMPLETAR con los diferentes opciones de teclado
-    }
-    return salir;
+    
+    return false;
 }
 //**************************************************************************
 
 void Escena::teclaEspecial(int tecla1, int x, int y)
 {
+    int mult = 4;
     switch (tecla1) {
     case GLUT_KEY_LEFT:
-        observer_angle_y--;
+        observer_angle_y-=mult;
         break;
     case GLUT_KEY_RIGHT:
-        observer_angle_y++;
+        observer_angle_y+=mult;
         break;
     case GLUT_KEY_UP:
-        observer_angle_x--;
+        observer_angle_x-=mult;
         break;
     case GLUT_KEY_DOWN:
-        observer_angle_x++;
+        observer_angle_x+=mult;
         break;
     case GLUT_KEY_PAGE_UP:
         observer_distance *= 1.2;

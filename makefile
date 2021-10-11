@@ -10,7 +10,7 @@
 
 exe             := pracs_exe
 obj				:= obj
-units_cc        := $(wildcard *.cc) $(wildcard *.cpp) $(wildcard renderers/*.cpp)
+units_cc        := $(wildcard *.cpp) $(wildcard renderers/*.cpp) $(wildcard figures/*.cpp)
 units_o         := $(addprefix $(obj)/, $(addsuffix .o, $(basename $(units_cc))))
 headers         := $(wildcard *.h*) $(wildcard include/*.h*)
 uname           := $(shell uname -s)

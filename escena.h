@@ -1,7 +1,7 @@
 #ifndef _ESCENA_H
 #define _ESCENA_H
 
-#include "cubo.h"
+#include "cube.h"
 #include "ejes.h"
 #include "malla.h"
 #include "tetraedro.h"
@@ -31,8 +31,9 @@ class Escena {
     menu modoMenu = NADA;
     // Objetos de la escena
     Ejes ejes;
-    Cubo *cubo {nullptr};           
-    Tetraedro *tetraedro {nullptr}; 
+    Cube *cube {nullptr};           
+    Tetraedro *tetrahedron {nullptr};
+    Malla3D* actual {nullptr};
 
   public:
     Escena();
@@ -40,6 +41,20 @@ class Escena {
     void redimensionar(int new_width, int new_height);
 
     void dibujar();
+
+    void set_buffered_draw(void);
+    void set_immediate_draw(void);
+
+    void render_points(bool t);
+    void render_lines(bool t);
+    void render_solid(bool t);
+    void render_chess(bool t);
+
+    void enable_cube(bool t);
+    void enable_tetrahedron(bool t);
+
+    inline bool is_cube_enabled(void) { return cube != nullptr && cube == actual; }
+    inline bool is_tetrahedron_enabled(void) { return tetrahedron != nullptr && tetrahedron == actual; }
 
     bool teclaPulsada(unsigned char tecla1, int x, int y);
     void teclaEspecial(int tecla1, int x, int y);
