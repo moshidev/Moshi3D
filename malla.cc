@@ -32,6 +32,14 @@ GLuint Malla3D::get_indices_VBO_id(void) {
     return indices_VBO_id;
 }
 
+GLuint Malla3D::get_color_VBO_id(void) {
+    if (color_VBO_id == 0) {
+        color_VBO_id = create_VBO(GL_ARRAY_BUFFER, sizeof(Tupla3f)*color.size(), color.data());
+    }
+
+    return color_VBO_id;
+}
+
 void Malla3D::set_color_array(const std::vector<Tupla3f>& c) {
    color = c;
 }

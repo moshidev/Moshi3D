@@ -45,6 +45,13 @@ class Malla3D {
      */
     GLuint get_indices_VBO_id(void);
 
+    /**
+     * @brief returns a GL_ELEMENT_ARRAY_BUFFER id with the data inside color. The first call
+     * to this function will allocate a new VBO for this data.
+     * @warning the VBO_id returned should never be deallocated or modified.
+     */
+    GLuint get_color_VBO_id(void);
+
   protected:
     void calcular_normales(); // calcula tabla de normales de vértices (práctica 3)
 
@@ -55,6 +62,7 @@ class Malla3D {
   private:
     GLuint vertices_VBO_id {0};
     GLuint indices_VBO_id {0};
+    GLuint color_VBO_id {0};
 
   public:
     virtual ~Malla3D() = 0;
