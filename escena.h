@@ -29,13 +29,16 @@ class Escena {
     void clear_window();
 
     menu modoMenu = NADA;
+
     // Objetos de la escena
     Ejes ejes;
     Cube *cube {nullptr};           
     Tetraedro *tetrahedron {nullptr};
-    Malla3D* actual {nullptr};
+    Malla3D* objeto_actual {nullptr};
 
   public:
+    bool (*menu_actual)(Escena& e, unsigned char tecla, int x, int y);
+    
     Escena();
     void inicializar(int UI_window_width, int UI_window_height);
     void redimensionar(int new_width, int new_height);
@@ -50,11 +53,11 @@ class Escena {
     void render_solid(bool t);
     void render_chess(bool t);
 
-    void enable_cube(bool t);
-    void enable_tetrahedron(bool t);
+    inline void enable_cube(bool t) { objeto_actual = t ? cube : nullptr; }
+    inline void enable_tetrahedron(bool t) { objeto_actual = t ? tetrahedron : nullptr; }
 
-    inline bool is_cube_enabled(void) { return cube != nullptr && cube == actual; }
-    inline bool is_tetrahedron_enabled(void) { return tetrahedron != nullptr && tetrahedron == actual; }
+    inline bool is_cube_enabled(void) { return cube != nullptr && cube == objeto_actual; }
+    inline bool is_tetrahedron_enabled(void) { return tetrahedron != nullptr && tetrahedron == objeto_actual; }
 
     bool teclaPulsada(unsigned char tecla1, int x, int y);
     void teclaEspecial(int tecla1, int x, int y);

@@ -3,12 +3,15 @@
 #include "malla.h" // objetos: Cubo y otros....
 #include "immediate_renderer.h"
 #include "buffered_renderer.h"
+#include "primitive_colorizer.h"
 
-//**************************************************************************
-// constructor de la escena (no puede usar ordenes de OpenGL)
-//**************************************************************************
+static bool menu_principal(Escena& e, unsigned char tecla, int x, int y);
+static bool menu_seleccion_objeto(Escena& e, unsigned char tecla, int x, int y);
+static bool menu_seleccion_modo_visualizacion(Escena& e, unsigned char tecla, int x, int y);
+static bool menu_modo_dibujado(Escena& e, unsigned char tecla, int x, int y);
 
 Escena::Escena()
+: menu_actual{menu_principal}
 {
     front_plane = 50.0;
     back_plane = 2000.0;
@@ -62,51 +65,88 @@ void Escena::dibujar()
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //glShadeModel(GL_FLAT);
+    glShadeModel(GL_FLAT);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_FLAT);
-
-    float colores[8*3];
-    float chess[8*3];
-    for (int i = 0; i < 8; i++) {
-        colores[i*3] = 1.0 * (i & 0x1);
-        colores[i*3+1] = 1.0 * ((i & 0x2) >> 1);
-        colores[i*3+2] = 1.0 * ((i & 0x4) >> 2);
-    }
-    for (int i = 0; i < 8; i+=2) {
-        chess[i*3] = 1;
-        chess[i*3+1] = 0;
-        chess[i*3+2] = 0;
-        chess[i*3+3] = 0;
-        chess[i*3+4] = 1;
-        chess[i*3+5] = 0;
-    }
-    std::vector<Tupla3f> c;
-    c.resize(8);
-    for (int i = 0; i < 8; i++) {
-        c[i] = {1.0 * (i & 0x1), 1.0 * ((i & 0x2) >> 1), 1.0 * ((i & 0x4) >> 2)};
-    }
-    std::swap(c[4], c[5]);
-    std::swap(c[6], c[7]);
     
-    cube->set_color_array(c);
-    cube->draw(renderer);
-    //tetrahedron->draw(renderer);
-    
-    //tetrahedron->draw(renderer);
+    if (objeto_actual != nullptr) {
+        if (objeto_actual == cube) {    // TODO: hacer refactor de PrimitiveColorizer
+            PrimitiveColorizer::chess(*(Cube*)objeto_actual);
+        }
+        else {
+            PrimitiveColorizer::chess(*(Tetraedro*)objeto_actual);
+        }
+        objeto_actual->draw(renderer);
+    }
 }
 
-//**************************************************************************
-//
-// función que se invoca cuando se pulsa una tecla
-// Devuelve true si se ha pulsado la tecla para terminar el programa (Q),
-// devuelve false en otro caso.
-//
-//**************************************************************************
+bool menu_principal(Escena& e, unsigned char tecla, int x, int y) {
+    switch (tecla)
+    {
+    case 'O':
+        std::cout << "Entramos al menú selección de objeto" << std::endl;
+        e.menu_actual = menu_seleccion_objeto;
+        break;
+    case 'V':
+        std::cout << "Entramos al menú selección de modo de visualización" << std::endl;
+        e.menu_actual = menu_seleccion_modo_visualizacion;
+        break;
+    case 'D':
+        std::cout << "Entramos al menú selección de modo de dibujado" << std::endl;
+        e.menu_actual = menu_seleccion_objeto;
+        break;
+    case 'Q':
+        std::cout << "Presionada la letra Q -> programa finalizado" << std::endl;
+        return true;
+        break;
+    default:
+        std::cout << "Opciones disponibles:\n";
+        std::cout << "'O': Menú selección de objeto.\n";
+        std::cout << "'V': Menú selección de modo de visualización.\n";
+        std::cout << "'D': Menú selección de modo de dibujado." << std::endl;
+        break;
+    }
+
+    return false;
+}
+
+bool menu_seleccion_objeto(Escena& e, unsigned char tecla, int x, int y) {
+    switch (tecla)
+    {
+    case 'C':
+        std::cout << "Visualizamos/ocultamos el cubo" << std::endl;
+        e.enable_cube(!e.is_cube_enabled());
+        break;
+    case 'T':
+        std::cout << "Visualizamos/ocultamos el tetraedro" << std::endl;
+        e.enable_tetrahedron(!e.is_tetrahedron_enabled());
+        break;
+    case 'Q':
+        std::cout << "Salimos del modo selección de objeto" << std::endl;
+        e.menu_actual = menu_principal;
+        break;
+    default:
+        std::cout << "Opciones disponibles:\n";
+        std::cout << "'C': Visualizamos/ocultamos el cubo.\n";
+        std::cout << "'T': Visualizamos/ocultamos el tetraedro.\n";
+        std::cout << "'Q': Volvemos al menú principal." << std::endl;
+        break;
+    }
+
+    return false;
+}
+
+bool menu_seleccion_modo_visualizacion(Escena& e, unsigned char tecla, int x, int y) {
+    return true;
+}
+
+bool menu_modo_dibujado(Escena& e, unsigned char tecla, int x, int y) {
+    return true;
+}
 
 bool Escena::teclaPulsada(unsigned char tecla, int x, int y)
 {
-    
-    return false;
+    tecla = toupper(tecla);
+    return menu_actual(*this, tecla, x, y);
 }
 //**************************************************************************
 
