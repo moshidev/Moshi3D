@@ -1,5 +1,5 @@
 /**
- * Daniel Pedrosa Montes © <pedrosam.sh@gmail.com>
+ * 2021 © Daniel Pedrosa Montes <pedrosam.sh@gmail.com>
  * GPLv3 License.
  */
 

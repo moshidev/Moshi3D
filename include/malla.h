@@ -1,22 +1,12 @@
-// #############################################################################
-//
-// Informática Gráfica (Grado Informática)
-//
-// Archivo: Malla3D.h
-// -- declaraciones de clase Malla3D (mallas indexadas) y derivados
-//
-// #############################################################################
+/**
+ * 2021 © Daniel Pedrosa Montes <pedrosam.sh@gmail.com>
+ * GPLv3 License.
+ */
 
 #ifndef MALLA3D_H_INCLUDED
 #define MALLA3D_H_INCLUDED
 
 #include "_aux.h"
-
-// *****************************************************************************
-//
-// clase para objetos 3D (mallas indexadas)
-//
-// *****************************************************************************
 
 class Renderer;
 

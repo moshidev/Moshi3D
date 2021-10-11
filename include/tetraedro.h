@@ -1,11 +1,7 @@
-// #############################################################################
-//
-// Informática Gráfica (Grado Informática)
-//
-// Archivo: tetraedro.h
-
-//
-// #############################################################################
+/**
+ * 2021 © Daniel Pedrosa Montes <pedrosam.sh@gmail.com>
+ * GPLv3 License.
+ */
 
 #ifndef TETRAEDRO_H_INCLUDED
 #define TETRAEDRO_H_INCLUDED

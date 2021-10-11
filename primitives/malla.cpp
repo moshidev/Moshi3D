@@ -1,3 +1,8 @@
+/**
+ * 2021 © Daniel Pedrosa Montes <pedrosam.sh@gmail.com>
+ * GPLv3 License.
+ */
+
 #include "renderer.h"
 #include "malla.h"
 #include "_aux.h"

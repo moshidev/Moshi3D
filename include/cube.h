@@ -1,11 +1,7 @@
-// #############################################################################
-//
-// Informática Gráfica (Grado Informática)
-//
-// Archivo: Cubo.h
-
-//
-// #############################################################################
+/**
+ * 2021 © Daniel Pedrosa Montes <pedrosam.sh@gmail.com>
+ * GPLv3 License.
+ */
 
 #ifndef CUBO_H_INCLUDED
 #define CUBO_H_INCLUDED
