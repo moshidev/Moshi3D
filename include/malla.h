@@ -20,6 +20,7 @@ class Malla3D {
     inline const GLvoid* get_indices_data(void) const { return indices.data(); }
     inline const GLvoid* get_color_data(void) const { return color.data(); }
     inline GLsizei get_indices_size(void) const { return 3*indices.size(); }
+    inline size_t get_num_vertices(void) const { return vertices.size(); }
 
     /**
      * @brief returns a GL_ARRAY_BUFFER VBO id with the data inside vertices. The first call
