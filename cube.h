@@ -13,9 +13,9 @@
 #include "_aux.h"
 #include "malla.h"
 
-class Cubo : public Malla3D {
+class Cube : public Malla3D {
   public:
-    Cubo(float l = 1);
+    Cube(float l = 1);
 };
 
 #endif /* CUBO_H_INCLUDED */
