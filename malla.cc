@@ -3,12 +3,6 @@
 #include "_aux.h"
 #include <iostream>
 
-// *****************************************************************************
-//
-// Clase Malla3D
-//
-// *****************************************************************************
-
 Malla3D::~Malla3D() {}
 
 void Malla3D::draw(const Renderer& r) {
@@ -36,4 +30,8 @@ GLuint Malla3D::get_indices_VBO_id(void) {
         indices_VBO_id = create_VBO(GL_ELEMENT_ARRAY_BUFFER, sizeof(Tupla3u)*indices.size(), indices.data());
     }
     return indices_VBO_id;
+}
+
+void Malla3D::set_color_array(const std::vector<Tupla3f>& c) {
+   color = c;
 }

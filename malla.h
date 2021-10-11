@@ -22,16 +22,13 @@ class Renderer;
 
 class Malla3D {
   public:
-    void draw_immediate();
-
-    void draw_buffered();
-
     virtual void draw(const Renderer& r);
 
     static GLuint create_VBO(GLuint target, GLsizeiptr size, const void* data, GLuint usage=GL_STATIC_DRAW);
 
     inline const GLvoid* get_vertices_data(void) const { return vertices.data(); }
     inline const GLvoid* get_indices_data(void) const { return indices.data(); }
+    inline const GLvoid* get_color_data(void) const { return color.data(); }
     inline GLsizei get_indices_size(void) const { return 3*indices.size(); }
 
     /**
@@ -53,13 +50,16 @@ class Malla3D {
 
     std::vector<Tupla3f> vertices;
     std::vector<Tupla3u> indices;
+    std::vector<Tupla3f> color;
+
   private:
     GLuint vertices_VBO_id {0};
     GLuint indices_VBO_id {0};
 
   public:
     virtual ~Malla3D() = 0;
-    // completar: tabla de colores, tabla de normales de vértices
+    
+    void set_color_array(const std::vector<Tupla3f>& c);
 };
 
 #endif
