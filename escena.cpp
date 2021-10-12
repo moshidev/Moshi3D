@@ -63,9 +63,9 @@ void Escena::dibujar()
     change_observer();
     ejes.draw();
 
-    glEnable(GL_CULL_FACE);
     glShadeModel(GL_FLAT);
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_FLAT);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FLAT);
+    glPointSize(10);
     
     if (objeto_actual != nullptr) {
         if (objeto_actual == cube) {    // TODO: hacer refactor de PrimitiveColorizer
