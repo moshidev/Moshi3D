@@ -46,5 +46,8 @@ $(obj)/%.o : %.cpp
 $(units_cc) : $(headers)
 	touch $(units_cc)
 
+configure:
+	@mkdir -p obj
+
 clean:
 	rm -f $(obj)/*.o *_exe
