@@ -2,6 +2,7 @@
 #define _ESCENA_H
 
 #include "cube.h"
+#include "menu.h"
 #include "ejes.h"
 #include "malla.h"
 #include "tetraedro.h"
@@ -44,8 +45,9 @@ class Escena {
     RendererBuffered buffered_renderer;
     Renderer* renderer;
 
+    Menu menu;
+
   public:
-    bool (*menu_actual)(Escena& e, unsigned char tecla, int x, int y);
     
     Escena();
     void inicializar(int UI_window_width, int UI_window_height);
