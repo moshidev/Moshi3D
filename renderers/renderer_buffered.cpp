@@ -28,12 +28,14 @@ void draw_elements_from_indices(GLuint indices_vbo_id, GLsizei count) {
 }
 
 void RendererBuffered::render(Malla3D& m) const {
-    GLuint vertices_VBO_id = m.get_vertices_VBO_id();
-    GLuint indices_VBO_id = m.get_indices_VBO_id();
-    GLuint color_VBO_id = m.get_color_VBO_id();
-    GLsizei indices_size = m.get_indices_size();
+    const std::set<int>& polygon_modes = m.get_polygon_modes();
+    
     glEnable(GL_CULL_FACE);
-    set_vertex_pointer(vertices_VBO_id);
-    set_color_pointer(color_VBO_id);
-    draw_elements_from_indices(indices_VBO_id, indices_size);
+    set_vertex_pointer(m.get_vertices_VBO_id());
+    set_color_pointer(m.get_color_VBO_id());
+
+    for (auto& mode : polygon_modes) {
+        glPolygonMode(GL_FRONT_AND_BACK, mode);
+        draw_elements_from_indices(m.get_indices_VBO_id(), m.get_indices_size());
+    }
 }

@@ -8,10 +8,22 @@
 #include "_aux.h"
 #include <iostream>
 
+Malla3D::Malla3D() {
+    enable_polygon_modes(GL_FILL);
+}
+
 Malla3D::~Malla3D() {}
 
 void Malla3D::draw(const Renderer& r) {
     r.render(*this);
+}
+
+void Malla3D::set_color_chess(void) {
+    color.set_chess(*this);
+}
+
+void Malla3D::set_color_plain(void) {
+    color.set_plain(*this);
 }
 
 GLuint Malla3D::create_VBO(GLuint target, GLsizeiptr size, const void* data, GLuint usage) {
@@ -35,16 +47,4 @@ GLuint Malla3D::get_indices_VBO_id(void) {
         indices_VBO_id = create_VBO(GL_ELEMENT_ARRAY_BUFFER, sizeof(Tupla3u)*indices.size(), indices.data());
     }
     return indices_VBO_id;
-}
-
-GLuint Malla3D::get_color_VBO_id(void) {
-    if (color_VBO_id == 0) {
-        color_VBO_id = create_VBO(GL_ARRAY_BUFFER, sizeof(Tupla3f)*color.size(), color.data());
-    }
-
-    return color_VBO_id;
-}
-
-void Malla3D::set_color_array(const std::vector<Tupla3f>& c) {
-   color = c;
 }

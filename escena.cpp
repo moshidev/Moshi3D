@@ -1,7 +1,6 @@
 #include "escena.h"
 #include "_aux.h" // includes de OpenGL/glut/glew, windows, y librería std de C++
 #include "malla.h" // objetos: Cubo y otros....
-#include "primitive_colorizer.h"
 
 static bool menu_principal(Escena& e, unsigned char tecla, int x, int y);
 static bool menu_seleccion_objeto(Escena& e, unsigned char tecla, int x, int y);
@@ -21,6 +20,8 @@ Escena::Escena()
 
     cube = new Cube(100);
     tetrahedron = new Tetraedro(100);
+    cube->set_color_rgb_cube();
+    objeto_actual = cube;
     // crear los objetos de la escena....
     // .......completar: ...
     // .....
@@ -55,24 +56,16 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
 
 void Escena::dibujar()
 {
-    RendererBuffered renderer;
     static int i = 0;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla
     change_observer();
     ejes.draw();
 
     glShadeModel(GL_FLAT);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FLAT);
     glPointSize(10);
     
     if (objeto_actual != nullptr) {
-        if (objeto_actual == cube) {    // TODO: hacer refactor de PrimitiveColorizer
-            PrimitiveColorizer::chess(*(Cube*)objeto_actual);
-        }
-        else {
-            PrimitiveColorizer::chess(*(Tetraedro*)objeto_actual);
-        }
-        objeto_actual->draw(renderer);
+        objeto_actual->draw(*renderer);
     }
 }
 
@@ -133,8 +126,38 @@ bool menu_seleccion_objeto(Escena& e, unsigned char tecla, int x, int y) {
 }
 
 bool menu_seleccion_modo_visualizacion(Escena& e, unsigned char tecla, int x, int y) {
-    std::cout << "Sin implementar!!!" << std::endl;
-    e.menu_actual = menu_principal;
+    switch (tecla)
+    {
+    case 'P':
+        std::cout << "Activamos/desactivamos visualización en modo puntos" << std::endl;
+        e.render_points(!e.is_rendering_points());
+        break;
+    case 'L':
+        std::cout << "Activamos/desactivamos visualización en modo líneas" << std::endl;
+        e.render_lines(!e.is_rendering_lines());
+        break;
+    case 'S':
+        std::cout << "Activamos/desactivamos visualización en modo sólido" << std::endl;
+        e.render_solid(!e.is_rendering_solid());
+        break;
+    case 'A':
+        std::cout << "Activamos/desactivamos visualización en modo ajedrez" << std::endl;
+        e.render_chess(!e.is_rendering_chess());
+        break;
+    case 'Q':
+        std::cout << "Salimos del modo selección de modo de visualización" << std::endl;
+        e.menu_actual = menu_principal;
+        break;
+    default:
+        std::cout << "Opciones disponibles:\n";
+        std::cout << "'P': Activamos/desactivamos visualización en modo puntos.\n";
+        std::cout << "'L': Activamos/desactivamos visualización en modo líneas.\n";
+        std::cout << "'S': Activamos/desactivamos visualización en modo sólido.\n";
+        std::cout << "'A': Activamos/desactivamos visualización en modo ajedrez.\n";
+        std::cout << "'Q': Volvemos al menú principal." << std::endl;
+        break;
+    }
+
     return false;
 }
 

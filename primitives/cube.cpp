@@ -6,6 +6,7 @@
 #include "_aux.h"
 #include "malla.h"
 #include "cube.h"
+#include "color.h"
 
 static void cube_init_vertices(std::vector<Tupla3f>& v, float lado) {
    const float offset = lado/2;
@@ -38,13 +39,13 @@ static void cube_init_indices(std::vector<Tupla3u>& i) {
    i.resize(12);
 }
 
-static void cube_init_color(std::vector<Tupla3f>& c) {
-   c.resize(8);
-}
-
 Cube::Cube(float lado)
 {
    cube_init_vertices(vertices, lado);
    cube_init_indices(indices);
-   cube_init_color(color);
+   color.init(*this);
+}
+
+void Cube::set_color_rgb_cube(void) {
+   color.set_rgb(*this);
 }
