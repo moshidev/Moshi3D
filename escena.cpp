@@ -1,8 +1,6 @@
 #include "escena.h"
 #include "_aux.h" // includes de OpenGL/glut/glew, windows, y librería std de C++
 #include "malla.h" // objetos: Cubo y otros....
-#include "immediate_renderer.h"
-#include "buffered_renderer.h"
 #include "primitive_colorizer.h"
 
 static bool menu_principal(Escena& e, unsigned char tecla, int x, int y);
@@ -57,7 +55,7 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
 
 void Escena::dibujar()
 {
-    BufferedRenderer renderer;
+    RendererBuffered renderer;
     static int i = 0;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla
     change_observer();

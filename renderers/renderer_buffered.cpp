@@ -3,7 +3,7 @@
  * GPLv3 License.
  */
 
-#include "buffered_renderer.h"
+#include "renderer_buffered.h"
 #include "malla.h"
 #include "_aux.h"
 
@@ -27,7 +27,7 @@ void draw_elements_from_indices(GLuint indices_vbo_id, GLsizei count) {
     glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void BufferedRenderer::render(Malla3D& m) const {
+void RendererBuffered::render(Malla3D& m) const {
     GLuint vertices_VBO_id = m.get_vertices_VBO_id();
     GLuint indices_VBO_id = m.get_indices_VBO_id();
     GLuint color_VBO_id = m.get_color_VBO_id();

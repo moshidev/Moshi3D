@@ -8,7 +8,7 @@
 
 #include "renderer.h"
 
-class ImmediateRenderer : public Renderer {
+class RendererImmediate : public Renderer {
     public:
     void render(Malla3D& m) const;
 };

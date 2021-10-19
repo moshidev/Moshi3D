@@ -8,7 +8,7 @@
 
 #include "renderer.h"
 
-class BufferedRenderer : public Renderer {
+class RendererBuffered : public Renderer {
     public:
     void render(Malla3D& m) const;
 };

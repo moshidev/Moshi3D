@@ -3,11 +3,11 @@
  * GPLv3 License.
  */
 
-#include "immediate_renderer.h"
+#include "renderer_immediate.h"
 #include "malla.h"
 #include "_aux.h"
 
-void ImmediateRenderer::render(Malla3D& m) const {
+void RendererImmediate::render(Malla3D& m) const {
     const GLvoid* vertices_data = m.get_vertices_data();
     const GLvoid* indices_data = m.get_indices_data();
     const GLvoid* color_data = m.get_color_data();

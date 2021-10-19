@@ -6,8 +6,8 @@
 #include "malla.h"
 #include "tetraedro.h"
 #include "renderer.h"
-#include "immediate_renderer.h"
-#include "buffered_renderer.h"
+#include "renderer_immediate.h"
+#include "renderer_buffered.h"
 
 typedef enum { NADA, SELOBJETO, SELVISUALIZACION, SELDIBUJADO } menu;
 
@@ -40,8 +40,8 @@ class Escena {
     Malla3D* objeto_actual {nullptr};
 
     // Renderizadores
-    ImmediateRenderer immediate_renderer;
-    BufferedRenderer buffered_renderer;
+    RendererImmediate immediate_renderer;
+    RendererBuffered buffered_renderer;
     Renderer* renderer;
 
   public:
