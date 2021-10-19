@@ -14,7 +14,7 @@ Escena::Escena()
     ejes.changeAxisSize(5000);
 
     cube = new Cube(100);
-    tetrahedron = new Tetraedro(100);
+    tetrahedron = new Tetrahedron(100);
     cube->set_color_rgb_cube();
     objeto_actual = cube;
     // crear los objetos de la escena....

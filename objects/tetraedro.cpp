@@ -7,7 +7,7 @@
 #include "_aux.h"
 #include "malla.h"
 
-Tetraedro::Tetraedro(float l)
+Tetrahedron::Tetrahedron(float l)
 {
     const float x_offset = l / 2;
     const float y_offset = sqrt(9*l*l/16) / 2;

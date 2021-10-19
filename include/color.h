@@ -10,7 +10,7 @@
 
 class Malla3D;
 class Cube;
-class Tetraedro;
+class Tetrahedron;
 
 #define PC_BLACK Tupla3f{0,0,0}
 #define PC_RED   Tupla3f{1,0,0}
@@ -31,7 +31,7 @@ public:
     inline const GLvoid* get_data(void) const { return color.data(); }
 
     void init(const Cube& c);
-    void init(const Tetraedro& t);
+    void init(const Tetrahedron& t);
 
     void set_chess(const Malla3D& m, const Tupla3f& color_a=PC_RED, const Tupla3f& color_b=PC_GREEN);
     void set_plain(const Malla3D& m, const Tupla3f& color_a=PC_BLACK);

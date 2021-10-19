@@ -37,7 +37,7 @@ class Escena {
     // Objetos de la escena
     Ejes ejes;
     Cube *cube {nullptr};           
-    Tetraedro *tetrahedron {nullptr};
+    Tetrahedron *tetrahedron {nullptr};
     Malla3D* objeto_actual {nullptr};
 
     // Renderizadores

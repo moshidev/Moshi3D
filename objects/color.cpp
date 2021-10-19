@@ -21,7 +21,7 @@ void Color::init(const Cube& c) {
     color.resize(8);
 }
 
-void Color::init(const Tetraedro& t) {
+void Color::init(const Tetrahedron& t) {
     color.resize(4);
 }
 

@@ -9,9 +9,9 @@
 #include "_aux.h"
 #include "malla.h"
 
-class Tetraedro : public Malla3D {
+class Tetrahedron : public Malla3D {
   public:
-    Tetraedro(float l = 1);
+    Tetrahedron(float l = 1);
 };
 
 #endif /* TETRAEDRO_H_INCLUDED */
