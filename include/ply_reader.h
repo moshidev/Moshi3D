@@ -4,7 +4,7 @@
 // **
 // ** Carlos Ureña - 2012- 2018
 // **
-// ** Lector de archivos PLY: usa std::vector y Tupla3f, Tupla3i
+// ** Lector de archivos PLY: usa std::vector y Tupla3f, Tupla3u
 // ** Lee caras y vertices (ply::read), o bien solo vértices
 // (ply::read_vertices)
 // **
@@ -51,7 +51,7 @@ namespace ply {
 
 void read(const std::string &nombre_archivo_pse, // entrada: nombre de archivo
           std::vector<Tupla3f> &vertices, // salida:  vector de coords. de vert.
-          std::vector<Tupla3i> &caras // salida:  vector de triángulos (índices)
+          std::vector<Tupla3u> &caras // salida:  vector de triángulos (índices)
 );
 
 // **********************************************************************
