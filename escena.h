@@ -62,6 +62,7 @@ class Escena {
     inline void render_lines(bool t) { t ? objeto_actual->enable_polygon_modes(GL_LINE) : objeto_actual->disable_polygon_modes(GL_LINE); }
     inline void render_solid(bool t) { t ? objeto_actual->enable_polygon_modes(GL_FILL) : objeto_actual->disable_polygon_modes(GL_FILL); }
     inline void render_chess(bool t) { t ? objeto_actual->set_color_chess() : objeto_actual->set_color_plain(); }
+    inline void render_rgb(void) { if (objeto_actual == cube) cube->set_color_rgb_cube(); }
 
     inline bool is_rendering_points(void) { return objeto_actual->get_polygon_modes().find(GL_POINT) != objeto_actual->get_polygon_modes().end();}
     inline bool is_rendering_lines(void) { return objeto_actual->get_polygon_modes().find(GL_LINE) != objeto_actual->get_polygon_modes().end();}

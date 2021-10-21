@@ -84,6 +84,10 @@ bool Menu::menu_visualization_mode_selection(Escena& e, unsigned char tecla, int
         std::cout << "Activamos/desactivamos visualización en modo ajedrez" << std::endl;
         e.render_chess(!e.is_rendering_chess());
         break;
+    case 'C':
+        std::cout << "Activamos visualización RGB si el objeto lo soporta" << std::endl;
+        e.render_rgb();
+        break;
     case 'Q':
         std::cout << "Salimos del modo selección de modo de visualización" << std::endl;
         current_menu = &Menu::menu_main;
@@ -94,6 +98,7 @@ bool Menu::menu_visualization_mode_selection(Escena& e, unsigned char tecla, int
         std::cout << "'L': Activamos/desactivamos visualización en modo líneas.\n";
         std::cout << "'S': Activamos/desactivamos visualización en modo sólido.\n";
         std::cout << "'A': Activamos/desactivamos visualización en modo ajedrez.\n";
+        std::cout << "'C': Activamos visualización RGB si el objeto lo soporta.\n";
         std::cout << "'Q': Volvemos al menú principal." << std::endl;
         break;
     }
