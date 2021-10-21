@@ -24,16 +24,16 @@ static void cube_init_vertices(std::vector<Tupla3f>& v, float lado) {
 
 static void cube_init_indices(std::vector<Tupla3u>& i) {
    i.reserve(12);
-   i.emplace_back(3, 2, 0);
-   i.emplace_back(0, 1, 3);
    i.emplace_back(3, 1, 6);
    i.emplace_back(4, 6, 1);
-   i.emplace_back(7, 6, 4);
+   i.emplace_back(4, 7, 6);
    i.emplace_back(4, 5, 7);
-   i.emplace_back(7, 5, 2);
-   i.emplace_back(0, 2, 5);
-   i.emplace_back(1, 0, 4);
-   i.emplace_back(4, 0, 5);
+   i.emplace_back(7, 5, 0);
+   i.emplace_back(0, 2, 7);
+   i.emplace_back(0, 1, 2);
+   i.emplace_back(3, 2, 1);
+   i.emplace_back(1, 5, 4);
+   i.emplace_back(1, 0, 5);
    i.emplace_back(6, 7, 3);
    i.emplace_back(3, 7, 2);
    i.resize(12);
