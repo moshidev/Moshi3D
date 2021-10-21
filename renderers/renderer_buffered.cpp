@@ -31,6 +31,7 @@ void RendererBuffered::render(Malla3D& m) const {
     const std::set<int>& polygon_modes = m.get_polygon_modes();
     
     glEnable(GL_CULL_FACE);
+    glShadeModel(m.get_color_shade_mode());
     set_vertex_pointer(m.get_vertices_VBO_id());
     set_color_pointer(m.get_color_VBO_id());
 

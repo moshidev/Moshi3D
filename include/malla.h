@@ -23,6 +23,7 @@ class Malla3D {
     inline const GLvoid* get_vertices_data(void) const { return vertices.data(); }
     inline const GLvoid* get_indices_data(void) const { return indices.data(); }
     inline const GLvoid* get_color_data(void) const { return color.get_data(); }
+    inline GLuint get_color_shade_mode(void) const { return color.get_shade_mode(); }
     inline GLsizei get_indices_size(void) const { return 3*indices.size(); }
     inline size_t get_num_vertices(void) const { return vertices.size(); }
 

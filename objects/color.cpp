@@ -26,6 +26,7 @@ void Color::init(const Tetrahedron& t) {
 }
 
 void Color::set_chess(const Malla3D& m, const Tupla3f& color_a, const Tupla3f& color_b) {
+    shade_mode = GL_FLAT;
     color.clear();
     for (int i = 0; i < m.get_indices_size()/2; i++) {
         color.push_back(color_a);
@@ -35,6 +36,7 @@ void Color::set_chess(const Malla3D& m, const Tupla3f& color_a, const Tupla3f& c
 }
 
 void Color::set_plain(const Malla3D& m, const Tupla3f& color_a) {
+    shade_mode = GL_FLAT;
     color.clear();
     for (int i = 0; i < m.get_indices_size(); i++) {
         color.push_back(color_a);
@@ -43,6 +45,7 @@ void Color::set_plain(const Malla3D& m, const Tupla3f& color_a) {
 }
 
 void Color::set_rgb(const Cube& c) {
+    shade_mode = GL_SMOOTH;
     color.clear();
     for (int i = 0; i < 8; i++) {
         Tupla3f t {

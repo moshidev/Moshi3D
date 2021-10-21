@@ -56,7 +56,6 @@ void Escena::dibujar()
     change_observer();
     ejes.draw();
 
-    glShadeModel(GL_FLAT);
     glPointSize(10);
     
     if (objeto_actual != nullptr) {
