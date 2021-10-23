@@ -19,12 +19,8 @@ void Color::update_VBO(void) {
     }
 }
 
-void Color::init(const Cube& c) {
-    color.assign(8, MOSHI3D_DEFAULT_BLUE);
-}
-
-void Color::init(const Tetrahedron& t) {
-    color.assign(4, MOSHI3D_DEFAULT_BLUE);
+void Color::init(const Mesh3D& m) {
+    color.assign(m.get_num_vertices(), MOSHI3D_DEFAULT_BLUE);
 }
 
 void Color::set_chess(const Mesh3D& m, const Tupla3f& color_a, const Tupla3f& color_b) {

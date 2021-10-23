@@ -33,8 +33,7 @@ public:
 
     const GLuint get_shade_mode(void) const { return shade_mode; }
 
-    void init(const Cube& c);
-    void init(const Tetrahedron& t);
+    void init(const Mesh3D& m);
 
     void set_chess(const Mesh3D& m, const Tupla3f& color_a=PC_RED, const Tupla3f& color_b=PC_GREEN);
     void set_plain(const Mesh3D& m, const Tupla3f& color_a=PC_BLACK);
