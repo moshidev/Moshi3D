@@ -4,10 +4,10 @@
  */
 
 #include "renderer_immediate.h"
-#include "malla.h"
+#include "mesh.h"
 #include "_aux.h"
 
-void RendererImmediate::render(Malla3D& m) const {
+void RendererImmediate::render(Mesh3D& m) const {
     const std::set<int>& polygon_modes = m.get_polygon_modes();
     
     glEnable(GL_CULL_FACE);

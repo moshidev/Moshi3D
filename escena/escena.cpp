@@ -1,6 +1,6 @@
 #include "escena.h"
 #include "_aux.h" // includes de OpenGL/glut/glew, windows, y librería std de C++
-#include "malla.h" // objetos: Cubo y otros....
+#include "mesh.h" // objetos: Cubo y otros....
 
 Escena::Escena()
 : renderer{&immediate_renderer}

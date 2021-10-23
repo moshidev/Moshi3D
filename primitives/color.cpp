@@ -1,11 +1,11 @@
 #include "color.h"
-#include "malla.h"
+#include "mesh.h"
 
 #define MOSHI3D_DEFAULT_BLUE {0.25, 0.5, 0.75}
 
 GLuint Color::get_VBO_id(void) {
     if (color_VBO_id == 0) {
-        color_VBO_id = Malla3D::create_VBO(GL_ARRAY_BUFFER, sizeof(Tupla3f)*color.size(), color.data());
+        color_VBO_id = Mesh3D::create_VBO(GL_ARRAY_BUFFER, sizeof(Tupla3f)*color.size(), color.data());
     }
 
     return color_VBO_id;
@@ -27,7 +27,7 @@ void Color::init(const Tetrahedron& t) {
     color.assign(4, MOSHI3D_DEFAULT_BLUE);
 }
 
-void Color::set_chess(const Malla3D& m, const Tupla3f& color_a, const Tupla3f& color_b) {
+void Color::set_chess(const Mesh3D& m, const Tupla3f& color_a, const Tupla3f& color_b) {
     shade_mode = GL_FLAT;
     color.clear();
     for (int i = 0; i < m.get_indices_size()/2; i++) {
@@ -37,7 +37,7 @@ void Color::set_chess(const Malla3D& m, const Tupla3f& color_a, const Tupla3f& c
     update_VBO();
 }
 
-void Color::set_plain(const Malla3D& m, const Tupla3f& color_a) {
+void Color::set_plain(const Mesh3D& m, const Tupla3f& color_a) {
     shade_mode = GL_FLAT;
     color.clear();
     for (int i = 0; i < m.get_indices_size(); i++) {

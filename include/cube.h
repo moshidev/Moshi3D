@@ -7,9 +7,9 @@
 #define CUBO_H_INCLUDED
 
 #include "_aux.h"
-#include "malla.h"
+#include "mesh.h"
 
-class Cube : public Malla3D {
+class Cube : public Mesh3D {
   public:
     Cube(float l = 1);
 

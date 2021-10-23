@@ -4,8 +4,8 @@
 #include "cube.h"
 #include "menu.h"
 #include "ejes.h"
-#include "malla.h"
-#include "tetraedro.h"
+#include "mesh.h"
+#include "tetrahedron.h"
 #include "renderer.h"
 #include "renderer_immediate.h"
 #include "renderer_buffered.h"
@@ -38,7 +38,7 @@ class Escena {
     Ejes ejes;
     Cube *cube {nullptr};           
     Tetrahedron *tetrahedron {nullptr};
-    Malla3D* objeto_actual {nullptr};
+    Mesh3D* objeto_actual {nullptr};
 
     // Renderizadores
     RendererImmediate immediate_renderer;

@@ -4,7 +4,7 @@
  */
 
 #include "_aux.h"
-#include "malla.h"
+#include "mesh.h"
 #include "cube.h"
 #include "color.h"
 

@@ -4,7 +4,7 @@
  */
 
 #include "renderer_buffered.h"
-#include "malla.h"
+#include "mesh.h"
 #include "_aux.h"
 
 void set_vertex_pointer(GLuint vertices_vbo_id) {
@@ -27,7 +27,7 @@ void draw_elements_from_indices(GLuint indices_vbo_id, GLsizei count) {
     glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void RendererBuffered::render(Malla3D& m) const {
+void RendererBuffered::render(Mesh3D& m) const {
     const std::set<int>& polygon_modes = m.get_polygon_modes();
     
     glEnable(GL_CULL_FACE);

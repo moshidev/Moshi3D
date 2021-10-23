@@ -8,9 +8,9 @@
 
 #include "_aux.h"
 #include "ply_reader.h"
-#include "malla.h"
+#include "mesh.h"
 
-class ObjPLY: public Malla3D {
+class ObjPLY: public Mesh3D {
 public:
     ObjPLY(const std::string& filename);
 };

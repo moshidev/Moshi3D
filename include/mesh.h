@@ -3,8 +3,8 @@
  * GPLv3 License.
  */
 
-#ifndef MALLA3D_H_INCLUDED
-#define MALLA3D_H_INCLUDED
+#ifndef MOSHI3D_MESH3D_H_
+#define MOSHI3D_MESH3D_H_
 
 #include <set>
 #include "_aux.h"
@@ -12,7 +12,7 @@
 
 class Renderer;
 
-class Malla3D {
+class Mesh3D {
   public:
     virtual void draw(const Renderer& r);
     void set_color_chess(void);
@@ -66,8 +66,8 @@ class Malla3D {
     std::set<int> polygon_modes;
 
   public:
-    Malla3D();
-    virtual ~Malla3D() = 0;
+    Mesh3D();
+    virtual ~Mesh3D() = 0;
 };
 
-#endif
+#endif /* MOSHI3D_MESH3D_H_ */

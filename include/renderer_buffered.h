@@ -10,7 +10,7 @@
 
 class RendererBuffered : public Renderer {
     public:
-    void render(Malla3D& m) const;
+    void render(Mesh3D& m) const;
 };
 
 #endif /* MOSHI3D_BUFFERED_RENDERER_H_ */

@@ -8,7 +8,7 @@
 
 #include "_aux.h"
 
-class Malla3D;
+class Mesh3D;
 class Cube;
 class Tetrahedron;
 
@@ -36,8 +36,8 @@ public:
     void init(const Cube& c);
     void init(const Tetrahedron& t);
 
-    void set_chess(const Malla3D& m, const Tupla3f& color_a=PC_RED, const Tupla3f& color_b=PC_GREEN);
-    void set_plain(const Malla3D& m, const Tupla3f& color_a=PC_BLACK);
+    void set_chess(const Mesh3D& m, const Tupla3f& color_a=PC_RED, const Tupla3f& color_b=PC_GREEN);
+    void set_plain(const Mesh3D& m, const Tupla3f& color_a=PC_BLACK);
 
     void set_rgb(const Cube& c);
 };

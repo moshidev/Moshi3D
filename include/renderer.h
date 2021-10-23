@@ -6,11 +6,11 @@
 #ifndef MOSHI3D_RENDERER_H_
 #define MOSHI3D_RENDERER_H_
 
-class Malla3D;
+class Mesh3D;
 
 class Renderer {
     public:
-    virtual void render(Malla3D& m) const = 0;
+    virtual void render(Mesh3D& m) const = 0;
 };
 
 #endif /* MOSHI3D_RENDERER_H_ */

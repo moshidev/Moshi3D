@@ -3,9 +3,9 @@
  * GPLv3 License.
  */
 
-#include "tetraedro.h"
+#include "tetrahedron.h"
 #include "_aux.h"
-#include "malla.h"
+#include "mesh.h"
 
 Tetrahedron::Tetrahedron(float l)
 {

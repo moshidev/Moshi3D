@@ -7,9 +7,9 @@
 #define TETRAEDRO_H_INCLUDED
 
 #include "_aux.h"
-#include "malla.h"
+#include "mesh.h"
 
-class Tetrahedron : public Malla3D {
+class Tetrahedron : public Mesh3D {
   public:
     Tetrahedron(float l = 1);
 };
