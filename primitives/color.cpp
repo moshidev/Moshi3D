@@ -26,7 +26,7 @@ void Color::init(const Mesh3D& m) {
 void Color::set_chess(const Mesh3D& m, const Tupla3f& color_a, const Tupla3f& color_b) {
     shade_mode = GL_FLAT;
     color.clear();
-    for (int i = 0; i < m.get_indices_size()/2; i++) {
+    for (int i = 0; i < m.get_num_vertices()/2; i++) {
         color.push_back(color_a);
         color.push_back(color_b);
     }
@@ -36,7 +36,7 @@ void Color::set_chess(const Mesh3D& m, const Tupla3f& color_a, const Tupla3f& co
 void Color::set_plain(const Mesh3D& m, const Tupla3f& color_a) {
     shade_mode = GL_FLAT;
     color.clear();
-    for (int i = 0; i < m.get_indices_size(); i++) {
+    for (int i = 0; i < m.get_num_vertices(); i++) {
         color.push_back(color_a);
     }
     update_VBO();
