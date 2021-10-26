@@ -29,7 +29,6 @@ void RendererBuffered::render(Mesh3D& m) const {
     const std::set<int>& polygon_modes = m.get_polygon_modes();
     
     glEnable(GL_CULL_FACE);
-    glShadeModel(m.get_color_shade_mode());
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
 

@@ -19,7 +19,6 @@ class Tetrahedron;
 class Color {
     std::vector<Tupla3f> color;
     GLuint color_VBO_id {0};
-    GLuint shade_mode {GL_SMOOTH};
 
     void update_VBO(void);
 public:
@@ -30,8 +29,6 @@ public:
      */
     GLuint get_VBO_id(void);
     inline const GLvoid* get_data(void) const { return color.data(); }
-
-    const GLuint get_shade_mode(void) const { return shade_mode; }
 
     void init(const Mesh3D& m);
 

@@ -11,7 +11,6 @@ void RendererImmediate::render(Mesh3D& m) const {
     const std::set<int>& polygon_modes = m.get_polygon_modes();
     
     glEnable(GL_CULL_FACE);
-    glShadeModel(m.get_color_shade_mode());
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, m.get_vertices_data());
     glEnableClientState(GL_COLOR_ARRAY);
