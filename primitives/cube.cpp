@@ -8,7 +8,7 @@
 #include "cube.h"
 #include "color.h"
 
-static void cube_init_vertices(std::vector<Tupla3f>& v, float lado) {
+void Cube::cube_init_vertices(std::vector<Tupla3f>& v, float lado) {
    const float offset = lado/2;
    v.reserve(8);
    v.emplace_back(-offset, -offset, -offset);
@@ -22,7 +22,7 @@ static void cube_init_vertices(std::vector<Tupla3f>& v, float lado) {
    v.resize(8);
 }
 
-static void cube_init_indices(std::vector<Tupla3u>& i) {
+void Cube::cube_init_indices(std::vector<Tupla3u>& i) {
    i.reserve(12);
    i.emplace_back(3, 1, 6);
    i.emplace_back(4, 6, 1);
