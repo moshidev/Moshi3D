@@ -20,11 +20,9 @@ void set_color_pointer(GLuint color_vbo_id) {
 }
 
 void draw_elements_from_indices(GLuint indices_vbo_id, GLsizei count) {
-    glEnableClientState(GL_VERTEX_ARRAY);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_vbo_id);
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void RendererBuffered::render(Mesh3D& m) const {
@@ -32,6 +30,9 @@ void RendererBuffered::render(Mesh3D& m) const {
     
     glEnable(GL_CULL_FACE);
     glShadeModel(m.get_color_shade_mode());
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+
     set_vertex_pointer(m.get_vertices_VBO_id());
     set_color_pointer(m.get_color_VBO_id());
 
@@ -39,4 +40,7 @@ void RendererBuffered::render(Mesh3D& m) const {
         glPolygonMode(GL_FRONT_AND_BACK, mode);
         draw_elements_from_indices(m.get_indices_VBO_id(), m.get_indices_size());
     }
+
+    glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
 }
