@@ -23,5 +23,5 @@ Tetrahedron::Tetrahedron(float l)
     indices.emplace_back(2, 3, 0);
     indices.emplace_back(3, 2, 1);
 
-    color.init(*this);
+    init_color(vertices.size());
 }

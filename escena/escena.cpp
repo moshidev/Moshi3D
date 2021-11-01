@@ -3,7 +3,7 @@
 #include "mesh.h" // objetos: Cubo y otros....
 
 Escena::Escena()
-: renderer{&immediate_renderer}
+: renderer{&buffered_renderer}
 {
     front_plane = 50.0;
     back_plane = 2000.0;
@@ -15,11 +15,20 @@ Escena::Escena()
 
     cube = new Cube(100);
     tetrahedron = new Tetrahedron(100);
-    cube->set_color_rgb_cube();
+    //tmp = new RevolutionObject("/Users/daniel/Moshi3D/resources/lata-pcue.ply", 8);
+    //tmp->set_color_chess();
+    //cube->set_color_chess();
+    //objeto_actual = tmp;
     objeto_actual = cube;
     // crear los objetos de la escena....
     // .......completar: ...
     // .....
+}
+
+Escena::~Escena() {
+    delete cube;
+    delete tetrahedron;
+    delete tmp;
 }
 
 //**************************************************************************

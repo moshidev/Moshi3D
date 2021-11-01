@@ -12,27 +12,32 @@ Mesh3D::Mesh3D() {
     enable_polygon_modes(GL_FILL);
 }
 
-Mesh3D::~Mesh3D() {}
+Mesh3D::~Mesh3D() {
+    if (vertices_VBO) {
+        delete vertices_VBO;
+    }
+    if (color_solid_VBO) {
+        delete color_solid_VBO;
+    }
+    if (color_line_VBO) {
+        delete color_line_VBO;
+    }
+    if (color_point_VBO) {
+        delete color_point_VBO;
+    }
+    if (indices_VBO) {
+        delete indices_VBO;
+    }
+}
+
+void Mesh3D::init_color(unsigned n_vertices) {
+    color_solid.assign(n_vertices, {0.25, 0.5, 0.75});
+    color_line.assign(n_vertices, {1.0, 0.0, 0.0});
+    color_point.assign(n_vertices, {0.0, 1.0, 0.0});
+}
 
 void Mesh3D::draw(const Renderer& r) {
     r.render(*this);
-}
-
-void Mesh3D::set_color_chess(void) {
-    color.set_chess(*this);
-}
-
-void Mesh3D::set_color_plain(void) {
-    color.set_plain(*this);
-}
-
-GLuint Mesh3D::create_VBO(GLuint target, GLsizeiptr size, const void* data, GLuint usage) {
-    GLuint vbo_id;
-    glGenBuffers(1, &vbo_id);
-    glBindBuffer(target, vbo_id);
-    glBufferData(target, size, data, usage);
-    glBindBuffer(target, 0);
-    return vbo_id;
 }
 
 const VertexBuffer& Mesh3D::get_vertices_VBO(void) {
@@ -40,6 +45,27 @@ const VertexBuffer& Mesh3D::get_vertices_VBO(void) {
         vertices_VBO = new VertexBuffer(sizeof(Tupla3f)*vertices.size(), vertices.data());
     }
     return *vertices_VBO;
+}
+
+const VertexBuffer& Mesh3D::get_color_solid_VBO(void) {
+    if (color_solid_VBO == nullptr) {
+        color_solid_VBO = new VertexBuffer(sizeof(Tupla3f)*color_solid.size(), color_solid.data());
+    }
+    return *color_solid_VBO;
+}
+
+const VertexBuffer& Mesh3D::get_color_line_VBO(void) {
+    if (color_line_VBO == nullptr) {
+        color_line_VBO = new VertexBuffer(sizeof(Tupla3f)*color_line.size(), color_line.data());
+    }
+    return *color_line_VBO;
+}
+
+const VertexBuffer& Mesh3D::get_color_point_VBO(void) {
+    if (color_point_VBO == nullptr) {
+        color_point_VBO = new VertexBuffer(sizeof(Tupla3f)*color_point.size(), color_point.data());
+    }
+    return *color_point_VBO;
 }
 
 const IndexBuffer& Mesh3D::get_indices_VBO(void) {

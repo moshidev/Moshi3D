@@ -25,7 +25,7 @@ bool Menu::main(Escena& e, unsigned char tecla, int x, int y) {
         current_menu = &Menu::render_mode_selection;
         break;
     case 'Q':
-        std::cout << "Presionada la letra Q -> programa finalizado" << std::endl;
+        std::cout << "Presionada la letra Q -> finalizamos programa" << std::endl;
         return true;
         break;
     default:
@@ -82,11 +82,11 @@ bool Menu::visualization_mode_selection(Escena& e, unsigned char tecla, int x, i
         break;
     case 'A':
         std::cout << "Activamos/desactivamos visualización en modo ajedrez" << std::endl;
-        e.render_chess(!e.is_rendering_chess());
+        std::cout << "SIN IMPLEMENTAR" << std::endl;
         break;
     case 'C':
         std::cout << "Activamos visualización RGB si el objeto lo soporta" << std::endl;
-        e.render_rgb();
+        std::cout << "SIN IMPLEMENTAR" << std::endl;
         break;
     case 'Q':
         std::cout << "Salimos del modo selección de modo de visualización" << std::endl;

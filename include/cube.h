@@ -15,8 +15,6 @@ class Cube : public Mesh3D {
 
 public:
     Cube(float l = 1);
-
-    void set_color_rgb_cube(void);
 };
 
 #endif /* CUBO_H_INCLUDED */
