@@ -42,23 +42,34 @@ static void draw_elements_from_indices(const IndexBuffer& ib, GLsizei count, GLs
 }
 
 static void render_chess(Mesh3D& m) {
+    const std::set<int>& polygon_modes = m.get_polygon_modes();
+
     glEnable(GL_CULL_FACE);
 
     glEnableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_COLOR_ARRAY);
 
     set_vertex_pointer(m.get_vertices_VBO());
-    
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    
-    const auto& colors = m.get_chess_colors();
-    GLsizei first_half = m.get_indices_count()/2;
-    GLsizei second_half = m.get_indices_count() - first_half;
-    glColor3fv((GLfloat*)&colors.first);
-    draw_elements_from_indices(m.get_indices_VBO(), first_half, 0);
-    glColor3fv((GLfloat*)&colors.second);
-    draw_elements_from_indices(m.get_indices_VBO(), second_half, first_half);
 
+    for (auto& mode : polygon_modes) {
+        glPolygonMode(GL_FRONT_AND_BACK, mode);
+        if (mode == GL_LINE || mode == GL_POINT) {
+            glEnableClientState(GL_COLOR_ARRAY);
+            set_color_pointer(m, mode);
+            glDrawElements(GL_TRIANGLES, m.get_indices_count(), GL_UNSIGNED_INT, m.get_indices_data());
+        }
+        else {
+            glDisableClientState(GL_COLOR_ARRAY);
+            const auto& colors = m.get_chess_colors();
+            GLsizei first_half = m.get_indices_count()/2;
+            GLsizei second_half = m.get_indices_count() - first_half;
+            glColor3fv((GLfloat*)&colors.first);
+            draw_elements_from_indices(m.get_indices_VBO(), first_half, 0);
+            glColor3fv((GLfloat*)&colors.second);
+            draw_elements_from_indices(m.get_indices_VBO(), second_half, first_half);
+        }
+    }
+
+    glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
 
     glDisable(GL_CULL_FACE);
