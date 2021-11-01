@@ -6,6 +6,7 @@
 #include "ejes.h"
 #include "mesh.h"
 #include "tetrahedron.h"
+#include "revolution_object.h"
 #include "renderer.h"
 #include "renderer_immediate.h"
 #include "renderer_buffered.h"
@@ -38,6 +39,7 @@ class Escena {
     Ejes ejes;
     Cube *cube {nullptr};           
     Tetrahedron *tetrahedron {nullptr};
+    RevolutionObject *tmp {nullptr};
     Mesh3D* objeto_actual {nullptr};
 
     // Renderizadores
@@ -50,6 +52,7 @@ class Escena {
   public:
     
     Escena();
+    ~Escena();
     void inicializar(int UI_window_width, int UI_window_height);
     void redimensionar(int new_width, int new_height);
 
@@ -61,13 +64,12 @@ class Escena {
     inline void render_points(bool t) { t ? objeto_actual->enable_polygon_modes(GL_POINT) : objeto_actual->disable_polygon_modes(GL_POINT); }
     inline void render_lines(bool t) { t ? objeto_actual->enable_polygon_modes(GL_LINE) : objeto_actual->disable_polygon_modes(GL_LINE); }
     inline void render_solid(bool t) { t ? objeto_actual->enable_polygon_modes(GL_FILL) : objeto_actual->disable_polygon_modes(GL_FILL); }
-    inline void render_chess(bool t) { t ? objeto_actual->set_color_chess() : objeto_actual->set_color_plain(); }
-    inline void render_rgb(void) { if (objeto_actual == cube) cube->set_color_rgb_cube(); }
+    inline void render_chess(bool t) { objeto_actual->set_chess_enabled(t); }
 
     inline bool is_rendering_points(void) { return objeto_actual->get_polygon_modes().find(GL_POINT) != objeto_actual->get_polygon_modes().end();}
     inline bool is_rendering_lines(void) { return objeto_actual->get_polygon_modes().find(GL_LINE) != objeto_actual->get_polygon_modes().end();}
     inline bool is_rendering_solid(void) { return objeto_actual->get_polygon_modes().find(GL_FILL) != objeto_actual->get_polygon_modes().end();}
-    inline bool is_rendering_chess(void) { return *((float*)objeto_actual->get_color_data()) == 1; } // TODO: fix this
+    inline bool is_rendering_chess(void) { return objeto_actual->get_chess_enabled(); }
 
     inline void enable_cube(bool t) { objeto_actual = t ? cube : nullptr; }
     inline void enable_tetrahedron(bool t) { objeto_actual = t ? tetrahedron : nullptr; }

@@ -15,11 +15,13 @@ Escena::Escena()
 
     cube = new Cube(100);
     tetrahedron = new Tetrahedron(100);
-    //tmp = new RevolutionObject("/Users/daniel/Moshi3D/resources/lata-pcue.ply", 8);
-    //tmp->set_color_chess();
-    //cube->set_color_chess();
-    //objeto_actual = tmp;
-    objeto_actual = cube;
+    tmp = new RevolutionObject("/Users/daniel/Moshi3D/resources/lata-pcue.ply", 8);
+    tmp->set_chess_enabled(true);
+    cube->set_chess_enabled(true);
+    tetrahedron->set_chess_enabled(true);
+    objeto_actual = tmp;
+    //objeto_actual = cube;
+
     // crear los objetos de la escena....
     // .......completar: ...
     // .....
@@ -66,6 +68,7 @@ void Escena::dibujar()
     ejes.draw();
 
     glPointSize(10);
+    glLineWidth(1.25);
     
     if (objeto_actual != nullptr) {
         objeto_actual->draw(*renderer);
