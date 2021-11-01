@@ -82,7 +82,7 @@ bool Menu::visualization_mode_selection(Escena& e, unsigned char tecla, int x, i
         break;
     case 'A':
         std::cout << "Activamos/desactivamos visualización en modo ajedrez" << std::endl;
-        std::cout << "SIN IMPLEMENTAR" << std::endl;
+        e.render_chess(!e.is_rendering_chess());
         break;
     case 'C':
         std::cout << "Activamos visualización RGB si el objeto lo soporta" << std::endl;
