@@ -18,9 +18,9 @@ Tetrahedron::Tetrahedron(float l)
     vertices.emplace_back(        0, -y_offset,  z_offset*2);
     vertices.emplace_back(        0,  y_offset,         0);
 
-    indices.emplace_back(1, 2, 0);
-    indices.emplace_back(1, 0, 3);
+    indices.emplace_back(0, 1, 2);
     indices.emplace_back(2, 3, 0);
+    indices.emplace_back(1, 0, 3);
     indices.emplace_back(3, 2, 1);
 
     init_color(vertices.size());

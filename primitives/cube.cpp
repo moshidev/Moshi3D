@@ -14,27 +14,29 @@ void Cube::cube_init_vertices(std::vector<Tupla3f>& v, float lado) {
    v.emplace_back(-offset, -offset,  offset);
    v.emplace_back(-offset,  offset, -offset);
    v.emplace_back(-offset,  offset,  offset);
-   v.emplace_back(offset, -offset,  offset);
    v.emplace_back(offset, -offset, -offset);
-   v.emplace_back(offset,  offset,  offset);
+   v.emplace_back(offset, -offset,  offset);
    v.emplace_back(offset,  offset, -offset);
+   v.emplace_back(offset,  offset,  offset);
+   
    v.resize(8);
 }
 
 void Cube::cube_init_indices(std::vector<Tupla3u>& i) {
    i.reserve(12);
-   i.emplace_back(3, 1, 6);
-   i.emplace_back(4, 6, 1);
-   i.emplace_back(4, 7, 6);
-   i.emplace_back(4, 5, 7);
-   i.emplace_back(7, 5, 0);
-   i.emplace_back(0, 2, 7);
-   i.emplace_back(0, 1, 2);
-   i.emplace_back(3, 2, 1);
-   i.emplace_back(1, 5, 4);
-   i.emplace_back(1, 0, 5);
-   i.emplace_back(6, 7, 3);
-   i.emplace_back(3, 7, 2);
+   i.emplace_back(0, 3, 2);
+   i.emplace_back(1, 7, 3);
+   i.emplace_back(7, 5, 4);
+   i.emplace_back(6, 4, 0);
+   i.emplace_back(5, 1, 0);
+   i.emplace_back(2, 7, 6);
+
+   i.emplace_back(0, 1, 3);
+   i.emplace_back(1, 5, 7);
+   i.emplace_back(7, 4, 6);
+   i.emplace_back(6, 0, 2);
+   i.emplace_back(5, 0, 4);
+   i.emplace_back(2, 3, 7);
    i.resize(12);
 }
 

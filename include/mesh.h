@@ -38,6 +38,10 @@ class Mesh3D {
     inline void disable_polygon_modes(int mode) { polygon_modes.erase(mode); }
     inline const std::set<int>& get_polygon_modes(void) const { return polygon_modes; }
 
+    inline void set_chess_enabled(bool b) { chess_enabled = b; }
+    inline bool get_chess_enabled(void) const { return chess_enabled; }
+    inline std::pair<Tupla3f,Tupla3f> get_chess_colors(void) const { return {{1.0, 0.0, 1.0}, {0.0, 0.125, 1.0}}; }
+
   protected:
     void init_color(unsigned n_vertices);
     void calcular_normales(); // calcula tabla de normales de vértices (práctica 3)
@@ -57,6 +61,8 @@ class Mesh3D {
     IndexBuffer* indices_VBO {nullptr};
 
     std::set<int> polygon_modes;
+
+    bool chess_enabled;
 };
 
 #endif /* MOSHI3D_MESH3D_H_ */
