@@ -28,6 +28,8 @@ static void set_color_pointer(Mesh3D& m, int mode) {
 }
 
 static void render_chess(Mesh3D& m) {
+    glEnable(GL_CULL_FACE);
+
     glEnableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
 
@@ -44,6 +46,8 @@ static void render_chess(Mesh3D& m) {
     glDrawElements(GL_TRIANGLES, second_half, GL_UNSIGNED_INT, (unsigned int*)m.get_indices_data() + first_half);
 
     glDisableClientState(GL_VERTEX_ARRAY);
+
+    glDisable(GL_CULL_FACE);
 }
 
 static void render_std(Mesh3D& m) {
