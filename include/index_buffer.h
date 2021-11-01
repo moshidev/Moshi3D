@@ -20,8 +20,8 @@ public:
     IndexBuffer(GLsizei count, const GLvoid* data, GLenum usage=GL_STATIC_DRAW);
     ~IndexBuffer();
 
-    void bind(void);
-    void unbind(void);
+    void bind(void) const;
+    void unbind(void) const;
     void set_indices(GLsizei count, const GLvoid* data, GLenum usage=GL_STATIC_DRAW);
 };
 

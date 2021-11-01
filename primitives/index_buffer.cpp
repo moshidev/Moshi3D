@@ -18,16 +18,17 @@ IndexBuffer::~IndexBuffer() {
     glDeleteBuffers(1, &id);
 }
 
-void IndexBuffer::bind(void) {
+void IndexBuffer::bind(void) const {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
 }
 
-void IndexBuffer::unbind(void) {
+void IndexBuffer::unbind(void) const {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void IndexBuffer::set_indices(GLsizei count, const GLvoid* data, GLenum usage) {
     bind();
+    index_count = count;
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, count*sizeof(unsigned int), data, usage);
     unbind();
 }

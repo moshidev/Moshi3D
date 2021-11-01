@@ -19,8 +19,8 @@ public:
     VertexBuffer(GLsizeiptr size, const GLvoid* data, GLenum usage=GL_STATIC_DRAW);
     ~VertexBuffer();
 
-    void bind(void);
-    void unbind(void);
+    void bind(void) const;
+    void unbind(void) const;
     void set_data(GLsizeiptr size, const GLvoid* data, GLenum usage=GL_STATIC_DRAW);
 };
 
