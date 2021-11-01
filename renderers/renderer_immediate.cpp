@@ -27,7 +27,26 @@ static void set_color_pointer(Mesh3D& m, int mode) {
     }
 }
 
-void RendererImmediate::render(Mesh3D& m) const {
+static void render_chess(Mesh3D& m) {
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
+
+    glVertexPointer(3, GL_FLOAT, 0, m.get_vertices_data());
+    
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    
+    const auto& colors = m.get_chess_colors();
+    GLsizei first_half = m.get_indices_count()/2;
+    GLsizei second_half = m.get_indices_count() - first_half;
+    glColor3fv((GLfloat*)&colors.first);
+    glDrawElements(GL_TRIANGLES, first_half, GL_UNSIGNED_INT, m.get_indices_data());
+    glColor3fv((GLfloat*)&colors.second);
+    glDrawElements(GL_TRIANGLES, second_half, GL_UNSIGNED_INT, (unsigned int*)m.get_indices_data() + first_half);
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+static void render_std(Mesh3D& m) {
     const std::set<int>& polygon_modes = m.get_polygon_modes();
     
     glEnable(GL_CULL_FACE);
@@ -50,4 +69,13 @@ void RendererImmediate::render(Mesh3D& m) const {
 
     glDisable(GL_POLYGON_OFFSET_LINE);
     glDisable(GL_CULL_FACE);
+}
+
+void RendererImmediate::render(Mesh3D& m) const {
+    if (m.get_chess_enabled()) {
+        render_chess(m);
+    }
+    else {
+        render_std(m);
+    }
 }
