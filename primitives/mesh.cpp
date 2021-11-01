@@ -35,16 +35,16 @@ GLuint Mesh3D::create_VBO(GLuint target, GLsizeiptr size, const void* data, GLui
     return vbo_id;
 }
 
-GLuint Mesh3D::get_vertices_VBO_id(void) {
-    if (vertices_VBO_id == 0) {
-        vertices_VBO_id = create_VBO(GL_ARRAY_BUFFER, sizeof(Tupla3f)*vertices.size(), vertices.data());
+const VertexBuffer& Mesh3D::get_vertices_VBO(void) {
+    if (vertices_VBO == nullptr) {
+        vertices_VBO = new VertexBuffer(sizeof(Tupla3f)*vertices.size(), vertices.data());
     }
-    return vertices_VBO_id;
+    return *vertices_VBO;
 }
 
-GLuint Mesh3D::get_indices_VBO_id(void) {
-    if (indices_VBO_id == 0) {
-        indices_VBO_id = create_VBO(GL_ELEMENT_ARRAY_BUFFER, sizeof(Tupla3u)*indices.size(), indices.data());
+const IndexBuffer& Mesh3D::get_indices_VBO(void) {
+    if (indices_VBO == nullptr) {
+        indices_VBO = new IndexBuffer(3*indices.size(), indices.data());
     }
-    return indices_VBO_id;
+    return *indices_VBO;
 }

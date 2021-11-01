@@ -9,6 +9,8 @@
 #include <set>
 #include "_aux.h"
 #include "color.h"
+#include "vertex_buffer.h"
+#include "index_buffer.h"
 
 class Renderer;
 
@@ -26,19 +28,9 @@ class Mesh3D {
     inline GLsizei get_indices_size(void) const { return 3*indices.size(); }
     inline size_t get_num_vertices(void) const { return vertices.size(); }
 
-    /**
-     * @brief returns a GL_ARRAY_BUFFER VBO id with the data inside vertices. The first call
-     * to this function will allocate a new VBO for this data.
-     * @warning the VBO_id returned should never be deallocated or modified.
-     */
-    GLuint get_vertices_VBO_id(void);
 
-    /**
-     * @brief returns a GL_ELEMENT_ARRAY_BUFFER id with the data inside indices. The first call
-     * to this function will allocate a new VBO for this data.
-     * @warning the VBO_id returned should never be deallocated or modified.
-     */
-    GLuint get_indices_VBO_id(void);
+    const VertexBuffer& get_vertices_VBO(void);
+    const IndexBuffer& get_indices_VBO(void);
 
     /**
      * @brief returns a GL_ELEMENT_ARRAY_BUFFER id with the data inside color. The first call
@@ -60,8 +52,8 @@ class Mesh3D {
     Color color;
 
   private:
-    GLuint vertices_VBO_id {0};
-    GLuint indices_VBO_id {0};
+    VertexBuffer* vertices_VBO {nullptr};
+    IndexBuffer* indices_VBO {nullptr};
     std::set<int> polygon_modes;
 
   public:
