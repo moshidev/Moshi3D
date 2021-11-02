@@ -44,8 +44,6 @@ static void draw_elements_from_indices(const IndexBuffer& ib, GLsizei count, GLs
 static void render_chess(Mesh3D& m) {
     const std::set<int>& polygon_modes = m.get_polygon_modes();
 
-    glEnable(GL_CULL_FACE);
-
     glEnableClientState(GL_VERTEX_ARRAY);
 
     set_vertex_pointer(m.get_vertices_VBO());
@@ -71,17 +69,11 @@ static void render_chess(Mesh3D& m) {
 
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
-
-    glDisable(GL_CULL_FACE);
 }
 
 static void render_std(Mesh3D& m) {
     const std::set<int>& polygon_modes = m.get_polygon_modes();
     
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_POLYGON_OFFSET_LINE);
-    glPolygonOffset(-25.0, 12.5);
-
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
 
@@ -95,16 +87,20 @@ static void render_std(Mesh3D& m) {
 
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
-
-    glDisable(GL_POLYGON_OFFSET_LINE);
-    glDisable(GL_CULL_FACE);
 }
 
 void RendererBuffered::render(Mesh3D& m) const {
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_POLYGON_OFFSET_LINE);
+    glPolygonOffset(-25.0, 12.5);
+
     if (m.get_chess_enabled()) {
         render_chess(m);
     }
     else {
         render_std(m);
     }
+
+    glDisable(GL_POLYGON_OFFSET_LINE);
+    glDisable(GL_CULL_FACE);
 }
