@@ -15,8 +15,9 @@ Escena::Escena()
 
     cube = new Cube();
     tetrahedron = new Tetrahedron();
-    lata = new RevolutionObject("/Users/daniel/Moshi3D/resources/lata-pcue.ply", 16);
-    peon = new RevolutionObject("/Users/daniel/Moshi3D/resources/peon.ply", 16);
+    lata = new RevolutionObject("/Users/daniel/Moshi3D/resources/lata-pcue.ply", 40);
+    peon = new RevolutionObject("/Users/daniel/Moshi3D/resources/peon.ply", 40);
+    necoarc = new ObjPLY("/Users/daniel/Moshi3D/resources/necoarc.ply");
     lata->set_chess_enabled(true);
     peon->set_chess_enabled(true);
     cube->set_chess_enabled(true);

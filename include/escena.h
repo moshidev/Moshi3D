@@ -7,6 +7,7 @@
 #include "mesh.h"
 #include "tetrahedron.h"
 #include "revolution_object.h"
+#include "objply.h"
 #include "renderer.h"
 #include "renderer_immediate.h"
 #include "renderer_buffered.h"
@@ -41,6 +42,7 @@ class Escena {
     Tetrahedron *tetrahedron {nullptr};
     RevolutionObject *lata {nullptr};
     RevolutionObject *peon {nullptr};
+    ObjPLY *necoarc {nullptr};
     Mesh3D* objeto_actual {nullptr};
 
     // Renderizadores
