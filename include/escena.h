@@ -39,7 +39,8 @@ class Escena {
     Ejes ejes;
     Cube *cube {nullptr};           
     Tetrahedron *tetrahedron {nullptr};
-    RevolutionObject *tmp {nullptr};
+    RevolutionObject *lata {nullptr};
+    RevolutionObject *peon {nullptr};
     Mesh3D* objeto_actual {nullptr};
 
     // Renderizadores

@@ -13,14 +13,15 @@ Escena::Escena()
 
     ejes.changeAxisSize(5000);
 
-    cube = new Cube(100);
-    tetrahedron = new Tetrahedron(100);
-    tmp = new RevolutionObject("/Users/daniel/Moshi3D/resources/lata-pcue.ply", 8);
-    tmp->set_chess_enabled(true);
+    cube = new Cube();
+    tetrahedron = new Tetrahedron();
+    lata = new RevolutionObject("/Users/daniel/Moshi3D/resources/lata-pcue.ply", 16);
+    peon = new RevolutionObject("/Users/daniel/Moshi3D/resources/peon.ply", 16);
+    lata->set_chess_enabled(true);
+    peon->set_chess_enabled(true);
     cube->set_chess_enabled(true);
     tetrahedron->set_chess_enabled(true);
-    objeto_actual = tmp;
-    //objeto_actual = cube;
+    objeto_actual = lata;
 
     // crear los objetos de la escena....
     // .......completar: ...
@@ -30,7 +31,8 @@ Escena::Escena()
 Escena::~Escena() {
     delete cube;
     delete tetrahedron;
-    delete tmp;
+    delete lata;
+    delete peon;
 }
 
 //**************************************************************************
@@ -66,6 +68,7 @@ void Escena::dibujar()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla
     change_observer();
     ejes.draw();
+    glScalef(100.0, 100.0, 100.0);
 
     glPointSize(10);
     glLineWidth(1.25);
