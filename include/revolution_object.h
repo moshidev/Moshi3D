@@ -11,7 +11,9 @@
 #include "mesh.h"
 
 class RevolutionObject : public Mesh3D {
-    void make_mesh(std::vector<Tupla3f> revolution_coordinates, std::vector<Tupla3f>& result, int num_instances);
+    void revolution_surface_make_topology(const std::vector<Tupla3f>& rv, int num_instances);
+    void revolution_surface_make_geometry(const std::vector<Tupla3f>& rv, int num_instances);
+    void make_revolution_surface(std::vector<Tupla3f> revolution_coordinates, int num_instances);
 
     public:
     RevolutionObject(const std::string& ifile, int num_instances, bool upper_surface=true, bool lower_surface=true);
