@@ -86,6 +86,8 @@ void RevolutionObject::make_revolution_surface(std::vector<Tupla3f> revolution_c
     }
 }
 
+RevolutionObject::RevolutionObject() {}
+
 RevolutionObject::RevolutionObject(const std::string& ifile, int num_instances, bool make_south_cover, bool make_north_cover) {
     std::vector<Tupla3f> revolution_coordinates;
     ply::read_vertices(ifile, revolution_coordinates);

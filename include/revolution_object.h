@@ -21,7 +21,8 @@ class RevolutionObject : public Mesh3D {
     void covers_make_north(const Tupla3f& north, int num_instances, int height, int midpoint, int offset);
 
 protected:
-    void make_revolution_surface(std::vector<Tupla3f> revolution_coordinates, int num_instances, bool make_south_cover, bool make_north_cover);
+    void make_revolution_surface(std::vector<Tupla3f> revolution_coordinates, int num_instances, bool make_south_cover=true, bool make_north_cover=true);
+    RevolutionObject();
 
 public:
     RevolutionObject(const std::string& ifile, int num_instances, bool make_south_cover=true, bool make_north_cover=true);
