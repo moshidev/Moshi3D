@@ -21,18 +21,15 @@ void RevolutionObject::make_mesh(std::vector<Tupla3f> revolution_coordinates, st
         }
     }
 
+    int midpoint = num_instances*(rv.size()-1);
+    indices.resize(2*midpoint);
     for (int i = 0; i < num_instances; i++) {
         for (int j = 0; j < (rv.size()-1); j++) {
-            int a = i*rv.size()+j;
-            int b = ((i+1)%num_instances)*rv.size()+j;
-            indices.emplace_back(a, b, b+1);
-        }
-    }
-    for (int i = 0; i < num_instances; i++) {
-        for (int j = 0; j < (rv.size()-1); j++) {
-            int a = i*rv.size()+j;
-            int b = ((i+1)%num_instances)*rv.size()+j;
-            indices.emplace_back(a, b+1, a+1);
+            int a = i*rv.size()+j;                      // Vértice columna i
+            int b = ((i+1)%num_instances)*rv.size()+j;  // Vértice columna i+1
+            int offset = i*(rv.size()-1) + j;
+            indices[offset] = {a, b, b+1};
+            indices[offset+midpoint] = {a, b+1, a+1};   // Los impares los insertamos a partir de la mitad para el modo ajedréz
         }
     }
 }
