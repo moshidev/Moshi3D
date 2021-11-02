@@ -20,19 +20,6 @@ class Mesh3D {
 
     virtual void draw(const Renderer& r);
 
-    inline const GLvoid* get_vertices_data(void) const { return vertices.data(); }
-    inline const GLvoid* get_color_solid_data(void) const { return color_solid.data(); }
-    inline const GLvoid* get_color_line_data(void) const { return color_line.data(); }
-    inline const GLvoid* get_color_point_data(void) const { return color_point.data(); }
-    inline const GLvoid* get_indices_data(void) const { return indices.data(); }
-    inline GLsizei get_indices_count(void) const { return 3*indices.size(); }
-
-    const VertexBuffer& get_vertices_VBO(void);
-    const VertexBuffer& get_color_solid_VBO(void);
-    const VertexBuffer& get_color_line_VBO(void);
-    const VertexBuffer& get_color_point_VBO(void);
-    const IndexBuffer& get_indices_VBO(void);
-
     inline void clear_polygon_modes(void) { polygon_modes.clear(); }
     inline void enable_polygon_modes(int mode) { polygon_modes.insert(mode); }
     inline void disable_polygon_modes(int mode) { polygon_modes.erase(mode); }
@@ -63,6 +50,21 @@ class Mesh3D {
     std::set<int> polygon_modes;
 
     bool chess_enabled;
+
+  public:
+    inline const GLvoid* get_vertices_data(void) const { return vertices.data(); }
+    inline const GLvoid* get_color_solid_data(void) const { return color_solid.data(); }
+    inline const GLvoid* get_color_line_data(void) const { return color_line.data(); }
+    inline const GLvoid* get_color_point_data(void) const { return color_point.data(); }
+    inline const GLvoid* get_indices_data(void) const { return indices.data(); }
+    inline GLsizei get_indices_count(void) const { return 3*indices.size(); }
+
+    const VertexBuffer& get_vertices_VBO(void);
+    const VertexBuffer& get_color_solid_VBO(void);
+    const VertexBuffer& get_color_line_VBO(void);
+    const VertexBuffer& get_color_point_VBO(void);
+    const IndexBuffer& get_indices_VBO(void);
+
 };
 
 #endif /* MOSHI3D_MESH3D_H_ */
