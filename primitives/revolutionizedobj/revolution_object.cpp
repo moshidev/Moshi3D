@@ -66,13 +66,13 @@ void RevolutionObject::revolution_surface_make_topology(const std::vector<Tupla3
 
 void RevolutionObject::covers_make_south(const Tupla3f& south, int num_instances) {
     vertices.push_back(south);
-    covers.emplace_back(cover_south_VBO, cover_south);
+    covers.emplace_back(cover_south_IB, cover_south);
     covers_make_topology(cover_south, vertices.size()-1, num_instances, 0, false);
 }
 
 void RevolutionObject::covers_make_north(const Tupla3f& north, int num_instances, int height) {
     vertices.push_back(north);
-    covers.emplace_back(cover_north_VBO, cover_north);
+    covers.emplace_back(cover_north_IB, cover_north);
     covers_make_topology(cover_north, vertices.size()-1, num_instances, height, true);
 }
 
@@ -108,7 +108,6 @@ void RevolutionObject::covers_extract_pole(std::vector<Tupla3f>& rv, std::vector
 }
 
 void RevolutionObject::make_current_buffer_data_list(void) {
-    init_index_buffer(indices_IB, indices);
     auto& list = current_buffer_data_list;
 
     list.clear();

@@ -21,8 +21,8 @@ public:
 protected:
     RevolutionObject();
 
-    IndexBuffer cover_south_VBO;
-    IndexBuffer cover_north_VBO;
+    IndexBuffer cover_south_IB;
+    IndexBuffer cover_north_IB;
     std::vector<Tupla3u> cover_south;
     std::vector<Tupla3u> cover_north;
     std::vector<std::pair<IndexBuffer&, std::vector<Tupla3u>&>> covers;
