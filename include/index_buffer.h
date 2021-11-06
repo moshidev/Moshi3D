@@ -23,6 +23,7 @@ public:
     void bind(void) const;
     void unbind(void) const;
     void set_indices(GLsizei count, const GLvoid* data, GLenum usage=GL_STATIC_DRAW);
+    inline unsigned get_num_indices(void) const { return index_count; }
 };
 
 #endif /* MOSHI3D_INDEX_BUFFER_H_ */
