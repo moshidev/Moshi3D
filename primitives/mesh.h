@@ -15,10 +15,10 @@
 class Renderer;
 
 class Mesh3D {
-  public:
+public:
     class BufferedData;
     class RawData;
-    
+
     Mesh3D();
     virtual ~Mesh3D() = 0;
 
@@ -36,10 +36,10 @@ class Mesh3D {
     inline bool is_chess_mode_enabled(void) const { return chess_enabled; }
 
     /* Métodos get para obtener la información a renderizar */
-    inline const std::list<BufferedData>& get_buffer_data_list(void) { return current_buffered_data_list; }
+    inline const std::list<BufferedData>& get_buffer_data_list(void) const { return current_buffered_data_list; }
     inline const std::list<RawData>& get_raw_data_list(void) const { return current_raw_data_list; }
 
-  protected:
+protected:
     /* Inicializa los distintos vectores de colores a su valor por defecto */
     void init_color(unsigned n_vertices);
 
@@ -55,6 +55,7 @@ class Mesh3D {
     VertexBuffer& get_color_line_VB(void);
     VertexBuffer& get_color_point_VB(void);
 
+    /* Inicializa el [Vertex,Index]Buffer si no lo estaba ya antes */
     void init_vertex_buffer(VertexBuffer& vb, const std::vector<Tupla3f>& v);
     void init_index_buffer(IndexBuffer& ib, const std::vector<Tupla3u>& v);
 
@@ -69,7 +70,7 @@ class Mesh3D {
     std::list<BufferedData> current_buffered_data_list;
     std::list<RawData> current_raw_data_list;
 
-  private:
+private:
     std::vector<Tupla3f> color_fill;
     std::vector<Tupla3f> color_line;
     std::vector<Tupla3f> color_point;
