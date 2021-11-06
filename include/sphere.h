@@ -11,6 +11,8 @@
 class Sphere : public RevolutionObject {
 public:
     Sphere(int num_vertices_side_face, int num_instances, float radius);
+
+    inline void enable_covers_visibility(bool b) {};
 };
 
 #endif /* MOSHI3D_SPHERE_H_ */

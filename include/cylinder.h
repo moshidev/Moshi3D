@@ -10,7 +10,7 @@
 
 class Cylinder : public RevolutionObject {
 public:
-    Cylinder(int num_vertices_side_face, int num_instances, float height, float radius, bool make_south_cover=true, bool make_north_cover=true);
+    Cylinder(int num_vertices_side_face, int num_instances, float height, float radius);
 };
 
 #endif /* MOSHI3D_CYLINDER_H_ */

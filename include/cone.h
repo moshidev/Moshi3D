@@ -10,7 +10,9 @@
 
 class Cone : public RevolutionObject {
 public:
-    Cone(int num_vertices_side_face, int num_instances, float height, float radius, bool make_north_cover=true);
+    Cone(int num_vertices_side_face, int num_instances, float height, float radius);
+
+    inline void enable_covers_visibility(bool b) {};
 };
 
 #endif /* MOSHI3D_CONE_H_ */
