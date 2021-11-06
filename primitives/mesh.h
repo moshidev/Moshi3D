@@ -43,11 +43,9 @@ class Mesh3D {
     /* Inicializa los distintos vectores de colores a su valor por defecto */
     void init_color(unsigned n_vertices);
 
-    /* Limpia e establece (actualiza) la lista de información a renderizar */
-    virtual void make_data_lists(void);
-
-    std::list<BufferedData> get_chess_buffer_list(VertexBuffer& vertices, IndexBuffer& indices);
-    std::list<RawData> get_chess_raw_list(void) const;
+    virtual void make_current_buffer_data_list(void);
+    std::list<BufferedData> mklist_polygon_mode(VertexBuffer& vb, IndexBuffer& ib);
+    std::list<BufferedData> mklist_chess_mode(VertexBuffer& vb, IndexBuffer& ib);
 
     VertexBuffer& get_vertices_VBO(void);
     IndexBuffer& get_indices_VBO(void);
@@ -55,7 +53,7 @@ class Mesh3D {
     VertexBuffer& get_color_line_VBO(void);
     VertexBuffer& get_color_point_VBO(void);
 
-    void init_vertex_buffer(VertexBuffer*& vb, const std::vector<Tupla3f>& v);
+    void init_vertex_buffer(VertexBuffer*& vb, const std::vector<Tupla3f>& v);  // tal vez debería ser responsabilidad de VertexBuffer e IndexBuffer...
     void init_index_buffer(IndexBuffer*& ib, const std::vector<Tupla3u>& v);
     void update_vertex_buffer(VertexBuffer*& vb, GLsizeiptr size, const GLvoid* data);
     void update_index_buffer(IndexBuffer*& ib, GLsizei count, const GLvoid* data);
@@ -67,6 +65,7 @@ class Mesh3D {
 
     std::vector<Tupla3f> vertices;
     std::vector<Tupla3u> indices;
+    IndexBuffer* indices_VBO {nullptr};
 
     std::list<BufferedData> current_buffer_data_list;
     std::list<RawData> current_raw_data_list;
@@ -79,7 +78,6 @@ class Mesh3D {
     std::vector<Tupla3f> color_chess_b;
 
     VertexBuffer* vertices_VBO {nullptr};
-    IndexBuffer* indices_VBO {nullptr};
     VertexBuffer* color_fill_VBO {nullptr};
     VertexBuffer* color_line_VBO {nullptr};
     VertexBuffer* color_point_VBO {nullptr};
