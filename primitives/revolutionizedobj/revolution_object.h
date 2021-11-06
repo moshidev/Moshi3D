@@ -26,11 +26,11 @@ protected:
     std::vector<Tupla3u> cover_south;
     std::vector<Tupla3u> cover_north;
     std::vector<std::pair<IndexBuffer*&, std::vector<Tupla3u>&>> covers;
-    bool covers_enabled;
+    bool covers_enabled {false};
     bool has_covers {false};
 
     void make_revolution_surface(std::vector<Tupla3f> revolution_coordinates, int num_instances, bool make_covers=true);
-    virtual void make_data_lists(void);
+    virtual void make_current_buffer_data_list(void);
 
 private:
     void revolution_surface_make_topology(const std::vector<Tupla3f>& rv, int num_instances);

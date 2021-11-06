@@ -107,38 +107,23 @@ void RevolutionObject::covers_extract_pole(std::vector<Tupla3f>& rv, std::vector
     pole(z) = 0.0;
 }
 
-void RevolutionObject::make_data_lists(void) {
-    Mesh3D::make_data_lists();  // Antipattern...
-    VertexBuffer& v_VB = get_vertices_VBO();
-    const auto& it = current_buffer_data_list.begin();
+void RevolutionObject::make_current_buffer_data_list(void) {
+    init_index_buffer(indices_VBO, indices);
+    auto& list = current_buffer_data_list;
 
+    list.clear();
+    list.splice(list.begin(), mklist_polygon_mode(get_vertices_VBO(), *indices_VBO));
+    list.splice(list.begin(), mklist_chess_mode(get_vertices_VBO(), *indices_VBO));
     if (covers_enabled) {
-        for (auto& c : covers) {
-            IndexBuffer*& i_IB = c.first;
-            init_index_buffer(i_IB, c.second);
-
-            if (chess_enabled) {
-                current_buffer_data_list.splice(it, get_chess_buffer_list(v_VB, *i_IB));
-            }
-
-            for (const auto& m : polygon_modes) {
-                switch (m)
-                {
-                case GL_FILL:
-                    current_buffer_data_list.emplace_back(v_VB, *i_IB, get_color_fill_VBO(), GL_FILL);
-                    break;
-                case GL_LINE:
-                    current_buffer_data_list.emplace_back(v_VB, *i_IB, get_color_line_VBO(), GL_LINE);
-                    break;
-                case GL_POINT:
-                    current_buffer_data_list.emplace_back(v_VB, *i_IB, get_color_point_VBO(), GL_POINT);
-                }
-            }
+        for (auto& [ib,v] : covers) {
+            init_index_buffer(ib, v);
+            list.splice(list.begin(), mklist_polygon_mode(get_vertices_VBO(), *ib));
+            list.splice(list.begin(), mklist_chess_mode(get_vertices_VBO(), *ib));
         }
     }
 }
 
 void RevolutionObject::enable_covers_visibility(bool b) {
-    covers_enabled = has_covers ? b : false;    // Code smell...?
-    make_data_lists();
+    covers_enabled = has_covers ? b : false;    // ...?
+    make_current_buffer_data_list();
 }
