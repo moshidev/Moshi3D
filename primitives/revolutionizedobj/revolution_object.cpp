@@ -108,7 +108,7 @@ void RevolutionObject::covers_extract_pole(std::vector<Tupla3f>& rv, std::vector
 }
 
 void RevolutionObject::make_current_buffer_data_list(void) {
-    auto& list = current_buffer_data_list;
+    auto& list = current_buffered_data_list;
 
     list.clear();
     list.splice(list.begin(), mklist_polygon_mode(get_vertices_VB(), get_indices_IB()));

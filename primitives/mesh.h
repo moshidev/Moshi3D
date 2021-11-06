@@ -36,13 +36,14 @@ class Mesh3D {
     inline bool is_chess_mode_enabled(void) const { return chess_enabled; }
 
     /* Métodos get para obtener la información a renderizar */
-    inline const std::list<BufferedData>& get_buffer_data_list(void) { return current_buffer_data_list; }
+    inline const std::list<BufferedData>& get_buffer_data_list(void) { return current_buffered_data_list; }
     inline const std::list<RawData>& get_raw_data_list(void) const { return current_raw_data_list; }
 
   protected:
     /* Inicializa los distintos vectores de colores a su valor por defecto */
     void init_color(unsigned n_vertices);
 
+    /* Crea la estructura de los datos a exportar para renderizar. Lo almacena en current_[buffered,raw]_data_list */
     virtual void make_current_buffer_data_list(void);
     std::list<BufferedData> mklist_polygon_mode(VertexBuffer& vb, IndexBuffer& ib);
     std::list<BufferedData> mklist_chess_mode(VertexBuffer& vb, IndexBuffer& ib);
@@ -65,7 +66,7 @@ class Mesh3D {
     std::vector<Tupla3f> vertices;
     std::vector<Tupla3u> indices;
 
-    std::list<BufferedData> current_buffer_data_list;
+    std::list<BufferedData> current_buffered_data_list;
     std::list<RawData> current_raw_data_list;
 
   private:

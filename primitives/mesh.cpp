@@ -18,7 +18,7 @@ void Mesh3D::draw(const Renderer& r) {
 
 void Mesh3D::make_current_buffer_data_list(void) {
     init_index_buffer(indices_IB, indices);
-    auto& list = current_buffer_data_list;
+    auto& list = current_buffered_data_list;
 
     list.clear();
     list.splice(list.begin(), mklist_polygon_mode(get_vertices_VB(), indices_IB));
