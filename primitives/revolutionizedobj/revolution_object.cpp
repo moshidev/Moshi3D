@@ -108,17 +108,17 @@ void RevolutionObject::covers_extract_pole(std::vector<Tupla3f>& rv, std::vector
 }
 
 void RevolutionObject::make_current_buffer_data_list(void) {
-    init_index_buffer(indices_VBO, indices);
+    init_index_buffer(indices_IB, indices);
     auto& list = current_buffer_data_list;
 
     list.clear();
-    list.splice(list.begin(), mklist_polygon_mode(get_vertices_VBO(), *indices_VBO));
-    list.splice(list.begin(), mklist_chess_mode(get_vertices_VBO(), *indices_VBO));
+    list.splice(list.begin(), mklist_polygon_mode(get_vertices_VB(), get_indices_IB()));
+    list.splice(list.begin(), mklist_chess_mode(get_vertices_VB(), get_indices_IB()));
     if (covers_enabled) {
         for (auto& [ib,v] : covers) {
             init_index_buffer(ib, v);
-            list.splice(list.begin(), mklist_polygon_mode(get_vertices_VBO(), *ib));
-            list.splice(list.begin(), mklist_chess_mode(get_vertices_VBO(), *ib));
+            list.splice(list.begin(), mklist_polygon_mode(get_vertices_VB(), ib));
+            list.splice(list.begin(), mklist_chess_mode(get_vertices_VB(), ib));
         }
     }
 }

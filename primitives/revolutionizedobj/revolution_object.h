@@ -21,11 +21,11 @@ public:
 protected:
     RevolutionObject();
 
-    IndexBuffer* cover_south_VBO {nullptr};
-    IndexBuffer* cover_north_VBO {nullptr};
+    IndexBuffer cover_south_VBO;
+    IndexBuffer cover_north_VBO;
     std::vector<Tupla3u> cover_south;
     std::vector<Tupla3u> cover_north;
-    std::vector<std::pair<IndexBuffer*&, std::vector<Tupla3u>&>> covers;
+    std::vector<std::pair<IndexBuffer&, std::vector<Tupla3u>&>> covers;
     bool covers_enabled {false};
     bool has_covers {false};
 

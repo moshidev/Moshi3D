@@ -5,9 +5,7 @@
 
 #include "vertex_buffer.h"
 
-VertexBuffer::VertexBuffer() {
-    glGenBuffers(1, &id);
-}
+VertexBuffer::VertexBuffer() {}
 
 VertexBuffer::VertexBuffer(GLsizeiptr size, const GLvoid* data, GLenum usage) {
     glGenBuffers(1, &id);
@@ -27,6 +25,9 @@ void VertexBuffer::unbind(void) const {
 }
 
 void VertexBuffer::set_data(GLsizeiptr size, const GLvoid* data, GLenum usage) {
+    if (!id) {
+        glGenBuffers(1, &id);
+    }
     bind();
     glBufferData(GL_ARRAY_BUFFER, size, data, usage);
     unbind();

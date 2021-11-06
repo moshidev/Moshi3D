@@ -12,13 +12,14 @@
  * @warning should not be destroyed after GLU shuts down the OpenGL instance
  */
 class VertexBuffer {
-    GLuint id;
+    GLuint id {0};
 
 public:
     VertexBuffer();
     VertexBuffer(GLsizeiptr size, const GLvoid* data, GLenum usage=GL_STATIC_DRAW);
     ~VertexBuffer();
 
+    inline bool usable(void) const { return id; };
     void bind(void) const;
     void unbind(void) const;
     void set_data(GLsizeiptr size, const GLvoid* data, GLenum usage=GL_STATIC_DRAW);

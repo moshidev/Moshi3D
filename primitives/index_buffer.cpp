@@ -5,9 +5,7 @@
 
 #include "index_buffer.h"
 
-IndexBuffer::IndexBuffer() {
-    glGenBuffers(1, &id);
-}
+IndexBuffer::IndexBuffer() {}
 
 IndexBuffer::IndexBuffer(GLsizei count, const GLvoid* data, GLenum usage) {
     glGenBuffers(1, &id);
@@ -27,6 +25,9 @@ void IndexBuffer::unbind(void) const {
 }
 
 void IndexBuffer::set_indices(GLsizei count, const GLvoid* data, GLenum usage) {
+    if (!id) {
+        glGenBuffers(1, &id);
+    }
     bind();
     index_count = count;
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, count*sizeof(unsigned int), data, usage);

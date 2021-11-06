@@ -47,16 +47,15 @@ class Mesh3D {
     std::list<BufferedData> mklist_polygon_mode(VertexBuffer& vb, IndexBuffer& ib);
     std::list<BufferedData> mklist_chess_mode(VertexBuffer& vb, IndexBuffer& ib);
 
-    VertexBuffer& get_vertices_VBO(void);
-    IndexBuffer& get_indices_VBO(void);
-    VertexBuffer& get_color_fill_VBO(void);
-    VertexBuffer& get_color_line_VBO(void);
-    VertexBuffer& get_color_point_VBO(void);
+    /* Getters para inicializar únicamente los VBO cuando los vayamos a utilizar */
+    VertexBuffer& get_vertices_VB(void);
+    IndexBuffer& get_indices_IB(void);
+    VertexBuffer& get_color_fill_VB(void);
+    VertexBuffer& get_color_line_VB(void);
+    VertexBuffer& get_color_point_VB(void);
 
-    void init_vertex_buffer(VertexBuffer*& vb, const std::vector<Tupla3f>& v);  // tal vez debería ser responsabilidad de VertexBuffer e IndexBuffer...
-    void init_index_buffer(IndexBuffer*& ib, const std::vector<Tupla3u>& v);
-    void update_vertex_buffer(VertexBuffer*& vb, GLsizeiptr size, const GLvoid* data);
-    void update_index_buffer(IndexBuffer*& ib, GLsizei count, const GLvoid* data);
+    void init_vertex_buffer(VertexBuffer& vb, const std::vector<Tupla3f>& v);
+    void init_index_buffer(IndexBuffer& ib, const std::vector<Tupla3u>& v);
 
     void calcular_normales(void); // calcula tabla de normales de vértices (práctica 3)
 
@@ -65,7 +64,6 @@ class Mesh3D {
 
     std::vector<Tupla3f> vertices;
     std::vector<Tupla3u> indices;
-    IndexBuffer* indices_VBO {nullptr};
 
     std::list<BufferedData> current_buffer_data_list;
     std::list<RawData> current_raw_data_list;
@@ -77,12 +75,13 @@ class Mesh3D {
     std::vector<Tupla3f> color_chess_a;
     std::vector<Tupla3f> color_chess_b;
 
-    VertexBuffer* vertices_VBO {nullptr};
-    VertexBuffer* color_fill_VBO {nullptr};
-    VertexBuffer* color_line_VBO {nullptr};
-    VertexBuffer* color_point_VBO {nullptr};
-    VertexBuffer* color_chess_a_VBO {nullptr};
-    VertexBuffer* color_chess_b_VBO {nullptr};
+    VertexBuffer vertices_VB;
+    IndexBuffer indices_IB;
+    VertexBuffer color_fill_VB;
+    VertexBuffer color_line_VB;
+    VertexBuffer color_point_VB;
+    VertexBuffer color_chess_a_VB;
+    VertexBuffer color_chess_b_VB;
 };
 
 class Mesh3D::BufferedData {

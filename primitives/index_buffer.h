@@ -12,14 +12,15 @@
  * @warning should not be destroyed after GLU shuts down the OpenGL instance
  */
 class IndexBuffer {
-    GLuint id;
-    unsigned int index_count;
+    GLuint id {0};
+    unsigned int index_count {0};
 
 public:
     IndexBuffer();
     IndexBuffer(GLsizei count, const GLvoid* data, GLenum usage=GL_STATIC_DRAW);
     ~IndexBuffer();
 
+    inline bool usable(void) const { return id; };
     void bind(void) const;
     void unbind(void) const;
     void set_indices(GLsizei count, const GLvoid* data, GLenum usage=GL_STATIC_DRAW);
