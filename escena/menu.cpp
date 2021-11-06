@@ -84,6 +84,14 @@ bool Menu::visualization_mode_selection(Escena& e, unsigned char tecla, int x, i
         std::cout << "Activamos/desactivamos visualización en modo ajedrez" << std::endl;
         e.render_chess(!e.is_rendering_chess());
         break;
+    case 'T':
+        std::cout << "Habilitamos la visualización de tapas" << std::endl;
+        e.render_covers(true);
+        break;
+    case 'G':
+        std::cout << "Deshabilitamos la visualización de tapas" << std::endl;
+        e.render_covers(false);
+        break;
     case 'C':
         std::cout << "Activamos visualización RGB si el objeto lo soporta" << std::endl;
         std::cout << "SIN IMPLEMENTAR" << std::endl;
@@ -99,6 +107,8 @@ bool Menu::visualization_mode_selection(Escena& e, unsigned char tecla, int x, i
         std::cout << "'S': Activamos/desactivamos visualización en modo sólido.\n";
         std::cout << "'A': Activamos/desactivamos visualización en modo ajedrez.\n";
         std::cout << "'C': Activamos visualización RGB si el objeto lo soporta.\n";
+        std::cout << "'T': Habilitamos la visualización de tapas.\n";
+        std::cout << "'G': Deshabilitamos la visualización de tapas.\n";
         std::cout << "'Q': Volvemos al menú principal." << std::endl;
         break;
     }
@@ -111,7 +121,8 @@ bool Menu::render_mode_selection(Escena& e, unsigned char tecla, int x, int y) {
     {
     case '1':
         std::cout << "Visualizamos objetos usando glDrawElements" << std::endl;
-        e.set_immediate_draw();
+        std::cout << "SIN IMPLEMENTAR!!!" << std::endl;
+        //e.set_immediate_draw();
         break;
     case '2':
         std::cout << "Visualizamos objetos usando VBOs" << std::endl;
