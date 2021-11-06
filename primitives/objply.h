@@ -7,7 +7,7 @@
 #define MOSHI3D_OBJPLY_H_
 
 #include "_aux.h"
-#include "ply_reader.h"
+#include "file_io/ply_reader.h"
 #include "mesh.h"
 
 class ObjPLY: public Mesh3D {

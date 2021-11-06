@@ -4,7 +4,7 @@
  */
 
 #include "objply.h"
-#include "ply_reader.h"
+#include "file_io/ply_reader.h"
 
 ObjPLY::ObjPLY(const std::string& nombre_archivo)
 {

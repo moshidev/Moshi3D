@@ -1,4 +1,4 @@
-#include "ply_reader.h"
+#include "file_io/ply_reader.h"
 #include "revolution_object.h"
 
 static bool operator<(const Tupla3f& a, const Tupla3f& b) {
