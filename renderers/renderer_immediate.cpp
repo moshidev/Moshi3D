@@ -7,7 +7,7 @@
 #include "mesh.h"
 #include "_aux.h"
 
-static void set_color_pointer(Mesh3D& m, int mode) {
+/*static void set_color_pointer(Mesh3D& m, int mode) {
     const GLvoid* colorvb {nullptr};
     switch (mode)
     {
@@ -77,14 +77,14 @@ static void render_std(Mesh3D& m) {
 
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
-}
+}*/
 
 void RendererImmediate::render(Mesh3D& m) const {
-    glEnable(GL_CULL_FACE);
+    /*glEnable(GL_CULL_FACE);
     glEnable(GL_POLYGON_OFFSET_LINE);
     glPolygonOffset(-25.0, 12.5);
 
-    if (m.get_chess_enabled()) {
+    if (m.is_chess_mode_enabled()) {
         render_chess(m);
     }
     else {
@@ -92,5 +92,5 @@ void RendererImmediate::render(Mesh3D& m) const {
     }
 
     glDisable(GL_POLYGON_OFFSET_LINE);
-    glDisable(GL_CULL_FACE);
+    glDisable(GL_CULL_FACE);*/
 }
