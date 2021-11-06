@@ -18,11 +18,10 @@ Escena::Escena()
     lata = new RevolutionObject("/Users/daniel/Moshi3D/resources/lata-pcue.ply", 40);
     peon = new RevolutionObject("/Users/daniel/Moshi3D/resources/peon.ply", 40);
     necoarc = new ObjPLY("/Users/daniel/Moshi3D/resources/necoarc.ply");
-    lata->set_chess_enabled(true);
-    peon->set_chess_enabled(true);
-    cube->set_chess_enabled(true);
-    tetrahedron->set_chess_enabled(true);
-    objeto_actual = lata;
+    cilindro = new Cylinder(5, 90, 1, 1);
+    cono = new Cone(5, 90, 1, 1);
+    esfera = new Sphere(50, 50, 1);
+    objeto_actual = cilindro;
 
     // crear los objetos de la escena....
     // .......completar: ...
@@ -34,6 +33,8 @@ Escena::~Escena() {
     delete tetrahedron;
     delete lata;
     delete peon;
+    delete cilindro;
+    delete necoarc;
 }
 
 //**************************************************************************
@@ -54,6 +55,8 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
 
     change_projection(float(UI_window_width) / float(UI_window_height));
     glViewport(0, 0, UI_window_width, UI_window_height);
+
+    cube->enable_polygon_modes(GL_FILL);
 }
 
 // **************************************************************************
@@ -150,4 +153,10 @@ void Escena::change_observer()
     glTranslatef(0.0, 0.0, -observer_distance);
     glRotatef(observer_angle_y, 0.0, 1.0, 0.0);
     glRotatef(observer_angle_x, 1.0, 0.0, 0.0);
+}
+
+void Escena::render_covers(bool t) {
+    lata->enable_covers_visibility(t);
+    peon->enable_covers_visibility(t);
+    cilindro->enable_covers_visibility(t);
 }
