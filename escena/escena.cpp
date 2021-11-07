@@ -16,9 +16,9 @@ Escena::Escena()
 
     cubo = new Cube();
     tetraedro = new Tetrahedron();
-    lata = new RevolutionObject("/Users/daniel/Moshi3D/resources/lata-pcue.ply", 40);
-    peon = new RevolutionObject("/Users/daniel/Moshi3D/resources/peon.ply", 40);
-    necoarc = new ObjPLY("/Users/daniel/Moshi3D/resources/necoarc.ply");
+    lata = new RevolutionObject("resources/lata-pcue.ply", 40);
+    peon = new RevolutionObject("resources/peon.ply", 40);
+    necoarc = new ObjPLY("resources/necoarc.ply");
     cilindro = new Cylinder(5, 90, 1, 1);
     cono = new Cone(5, 90, 1, 1);
     esfera = new Sphere(50, 50, 1);
