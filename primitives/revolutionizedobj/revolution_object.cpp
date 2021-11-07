@@ -33,7 +33,6 @@ void RevolutionObject::make_revolution_surface(std::vector<Tupla3f> revolution_c
     revolution_surface_make_geometry(rv, num_instances);
     revolution_surface_make_topology(rv, num_instances);
 
-    int i = 0;
     if (make_covers) {
         int height = rv.size()-1;
         covers_make_south(south, num_instances);
@@ -99,7 +98,7 @@ void RevolutionObject::covers_extract_poles(std::vector<Tupla3f>& rv, Tupla3f& s
 }
 
 void RevolutionObject::covers_extract_pole(std::vector<Tupla3f>& rv, std::vector<Tupla3f>::iterator it, Tupla3f& pole) {
-    constexpr int x = 0, y = 1, z = 2;
+    constexpr int x = 0, z = 2;
     pole = *it;
     if (pole(x) == 0.0 && pole(z) == 0.0) {
         rv.erase(it);
@@ -114,7 +113,7 @@ void RevolutionObject::make_current_buffered_data_list(void) {
     list.clear();
     list.splice(list.begin(), mklist_buffered_polygon_mode(get_vertices_VB(), get_indices_IB()));
     list.splice(list.begin(), mklist_buffered_chess_mode(get_vertices_VB(), get_indices_IB()));
-    if (covers_enabled) {
+    if (covers_enabled || !has_covers) {
         for (auto& [ib,v] : covers) {
             init_index_buffer(ib, v);
             list.splice(list.begin(), mklist_buffered_polygon_mode(get_vertices_VB(), ib));
@@ -129,7 +128,7 @@ void RevolutionObject::make_current_raw_data_list(void) {
     list.clear();
     list.splice(list.begin(), mklist_raw_polygon_mode(vertices, indices));
     list.splice(list.begin(), mklist_raw_chess_mode(vertices, indices));
-    if (covers_enabled) {
+    if (covers_enabled || !has_covers) {
         for (auto& [ib,i] : covers) {
             list.splice(list.begin(), mklist_raw_polygon_mode(vertices, i));
             list.splice(list.begin(), mklist_raw_chess_mode(vertices, i));
