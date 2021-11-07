@@ -16,7 +16,7 @@ class IndexBuffer {
     unsigned int index_count {0};
 
 public:
-    IndexBuffer();
+    IndexBuffer(bool gen_buffer=false);
     IndexBuffer(GLsizei count, const GLvoid* data, GLenum usage=GL_STATIC_DRAW);
     ~IndexBuffer();
 

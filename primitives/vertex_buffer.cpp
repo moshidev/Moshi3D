@@ -5,7 +5,11 @@
 
 #include "vertex_buffer.h"
 
-VertexBuffer::VertexBuffer() {}
+VertexBuffer::VertexBuffer(bool gen_buffer) {
+    if (gen_buffer) {
+        glGenBuffers(1, &id);
+    }
+}
 
 VertexBuffer::VertexBuffer(GLsizeiptr size, const GLvoid* data, GLenum usage) {
     glGenBuffers(1, &id);

@@ -15,7 +15,7 @@ class VertexBuffer {
     GLuint id {0};
 
 public:
-    VertexBuffer();
+    VertexBuffer(bool gen_buffer=false);
     VertexBuffer(GLsizeiptr size, const GLvoid* data, GLenum usage=GL_STATIC_DRAW);
     ~VertexBuffer();
 

@@ -5,7 +5,11 @@
 
 #include "index_buffer.h"
 
-IndexBuffer::IndexBuffer() {}
+IndexBuffer::IndexBuffer(bool gen_buffer) {
+    if (gen_buffer) {
+        glGenBuffers(1, &id);
+    }
+}
 
 IndexBuffer::IndexBuffer(GLsizei count, const GLvoid* data, GLenum usage) {
     glGenBuffers(1, &id);
