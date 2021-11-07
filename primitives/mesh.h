@@ -136,7 +136,7 @@ class Mesh3D::RawData {
 
 public:
     RawData(const std::vector<Tupla3f>& vertices, const std::vector<Tupla3u>& faces, const std::vector<Tupla3f>& color, int polygon_mode)
-        :vertices_data{vertices}, color_data{color}, face_indices_data{faces}, polygon_mode{polygon_mode},
+        :vertices_data{vertices}, face_indices_data{faces}, color_data{color}, polygon_mode{polygon_mode},
          indices_count{(unsigned)faces.size()*3}, indices_offset{0}
     {}
 
