@@ -2,14 +2,14 @@
 #include "menu.h"
 
 Menu::Menu()
-:current_menu{&Menu::main}
+:current_menu{&Menu::mainmenu}
 {}
 
 bool Menu::update(Escena& e, unsigned char tecla, int x, int y) {
     return (this->*current_menu)(e, tecla, x, y);
 }
 
-bool Menu::main(Escena& e, unsigned char tecla, int x, int y) {
+bool Menu::mainmenu(Escena& e, unsigned char tecla, int x, int y) {
     switch (tecla)
     {
     case 'O':
@@ -52,7 +52,7 @@ bool Menu::object_selection(Escena& e, unsigned char tecla, int x, int y) {
         break;
     case 'Q':
         std::cout << "Salimos del modo selección de objeto" << std::endl;
-        current_menu = &Menu::main;
+        current_menu = &Menu::mainmenu;
         break;
     default:
         std::cout << "Opciones disponibles:\n";
@@ -98,7 +98,7 @@ bool Menu::visualization_mode_selection(Escena& e, unsigned char tecla, int x, i
         break;
     case 'Q':
         std::cout << "Salimos del modo selección de modo de visualización" << std::endl;
-        current_menu = &Menu::main;
+        current_menu = &Menu::mainmenu;
         break;
     default:
         std::cout << "Opciones disponibles:\n";
@@ -130,7 +130,7 @@ bool Menu::render_mode_selection(Escena& e, unsigned char tecla, int x, int y) {
         break;
     case 'Q':
         std::cout << "Salimos del modo selección de objeto" << std::endl;
-        current_menu = &Menu::main;
+        current_menu = &Menu::mainmenu;
         break;
     default:
         std::cout << "Opciones disponibles:\n";

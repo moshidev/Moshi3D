@@ -11,7 +11,7 @@ class Escena;
 class Menu {
     bool (Menu::*current_menu)(Escena& e, unsigned char tecla, int x, int y);
 
-    bool main(Escena& e, unsigned char tecla, int x, int y);
+    bool mainmenu(Escena& e, unsigned char tecla, int x, int y);
     bool object_selection(Escena& e, unsigned char tecla, int x, int y);
     bool visualization_mode_selection(Escena& e, unsigned char tecla, int x, int y);
     bool render_mode_selection(Escena& e, unsigned char tecla, int x, int y);
