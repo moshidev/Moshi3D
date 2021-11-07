@@ -1,5 +1,6 @@
 #include "file_io/ply_reader.h"
 #include "revolution_object.h"
+#include <algorithm>
 
 static bool operator<(const Tupla3f& a, const Tupla3f& b) {
     return a[1] < b[1] ||
@@ -107,22 +108,36 @@ void RevolutionObject::covers_extract_pole(std::vector<Tupla3f>& rv, std::vector
     pole(z) = 0.0;
 }
 
-void RevolutionObject::make_current_buffer_data_list(void) {
+void RevolutionObject::make_current_buffered_data_list(void) {
     auto& list = current_buffered_data_list;
 
     list.clear();
-    list.splice(list.begin(), mklist_polygon_mode(get_vertices_VB(), get_indices_IB()));
-    list.splice(list.begin(), mklist_chess_mode(get_vertices_VB(), get_indices_IB()));
+    list.splice(list.begin(), mklist_buffered_polygon_mode(get_vertices_VB(), get_indices_IB()));
+    list.splice(list.begin(), mklist_buffered_chess_mode(get_vertices_VB(), get_indices_IB()));
     if (covers_enabled) {
         for (auto& [ib,v] : covers) {
             init_index_buffer(ib, v);
-            list.splice(list.begin(), mklist_polygon_mode(get_vertices_VB(), ib));
-            list.splice(list.begin(), mklist_chess_mode(get_vertices_VB(), ib));
+            list.splice(list.begin(), mklist_buffered_polygon_mode(get_vertices_VB(), ib));
+            list.splice(list.begin(), mklist_buffered_chess_mode(get_vertices_VB(), ib));
+        }
+    }
+}
+
+void RevolutionObject::make_current_raw_data_list(void) {
+    auto& list = current_raw_data_list;
+
+    list.clear();
+    list.splice(list.begin(), mklist_raw_polygon_mode(vertices, indices));
+    list.splice(list.begin(), mklist_raw_chess_mode(vertices, indices));
+    if (covers_enabled) {
+        for (auto& [ib,i] : covers) {
+            list.splice(list.begin(), mklist_raw_polygon_mode(vertices, i));
+            list.splice(list.begin(), mklist_raw_chess_mode(vertices, i));
         }
     }
 }
 
 void RevolutionObject::enable_covers_visibility(bool b) {
     covers_enabled = has_covers ? b : false;    // ...?
-    make_current_buffer_data_list();
+    make_current_data_lists();
 }

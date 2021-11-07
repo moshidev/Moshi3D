@@ -30,7 +30,8 @@ protected:
     bool has_covers {false};
 
     void make_revolution_surface(std::vector<Tupla3f> revolution_coordinates, int num_instances, bool make_covers=true);
-    virtual void make_current_buffer_data_list(void);
+    virtual void make_current_buffered_data_list(void);
+    virtual void make_current_raw_data_list(void);
 
 private:
     void revolution_surface_make_topology(const std::vector<Tupla3f>& rv, int num_instances);

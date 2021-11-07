@@ -44,9 +44,13 @@ protected:
     void init_color(unsigned n_vertices);
 
     /* Crea la estructura de los datos a exportar para renderizar. Lo almacena en current_[buffered,raw]_data_list */
-    virtual void make_current_buffer_data_list(void);
-    std::list<BufferedData> mklist_polygon_mode(VertexBuffer& vb, IndexBuffer& ib);
-    std::list<BufferedData> mklist_chess_mode(VertexBuffer& vb, IndexBuffer& ib);
+    virtual void make_current_data_lists(void);
+    virtual void make_current_buffered_data_list(void);
+    virtual void make_current_raw_data_list(void);
+    std::list<BufferedData> mklist_buffered_polygon_mode(VertexBuffer& vb, IndexBuffer& ib);
+    std::list<BufferedData> mklist_buffered_chess_mode(VertexBuffer& vb, IndexBuffer& ib);
+    std::list<RawData> mklist_raw_polygon_mode(const std::vector<Tupla3f>& v, const std::vector<Tupla3u>& i);
+    std::list<RawData> mklist_raw_chess_mode(const std::vector<Tupla3f>& v, const std::vector<Tupla3u>& i);
 
     /* Getters para inicializar únicamente los VBO cuando los vayamos a utilizar */
     VertexBuffer& get_vertices_VB(void);
@@ -86,16 +90,20 @@ private:
     VertexBuffer color_chess_b_VB;
 };
 
+/**
+ * BufferedData contiene la información necesaria para renderizar un objeto usando
+ * VBOs
+ */
 class Mesh3D::BufferedData {
-    VertexBuffer& vertices;
-    IndexBuffer& face_indices;
-    VertexBuffer& color;
+    const VertexBuffer& vertices;
+    const IndexBuffer& face_indices;
+    const VertexBuffer& color;
     unsigned indices_offset;
     unsigned indices_count;
     int polygon_mode;
 
 public:
-    BufferedData(VertexBuffer& vertices, IndexBuffer& faces, VertexBuffer& color, int polygon_mode)
+    BufferedData(const VertexBuffer& vertices, const IndexBuffer& faces, const VertexBuffer& color, int polygon_mode)
         :vertices{vertices}, face_indices{faces}, color{color},
          indices_offset{0}, indices_count{faces.get_num_indices()},
          polygon_mode{polygon_mode}
@@ -113,25 +121,35 @@ public:
     inline int get_polygon_mode(void) const { return polygon_mode; }
 };
 
+
+/**
+ * RawData contiene la información necesaria para renderizar un objeto usando
+ * glDrawElements
+ */
 class Mesh3D::RawData {
-    std::vector<Tupla3f>& vertices_data;
-    std::vector<Tupla3f>& color_data;
-    std::vector<Tupla3u>& face_indices_data;
-    unsigned indices_offset;
-    unsigned indices_size;
+    const std::vector<Tupla3f>& vertices_data;
+    const std::vector<Tupla3u>& face_indices_data;
+    const std::vector<Tupla3f>& color_data;
     int polygon_mode;
+    unsigned indices_count;
+    unsigned indices_offset;    
 
 public:
-    RawData(std::vector<Tupla3f>& vertices, std::vector<Tupla3f>& color, std::vector<Tupla3u>& faces, int polygon_mode);
-    int get_polygon_mode(void);
+    RawData(const std::vector<Tupla3f>& vertices, const std::vector<Tupla3u>& faces, const std::vector<Tupla3f>& color, int polygon_mode)
+        :vertices_data{vertices}, color_data{color}, face_indices_data{faces}, polygon_mode{polygon_mode},
+         indices_count{(unsigned)faces.size()*3}, indices_offset{0}
+    {}
 
     inline const std::vector<Tupla3f>& get_vertices_data(void) const {return vertices_data; }
 
     inline const std::vector<Tupla3u>& get_indices_data(void) const { return face_indices_data; };
     inline unsigned get_indices_offset(void) const { return indices_offset; }
-    inline unsigned get_indices_size(void) const { return indices_size; }
+    inline unsigned get_indices_count(void) const { return indices_count; }
+    inline void set_face_indices_offset(unsigned offset, unsigned count) { indices_offset = offset; indices_count = count; }
 
     inline const std::vector<Tupla3f>& get_color_data(void) const { return color_data; }
+
+    inline int get_polygon_mode(void) const { return polygon_mode; }
 };
 
 #endif /* MOSHI3D_MESH3D_H_ */
