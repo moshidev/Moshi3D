@@ -121,8 +121,7 @@ bool Menu::render_mode_selection(Escena& e, unsigned char tecla, int x, int y) {
     {
     case '1':
         std::cout << "Visualizamos objetos usando glDrawElements" << std::endl;
-        std::cout << "SIN IMPLEMENTAR!!!" << std::endl;
-        //e.set_immediate_draw();
+        e.set_immediate_draw();
         break;
     case '2':
         std::cout << "Visualizamos objetos usando VBOs" << std::endl;

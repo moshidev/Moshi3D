@@ -12,10 +12,8 @@
 #include "sphere.h"
 #include "objply.h"
 #include "renderer.h"
-//#include "renderer_immediate.h"
+#include "renderer_immediate.h"
 #include "renderer_buffered.h"
-
-typedef enum { NADA, SELOBJETO, SELVISUALIZACION, SELDIBUJADO } menu;
 
 class Escena {
     // ** PARÁMETROS DE LA CÁMARA (PROVISIONAL)
@@ -37,8 +35,6 @@ class Escena {
 
     void clear_window();
 
-    menu modoMenu = NADA;
-
     // Objetos de la escena
     Ejes ejes;
     Cube* cube {nullptr};           
@@ -52,7 +48,7 @@ class Escena {
     Mesh3D* objeto_actual {nullptr};
 
     // Renderizadores
-//    RendererImmediate immediate_renderer;
+    RendererImmediate immediate_renderer;
     RendererBuffered buffered_renderer;
     Renderer* renderer;
 
@@ -68,7 +64,7 @@ class Escena {
     void dibujar();
 
     inline void set_buffered_draw(void) { renderer = &buffered_renderer; }
-//    inline void set_immediate_draw(void) { renderer = &immediate_renderer; }
+    inline void set_immediate_draw(void) { renderer = &immediate_renderer; }
 
     inline void render_points(bool t) { t ? objeto_actual->enable_polygon_modes(GL_POINT) : objeto_actual->disable_polygon_modes(GL_POINT); }
     inline void render_lines(bool t) { t ? objeto_actual->enable_polygon_modes(GL_LINE) : objeto_actual->disable_polygon_modes(GL_LINE); }
