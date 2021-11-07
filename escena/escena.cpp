@@ -1,10 +1,11 @@
 #include "escena.h"
 #include "_aux.h" // includes de OpenGL/glut/glew, windows, y librería std de C++
 #include "mesh.h" // objetos: Cubo y otros....
+#include <vector>
 
 Escena::Escena()
-: renderer{&buffered_renderer}
 {
+    renderer = &buffered_renderer;
     front_plane = 50.0;
     back_plane = 2000.0;
     observer_distance = 4 * front_plane;
@@ -13,28 +14,27 @@ Escena::Escena()
 
     ejes.changeAxisSize(5000);
 
-    cube = new Cube();
-    tetrahedron = new Tetrahedron();
+    cubo = new Cube();
+    tetraedro = new Tetrahedron();
     lata = new RevolutionObject("/Users/daniel/Moshi3D/resources/lata-pcue.ply", 40);
     peon = new RevolutionObject("/Users/daniel/Moshi3D/resources/peon.ply", 40);
     necoarc = new ObjPLY("/Users/daniel/Moshi3D/resources/necoarc.ply");
     cilindro = new Cylinder(5, 90, 1, 1);
     cono = new Cone(5, 90, 1, 1);
     esfera = new Sphere(50, 50, 1);
-    objeto_actual = cilindro;
 
-    // crear los objetos de la escena....
-    // .......completar: ...
-    // .....
+    objeto_actual = cubo;
 }
 
 Escena::~Escena() {
-    delete cube;
-    delete tetrahedron;
+    delete cubo;
+    delete tetraedro;
     delete lata;
     delete peon;
     delete cilindro;
     delete necoarc;
+    delete cono;
+    delete esfera;
 }
 
 //**************************************************************************
@@ -56,7 +56,15 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
     change_projection(float(UI_window_width) / float(UI_window_height));
     glViewport(0, 0, UI_window_width, UI_window_height);
 
-    cube->enable_polygon_modes(GL_FILL);
+    revobjects.push_back(lata);
+    revobjects.push_back(peon);
+    revobjects.push_back(cilindro);
+    revobjects.push_back(cono);
+    revobjects.push_back(esfera);
+    objects.push_back(cubo);
+    objects.push_back(tetraedro);
+    objects.push_back(necoarc);
+    objects.insert(objects.end(), revobjects.begin(), revobjects.end());
 }
 
 // **************************************************************************
@@ -68,17 +76,29 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
 
 void Escena::dibujar()
 {
-    static int i = 0;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla
     change_observer();
     ejes.draw();
-    glScalef(100.0, 100.0, 100.0);
+    glScalef(50.0, 50.0, 50.0);
 
     glPointSize(10);
     glLineWidth(1.25);
+
     
     if (objeto_actual != nullptr) {
-        objeto_actual->draw(*renderer);
+        glPushMatrix();
+            glTranslatef(0, 2, 0);
+            objeto_actual->draw(*renderer);
+        glPopMatrix();
+    }
+
+    int i = 0;
+    for (auto o : objects) {
+        glPushMatrix();
+            glTranslatef(-4+i*1.2, 0, 0);
+            o->draw(*renderer);
+        glPopMatrix();
+        i++;
     }
 }
 
@@ -155,8 +175,53 @@ void Escena::change_observer()
     glRotatef(observer_angle_x, 1.0, 0.0, 0.0);
 }
 
+void Escena::render_points(bool t) {
+    if (t) {
+        for (auto obj : objects) {
+            obj->enable_polygon_modes(GL_POINT);
+        }
+    }
+    else {
+        for (auto obj : objects) {
+            obj->disable_polygon_modes(GL_POINT);
+        }
+    }
+}
+
+void Escena::render_lines(bool t) {
+    if (t) {
+        for (auto obj : objects) {
+            obj->enable_polygon_modes(GL_LINE);
+        }
+    }
+    else {
+        for (auto obj : objects) {
+            obj->disable_polygon_modes(GL_LINE);
+        }
+    }
+}
+
+void Escena::render_solid(bool t) {
+    if (t) {
+        for (auto obj : objects) {
+            obj->enable_polygon_modes(GL_FILL);
+        }
+    }
+    else {
+        for (auto obj : objects) {
+            obj->disable_polygon_modes(GL_FILL);
+        }
+    }
+}
+
+void Escena::render_chess(bool t) {
+    for (auto obj : objects) {
+        obj->enable_chess_mode(t);
+    }
+}
+
 void Escena::render_covers(bool t) {
-    lata->enable_covers_visibility(t);
-    peon->enable_covers_visibility(t);
-    cilindro->enable_covers_visibility(t);
+    for (auto rv : revobjects) {
+        rv->enable_covers_visibility(t);
+    }   
 }
