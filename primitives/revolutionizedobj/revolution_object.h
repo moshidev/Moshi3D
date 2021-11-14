@@ -8,15 +8,18 @@
 
 #include <string>
 #include <vector>
+#include <tuple>
 #include "mesh.h"
 
 class RevolutionObject : public Mesh3D {
 public:
     RevolutionObject(const std::string& ifile, int num_instances, bool make_covers=true);
     RevolutionObject(const std::vector<Tupla3f>& revolution_coordinates, int num_instances, bool make_covers=true);
+    RevolutionObject(const std::string& ifile, int num_instances, bool make_cover_south, bool make_cover_north);
+    RevolutionObject(const std::vector<Tupla3f>& revolution_coordinates, int num_instances, bool make_cover_south, bool make_cover_north);
     
     virtual void enable_covers_visibility(bool b);
-    inline bool are_covers_visible(void) const { return covers_enabled; }
+    inline bool are_covers_visible(void) const { return render_cover_south || render_cover_north; }
 
 protected:
     RevolutionObject();
@@ -25,11 +28,12 @@ protected:
     IndexBuffer cover_north_IB;
     std::vector<Tupla3u> cover_south;
     std::vector<Tupla3u> cover_north;
-    std::vector<std::pair<IndexBuffer&, std::vector<Tupla3u>&>> covers;
-    bool covers_enabled {false};
-    bool has_covers {false};
+    bool render_cover_south {true};
+    bool render_cover_north {true};
+    bool force_cover_south {false};
+    bool force_cover_north {false};
 
-    void make_revolution_surface(std::vector<Tupla3f> revolution_coordinates, int num_instances, bool make_covers=true);
+    void make_revolution_surface(std::vector<Tupla3f> revolution_coordinates, int num_instances, bool make_cover_south, bool make_cover_north);
     virtual void make_current_buffered_data_list(void);
     virtual void make_current_raw_data_list(void);
 

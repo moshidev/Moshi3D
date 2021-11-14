@@ -7,6 +7,7 @@ Cone::Cone(int num_vertices_side_face, int num_instances, float height, float ra
     for (int i = 0; i < num_vertices_side_face; i++) {
         perfil.emplace_back(i*r, (num_vertices_side_face-i-1)*h, 0.0);
     }
-    make_revolution_surface(perfil, num_instances, true);
+    make_revolution_surface(perfil, num_instances, true, true);
+    force_cover_north = true;
     init_color(vertices.size());
 }
