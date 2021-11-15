@@ -146,6 +146,23 @@ void Mesh3D::init_color(unsigned n_vertices) {
     color_chess_b.assign(n_vertices, {0.25, 0.75, 0.0});
 }
 
+void Mesh3D::init_normals(void) {
+    for (const auto& f : indices) {
+        Tupla3f a = vertices[f[1]] - vertices[f[0]];
+        Tupla3f b = vertices[f[2]] - vertices[f[0]];
+        nf.emplace_back(a.cross(b).normalized());
+    }
+    nv.resize(vertices.size());
+    for (const auto& f : indices) {
+        nv[f[0]] = nv[f[0]] + nf[f[0]];
+        nv[f[1]] = nv[f[1]] + nf[f[1]];
+        nv[f[2]] = nv[f[2]] + nf[f[2]];
+    }
+    for (auto& v : nv) {
+        v = v.normalized();
+    }
+}
+
 void Mesh3D::init_vertex_buffer(VertexBuffer& vb, const std::vector<Tupla3f>& v) {
     if (!vb.usable()) {
         vb.set_data(v.size()*sizeof(Tupla3f), v.data());

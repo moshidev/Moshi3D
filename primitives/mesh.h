@@ -42,6 +42,8 @@ public:
 protected:
     /* Inicializa los distintos vectores de colores a su valor por defecto */
     void init_color(unsigned n_vertices);
+    /* Inicializa la lista de normales a los vértices y a las caras */
+    void init_normals(void);
 
     /* Crea la estructura de los datos a exportar para renderizar. Lo almacena en current_[buffered,raw]_data_list */
     virtual void make_current_data_lists(void);
@@ -63,13 +65,13 @@ protected:
     void init_vertex_buffer(VertexBuffer& vb, const std::vector<Tupla3f>& v);
     void init_index_buffer(IndexBuffer& ib, const std::vector<Tupla3u>& v);
 
-    void calcular_normales(void); // calcula tabla de normales de vértices (práctica 3)
-
     bool chess_enabled;
     std::set<int> polygon_modes;
 
     std::vector<Tupla3f> vertices;
     std::vector<Tupla3u> indices;
+    std::vector<Tupla3f> nv;    // normal to a vertice of vertices
+    std::vector<Tupla3f> nf;    // normal to a face of indices
 
     std::list<BufferedData> current_buffered_data_list;
     std::list<RawData> current_raw_data_list;
