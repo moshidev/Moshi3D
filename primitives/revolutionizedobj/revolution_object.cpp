@@ -2,15 +2,6 @@
 #include "revolution_object.h"
 #include <algorithm>
 
-static bool operator<(const Tupla3f& a, const Tupla3f& b) {
-    return a[1] < b[1] ||
-            (a[1] == b[1] && (a[0] < b[0])) ||
-            (a[1] == b[1] && (a[0] == b[0]) && (a[2] < b[2]));
-}
-// diferenciar entre tapa superior e inferior.
-// El criterio de ordenación no funcionaría para un Toroide por ejemplo.
-// añadir umbral a la detección de tapas.
-
 RevolutionObject::RevolutionObject() {}
 
 RevolutionObject::RevolutionObject(const std::string& ifile, int num_instances, bool make_covers) {
@@ -25,25 +16,35 @@ RevolutionObject::RevolutionObject(const std::vector<Tupla3f>& revolution_coordi
     init_color(vertices.size());
 }
 
-RevolutionObject::RevolutionObject(const std::string& ifile, int num_instances, bool make_cover_south, bool make_cover_north) {
+RevolutionObject::RevolutionObject(const std::string& ifile, int num_instances, bool make_cover_south, bool make_cover_north, int axis) {
     std::vector<Tupla3f> revolution_coordinates;
     ply::read_vertices(ifile, revolution_coordinates);
-    make_revolution_surface(revolution_coordinates, num_instances, make_cover_south, make_cover_north);
+    make_revolution_surface(revolution_coordinates, num_instances, make_cover_south, make_cover_north, axis);
     init_color(vertices.size());
 }
 
-RevolutionObject::RevolutionObject(const std::vector<Tupla3f>& revolution_coordinates, int num_instances, bool make_cover_south, bool make_cover_north) {
-    make_revolution_surface(revolution_coordinates, num_instances, make_cover_south, make_cover_north);
+RevolutionObject::RevolutionObject(const std::vector<Tupla3f>& revolution_coordinates, int num_instances, bool make_cover_south, bool make_cover_north, int axis) {
+    make_revolution_surface(revolution_coordinates, num_instances, make_cover_south, make_cover_north, axis);
     init_color(vertices.size());
 }
 
-void RevolutionObject::make_revolution_surface(std::vector<Tupla3f> revolution_coordinates, int num_instances, bool make_cover_south, bool make_cover_north) {
+static void ordenar(std::vector<Tupla3f>& rv, int axis) {
+    if (rv.front()[axis] > rv.back()[axis]) {
+        int size = rv.size();
+        int mid = rv.size()/2;
+        for (int i = 0; i < mid; i++) {
+            std::swap(rv[i], rv[size-i-1]);
+        }
+    }
+}
+
+void RevolutionObject::make_revolution_surface(std::vector<Tupla3f> revolution_coordinates, int num_instances, bool make_cover_south, bool make_cover_north, int axis) {
     std::vector<Tupla3f>& rv = revolution_coordinates;
     Tupla3f south, north;
-    std::sort(rv.begin(), rv.end());
-    covers_extract_poles(rv, south, north);
+    ordenar(rv, axis);
+    covers_extract_poles(rv, south, north, axis);
 
-    revolution_surface_make_geometry(rv, num_instances);
+    revolution_surface_make_geometry(rv, num_instances, axis);
     revolution_surface_make_topology(rv, num_instances);
 
     if (make_cover_south) {
@@ -55,11 +56,18 @@ void RevolutionObject::make_revolution_surface(std::vector<Tupla3f> revolution_c
     }
 }
 
-void RevolutionObject::revolution_surface_make_geometry(std::vector<Tupla3f>& rv, int num_instances) {
+void RevolutionObject::revolution_surface_make_geometry(std::vector<Tupla3f>& rv, int num_instances, int eje) {
     for (int i = 0; i < num_instances; i++) {
-        double angle = -2*M_PI/num_instances * i;
+        double angle = 2*M_PI/num_instances * i;
+        double _sin = sin(angle);
+        double _cos = cos(angle);
         for (const auto& c : rv) {
-            vertices.emplace_back(c(0)*cos(angle), c(1), c(0)*sin(angle));
+            if (eje == 0)       // X axis
+                vertices.emplace_back(c[0], c[1]*_cos-c[2]*_sin, c[1]*_sin+c[2]*_cos);
+            else if (eje == 1)  // Y axis
+                vertices.emplace_back(c[0]*_cos+c[2]*_sin, c[1], -c[0]*_sin+c[2]*_cos);
+            else                // Z axis
+                vertices.emplace_back(c[0]*_cos-c[1]*_sin, c[0]*_sin+c[1]*_cos, c[2]);
         }
     }
 }
@@ -105,19 +113,22 @@ void RevolutionObject::covers_make_topology(std::vector<Tupla3u>& ci, int shared
     }
 }
 
-void RevolutionObject::covers_extract_poles(std::vector<Tupla3f>& rv, Tupla3f& south, Tupla3f& north) {
-    covers_extract_pole(rv, --rv.end(), north);
-    covers_extract_pole(rv, rv.begin(), south);
+void RevolutionObject::covers_extract_poles(std::vector<Tupla3f>& rv, Tupla3f& south, Tupla3f& north, int axis) {
+    covers_extract_pole(rv, --rv.end(), north, axis);
+    covers_extract_pole(rv, rv.begin(), south, axis);
 }
 
-void RevolutionObject::covers_extract_pole(std::vector<Tupla3f>& rv, std::vector<Tupla3f>::iterator it, Tupla3f& pole) {
-    constexpr int x = 0, z = 2;
+void RevolutionObject::covers_extract_pole(std::vector<Tupla3f>& rv, std::vector<Tupla3f>::iterator it, Tupla3f& pole, int axis) {
+    constexpr double epsi = 0.0000002;
+    int a = axis==0 ? 2 : axis-1;
+    int b = axis==2 ? 0 : axis+1;
+
     pole = *it;
-    if (pole(x) == 0.0 && pole(z) == 0.0) {
+    if (pole(a) > -epsi && pole(a) < epsi && pole(b) > -epsi && pole(b) < epsi) {
         rv.erase(it);
     }
-    pole(x) = 0.0;
-    pole(z) = 0.0;
+    pole(a) = 0.0;
+    pole(b) = 0.0;
 }
 
 void RevolutionObject::make_current_buffered_data_list(void) {
