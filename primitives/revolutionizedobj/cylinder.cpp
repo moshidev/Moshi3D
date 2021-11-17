@@ -9,4 +9,5 @@ Cylinder::Cylinder(int num_vertices_side_face, int num_instances, float height, 
     }
     make_revolution_surface(perfil, num_instances, true, true, Y_axis);
     init_color(vertices.size());
+    init_normal_vectors();
 }

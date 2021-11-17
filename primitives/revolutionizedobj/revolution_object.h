@@ -23,11 +23,14 @@ public:
 
 protected:
     RevolutionObject();
+    virtual void init_normal_vectors(void);
 
     IndexBuffer cover_south_IB;
     IndexBuffer cover_north_IB;
     std::vector<Tupla3u> cover_south;
     std::vector<Tupla3u> cover_north;
+    std::vector<Tupla3f> cover_south_normal;
+    std::vector<Tupla3f> cover_north_normal;
     bool render_cover_south {true};
     bool render_cover_north {true};
     bool force_cover_south {false};

@@ -43,7 +43,11 @@ protected:
     /* Inicializa los distintos vectores de colores a su valor por defecto */
     void init_color(unsigned n_vertices);
     /* Inicializa la lista de normales a los vértices y a las caras */
-    void init_normals(void);
+    void compute_normal_faces(std::vector<Tupla3f>& nf_dst, const std::vector<Tupla3u>& indices);
+    void sum_normal_to_vertices(const std::vector<Tupla3f>& nf, const std::vector<Tupla3u>& indices);
+    void normalize_vertices(void);
+    virtual void init_normal_vectors(void);
+
 
     /* Crea la estructura de los datos a exportar para renderizar. Lo almacena en current_[buffered,raw]_data_list */
     virtual void make_current_data_lists(void);
@@ -70,8 +74,8 @@ protected:
 
     std::vector<Tupla3f> vertices;
     std::vector<Tupla3u> indices;
-    std::vector<Tupla3f> nv;    // normal to a vertice of vertices
-    std::vector<Tupla3f> nf;    // normal to a face of indices
+    std::vector<Tupla3f> vertices_normal;    // normal to every vertice in vertices
+    std::vector<Tupla3f> indices_normal;    // normal to every face in indices
 
     std::list<BufferedData> current_buffered_data_list;
     std::list<RawData> current_raw_data_list;

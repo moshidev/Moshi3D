@@ -146,21 +146,35 @@ void Mesh3D::init_color(unsigned n_vertices) {
     color_chess_b.assign(n_vertices, {0.25, 0.75, 0.0});
 }
 
-void Mesh3D::init_normals(void) {
-    for (const auto& f : indices) {
-        Tupla3f a = vertices[f[1]] - vertices[f[0]];
-        Tupla3f b = vertices[f[2]] - vertices[f[0]];
-        nf.emplace_back(a.cross(b).normalized());
+void Mesh3D::compute_normal_faces(std::vector<Tupla3f>& indices_normal, const std::vector<Tupla3u>& indices) {
+    for (auto& f : indices) {
+        Tupla3f a = vertices[f(1)] - vertices[f(0)];
+        Tupla3f b = vertices[f(2)] - vertices[f(0)];
+        indices_normal.emplace_back(a.cross(b).normalized());
     }
-    nv.resize(vertices.size());
-    for (const auto& f : indices) {
-        nv[f[0]] = nv[f[0]] + nf[f[0]];
-        nv[f[1]] = nv[f[1]] + nf[f[1]];
-        nv[f[2]] = nv[f[2]] + nf[f[2]];
+}
+
+void Mesh3D::sum_normal_to_vertices(const std::vector<Tupla3f>& indices_normal, const std::vector<Tupla3u>& indices) {
+    vertices_normal.resize(vertices.size());
+    int i = 0;
+    for (auto& f : indices) {
+        vertices_normal[f(0)] = vertices_normal[f(0)] + indices_normal[i];
+        vertices_normal[f(1)] = vertices_normal[f(1)] + indices_normal[i];
+        vertices_normal[f(2)] = vertices_normal[f(2)] + indices_normal[i];
+        i++;
     }
-    for (auto& v : nv) {
+}
+
+void Mesh3D::normalize_vertices(void) {
+    for (auto& v : vertices_normal) {
         v = v.normalized();
     }
+}
+
+void Mesh3D::init_normal_vectors(void) {
+    compute_normal_faces(indices_normal, indices);
+    sum_normal_to_vertices(indices_normal, indices);
+    normalize_vertices();  
 }
 
 void Mesh3D::init_vertex_buffer(VertexBuffer& vb, const std::vector<Tupla3f>& v) {

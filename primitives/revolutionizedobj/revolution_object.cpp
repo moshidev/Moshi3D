@@ -9,11 +9,13 @@ RevolutionObject::RevolutionObject(const std::string& ifile, int num_instances, 
     ply::read_vertices(ifile, revolution_coordinates);
     make_revolution_surface(revolution_coordinates, num_instances, make_covers, make_covers);
     init_color(vertices.size());
+    init_normal_vectors();
 }
 
 RevolutionObject::RevolutionObject(const std::vector<Tupla3f>& revolution_coordinates, int num_instances, bool make_covers) {
     make_revolution_surface(revolution_coordinates, num_instances, make_covers, make_covers);
     init_color(vertices.size());
+    init_normal_vectors();
 }
 
 RevolutionObject::RevolutionObject(const std::string& ifile, int num_instances, bool make_cover_south, bool make_cover_north, int axis) {
@@ -21,11 +23,13 @@ RevolutionObject::RevolutionObject(const std::string& ifile, int num_instances, 
     ply::read_vertices(ifile, revolution_coordinates);
     make_revolution_surface(revolution_coordinates, num_instances, make_cover_south, make_cover_north, axis);
     init_color(vertices.size());
+    init_normal_vectors();
 }
 
 RevolutionObject::RevolutionObject(const std::vector<Tupla3f>& revolution_coordinates, int num_instances, bool make_cover_south, bool make_cover_north, int axis) {
     make_revolution_surface(revolution_coordinates, num_instances, make_cover_south, make_cover_north, axis);
     init_color(vertices.size());
+    init_normal_vectors();
 }
 
 static void ordenar(std::vector<Tupla3f>& rv, int axis) {
@@ -129,6 +133,16 @@ void RevolutionObject::covers_extract_pole(std::vector<Tupla3f>& rv, std::vector
     }
     pole(a) = 0.0;
     pole(b) = 0.0;
+}
+
+void RevolutionObject::init_normal_vectors(void) {
+    compute_normal_faces(indices_normal, indices);
+    compute_normal_faces(cover_south_normal, cover_south);
+    compute_normal_faces(cover_north_normal, cover_north);
+    sum_normal_to_vertices(indices_normal, indices);
+    sum_normal_to_vertices(cover_south_normal, cover_south);
+    sum_normal_to_vertices(cover_north_normal, cover_north);
+    normalize_vertices();
 }
 
 void RevolutionObject::make_current_buffered_data_list(void) {
