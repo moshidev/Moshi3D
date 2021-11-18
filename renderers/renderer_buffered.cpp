@@ -5,6 +5,7 @@
 
 #include "renderer_buffered.h"
 #include "mesh.h"
+#include "light.h"
 #include "_aux.h"
 
 static void set_vertex_pointer(const VertexBuffer& vb) {
@@ -16,6 +17,12 @@ static void set_vertex_pointer(const VertexBuffer& vb) {
 static void set_color_pointer(const VertexBuffer& vb) {
     vb.bind();
     glColorPointer(3, GL_FLOAT, 0, 0);
+    vb.unbind();
+}
+
+static void set_normal_pointer(const VertexBuffer& vb) {
+    vb.bind();
+    glNormalPointer(GL_FLOAT, 0, 0);
     vb.unbind();
 }
 
@@ -32,16 +39,27 @@ void RendererBuffered::render(Mesh3D& m) const {
 
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
     
     for (const auto& r : m.get_buffer_data_list()) {
+        glEnable(GL_LIGHT0);
         glPolygonMode(GL_FRONT_AND_BACK, r.get_polygon_mode());
+
         set_vertex_pointer(r.get_vertices());
-        set_color_pointer(r.get_color());
+        if (Light::is_lighting_enabled()) {
+            set_normal_pointer(r.get_vertices_normals());
+            r.get_material().set_current();
+        }
+        else {
+            set_color_pointer(r.get_color());
+        }
+        
         draw_elements_from_indices(r.get_indices(), r.get_indices_count(), r.get_indices_offset());
     }
 
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
 
     glDisable(GL_POLYGON_OFFSET_LINE);
     glDisable(GL_CULL_FACE);
