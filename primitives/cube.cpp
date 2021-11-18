@@ -44,4 +44,5 @@ Cube::Cube(float lado) {
    cube_init_vertices(vertices, lado);
    cube_init_indices(indices);
    init_color(vertices.size());
+   init_normal_vectors();
 }

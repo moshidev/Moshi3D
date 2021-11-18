@@ -10,6 +10,7 @@ ObjPLY::ObjPLY(const std::string& nombre_archivo)
 {
    ply::read(nombre_archivo, vertices, indices);
    init_color(vertices.size());
+   init_normal_vectors();
 }
 
 

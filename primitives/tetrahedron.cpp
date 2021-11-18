@@ -24,4 +24,5 @@ Tetrahedron::Tetrahedron(float l)
     indices.emplace_back(3, 2, 1);
 
     init_color(vertices.size());
+    init_normal_vectors();
 }
