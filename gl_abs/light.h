@@ -31,8 +31,7 @@ protected:
     Tupla4f color_diffuse;
     Tupla4f color_specular;
 
-    //Light(Tupla4f position, Tupla4f color_ambient={0.25, 0.5, 0.75, 1}, Tupla4f color_diffuse={0.75, 0.25, 0.5, 1}, Tupla4f color_specular={0.5, 0.75, 0.25, 1});
-    Light(Tupla4f position, Tupla4f color_ambient={0, 0, 0, 1}, Tupla4f color_diffuse={1, 1, 1, 1}, Tupla4f color_specular={1, 1, 1, 1});
+    Light(Tupla4f position, Tupla4f color_ambient={0, 0, 0, 1.0}, Tupla4f color_diffuse={1, 1, 1, 1.0}, Tupla4f color_specular={1, 1, 1, 1.0});
     void set_light_color(void);
     void set_light_position(void);
 

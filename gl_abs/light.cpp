@@ -11,6 +11,7 @@ Light::Light(Tupla4f position, Tupla4f color_ambient, Tupla4f color_diffuse, Tup
 }
 
 Light::~Light() {
+    glDisable(id);
     Light::free_id(id);
 }
 
@@ -43,7 +44,7 @@ void Light::init_static_data(void) {
     if (ids_in_use.empty() && ids_available.empty()) {
         int max_lights;
         glGetIntegerv(GL_MAX_LIGHTS, &max_lights);
-        for (int i = 0; i < max_lights; i++) {
+        for (int i = max_lights-1; i >= 0; i--) {
             ids_available.push_back(GL_LIGHT0+i);
         }
     }
@@ -64,6 +65,7 @@ GLenum Light::get_new_id(void) {
 void Light::free_id(GLenum id) {
     auto it = std::find(ids_in_use.begin(), ids_in_use.end(), id);
     if (it != ids_in_use.end()) {
+        ids_available.push_back(*it);
         ids_in_use.erase(it);
     }
 }
