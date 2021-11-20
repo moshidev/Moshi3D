@@ -15,23 +15,18 @@ Light::~Light() {
     Light::free_id(id);
 }
 
-void Light::enable(void) {
-    glEnable(id);
-    set_light_color();
-    set_light_position();
+void Light::apply(void) {
+    apply_light_color();
+    apply_light_position();
 }
 
-void Light::disable(void) {
-    glDisable(id);
-}
-
-void Light::set_light_color(void) {
+void Light::apply_light_color(void) {
     glLightfv(id, GL_AMBIENT, (GLfloat*)&color_ambient);
     glLightfv(id, GL_DIFFUSE, (GLfloat*)&color_diffuse);
     glLightfv(id, GL_SPECULAR, (GLfloat*)&color_specular);
 }
 
-void Light::set_light_position(void) {
+void Light::apply_light_position(void) {
     glLightfv(id, GL_POSITION, (GLfloat*)&position);
 }
 

@@ -14,8 +14,10 @@ public:
     Light(const Light& l) = delete;
     virtual ~Light() = 0;
 
-    void enable(void);
-    void disable(void);
+    inline bool is_active(void) { return glIsEnabled(id); }
+    inline void activate(bool t) { t ? glEnable(id) : glDisable(id); }
+
+    void apply(void);
     inline void set_color_ambient(const Tupla4f& c) { color_ambient = c; }
     inline void set_color_diffuse(const Tupla4f& c) { color_diffuse = c; }
     inline void set_color_specular(const Tupla4f& c) { color_specular = c; }
@@ -32,8 +34,8 @@ protected:
     Tupla4f color_specular;
 
     Light(Tupla4f position, Tupla4f color_ambient={0, 0, 0, 1.0}, Tupla4f color_diffuse={1, 1, 1, 1.0}, Tupla4f color_specular={1, 1, 1, 1.0});
-    void set_light_color(void);
-    void set_light_position(void);
+    void apply_light_color(void);
+    void apply_light_position(void);
 
 private:
     static std::vector<GLenum> ids_available;
