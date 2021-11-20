@@ -1,6 +1,8 @@
 #include "escena.h"
 #include "_aux.h" // includes de OpenGL/glut/glew, windows, y librería std de C++
 #include "mesh.h" // objetos: Cubo y otros....
+#include "directional_light.h"
+#include "positional_light.h"
 #include <vector>
 
 Escena::Escena()
@@ -50,6 +52,10 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
 
     glEnable(GL_DEPTH_TEST); // se habilita el z-bufer
 
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_NORMALIZE); // <- the root of all evil
+	glShadeModel(GL_SMOOTH);
+
     window_width = UI_window_width / 10;
     window_height = UI_window_height / 10;
 
@@ -76,6 +82,10 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
 
 void Escena::dibujar()
 {
+    DirectionalLight d({0,0}, {0,0,0,1}, {1,0,0,1}, {1,0,0,1});
+    PositionalLight p({1,1,0}, {1,1,1,1}, {1,1,1,1}, {1,1,1,1});
+
+    Light::enable_lighting(false);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla
     change_observer();
     ejes.draw();
@@ -83,7 +93,12 @@ void Escena::dibujar()
 
     glPointSize(10);
     glLineWidth(1.25);
+    
+    Light::enable_lighting(true);
 
+    if (!d.is_active()) { d.activate(true); p.activate(true); }
+    d.apply();
+    p.apply();
     
     if (objeto_actual != nullptr) {
         glPushMatrix();
