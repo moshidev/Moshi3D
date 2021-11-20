@@ -15,12 +15,14 @@ public:
     DirectionalLight(const Tupla2f& orientation);
     DirectionalLight(const Tupla2f& orientation, Tupla4f color_ambient, Tupla4f color_diffuse, Tupla4f color_specular);
 
-    inline void increment_alpha(float value) { alpha += value; }
-    inline void increment_beta(float value) {beta += value; }
+    void increment_alpha(float value);
+    void increment_beta(float value);
 
 protected:
     float alpha;
     float beta;
+
+    void set_position(float alpha, float beta);
 };
 
 #endif /* MOSHI3D_DIRECTIONAL_LIGHT_H_ */
