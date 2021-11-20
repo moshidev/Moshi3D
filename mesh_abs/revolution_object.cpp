@@ -136,6 +136,7 @@ void RevolutionObject::covers_extract_pole(std::vector<Tupla3f>& rv, std::vector
 }
 
 void RevolutionObject::init_normal_vectors(void) {
+    std::vector<Tupla3f> indices_normal;
     compute_normal_faces(indices_normal, indices);
     compute_normal_faces(cover_south_normal, cover_south);
     compute_normal_faces(cover_north_normal, cover_north);
@@ -149,17 +150,17 @@ void RevolutionObject::make_current_buffered_data_list(void) {
     auto& list = current_buffered_data_list;
 
     list.clear();
-    list.splice(list.begin(), mklist_buffered_polygon_mode(get_vertices_VB(), get_indices_IB()));
-    list.splice(list.begin(), mklist_buffered_chess_mode(get_vertices_VB(), get_indices_IB()));
+    list.splice(list.begin(), mklist_buffered_polygon_mode(get_indices_IB()));
+    list.splice(list.begin(), mklist_buffered_chess_mode(get_indices_IB()));
     if (render_cover_south) {
         init_index_buffer(cover_south_IB, cover_south);
-        list.splice(list.begin(), mklist_buffered_polygon_mode(get_vertices_VB(), cover_south_IB));
-        list.splice(list.begin(), mklist_buffered_chess_mode(get_vertices_VB(), cover_south_IB));
+        list.splice(list.begin(), mklist_buffered_polygon_mode(cover_south_IB));
+        list.splice(list.begin(), mklist_buffered_chess_mode(cover_south_IB));
     }
     if (render_cover_north) {
         init_index_buffer(cover_north_IB, cover_north);
-        list.splice(list.begin(), mklist_buffered_polygon_mode(get_vertices_VB(), cover_north_IB));
-        list.splice(list.begin(), mklist_buffered_chess_mode(get_vertices_VB(), cover_north_IB));
+        list.splice(list.begin(), mklist_buffered_polygon_mode(cover_north_IB));
+        list.splice(list.begin(), mklist_buffered_chess_mode(cover_north_IB));
     }
 }
 
@@ -167,15 +168,15 @@ void RevolutionObject::make_current_raw_data_list(void) {
     auto& list = current_raw_data_list;
 
     list.clear();
-    list.splice(list.begin(), mklist_raw_polygon_mode(vertices, indices));
-    list.splice(list.begin(), mklist_raw_chess_mode(vertices, indices));
+    list.splice(list.begin(), mklist_raw_polygon_mode(indices));
+    list.splice(list.begin(), mklist_raw_chess_mode(indices));
     if (render_cover_south) {
-        list.splice(list.begin(), mklist_raw_polygon_mode(vertices, cover_south));
-        list.splice(list.begin(), mklist_raw_chess_mode(vertices, cover_south));
+        list.splice(list.begin(), mklist_raw_polygon_mode(cover_south));
+        list.splice(list.begin(), mklist_raw_chess_mode(cover_south));
     }
     if (render_cover_north) {
-        list.splice(list.begin(), mklist_raw_polygon_mode(vertices, cover_north));
-        list.splice(list.begin(), mklist_raw_chess_mode(vertices, cover_north));
+        list.splice(list.begin(), mklist_raw_polygon_mode(cover_north));
+        list.splice(list.begin(), mklist_raw_chess_mode(cover_north));
     }
 }
 
