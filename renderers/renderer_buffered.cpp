@@ -32,6 +32,16 @@ static void draw_elements_from_indices(const IndexBuffer& ib, GLsizei count, GLs
     ib.unbind();
 }
 
+static void update_lighting_status(bool lighting_enabled, bool affected_by_light) {
+    bool currently_enabled = Light::is_lighting_enabled();
+    if (currently_enabled && !affected_by_light) {
+        Light::enable_lighting(false);
+    }
+    else if (lighting_enabled && !currently_enabled) {
+        Light::enable_lighting(true);
+    }
+}
+
 void RendererBuffered::render(Mesh3D& m) const {
     glEnable(GL_CULL_FACE);
     glEnable(GL_POLYGON_OFFSET_LINE);
@@ -41,9 +51,10 @@ void RendererBuffered::render(Mesh3D& m) const {
     glEnableClientState(GL_COLOR_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
     
+    bool lighting_enabled = Light::is_lighting_enabled();
     for (const auto& r : m.get_buffer_data_list()) {
-        glEnable(GL_LIGHT0);
-        glPolygonMode(GL_FRONT_AND_BACK, r.get_polygon_mode());
+        update_lighting_status(lighting_enabled, r.get_affected_by_light());
+        glPolygonMode(GL_FRONT, r.get_polygon_mode());
 
         set_vertex_pointer(r.get_vertices());
         if (Light::is_lighting_enabled()) {
@@ -55,6 +66,7 @@ void RendererBuffered::render(Mesh3D& m) const {
         }
         
         draw_elements_from_indices(r.get_indices(), r.get_indices_count(), r.get_indices_offset());
+        update_lighting_status(lighting_enabled, r.get_affected_by_light());
     }
 
     glDisableClientState(GL_VERTEX_ARRAY);
