@@ -59,6 +59,7 @@ bool Menu::object_selection(Escena& e, unsigned char tecla, int x, int y) {
         std::cout << "'C': Visualizamos/ocultamos el cubo.\n";
         std::cout << "'T': Visualizamos/ocultamos el tetraedro.\n";
         std::cout << "'Q': Volvemos al menú principal." << std::endl;
+        submenu_lights.update(e, tecla, x, y);
         break;
     }
 
@@ -92,6 +93,23 @@ bool Menu::visualization_mode_selection(Escena& e, unsigned char tecla, int x, i
         std::cout << "Deshabilitamos la visualización de tapas" << std::endl;
         e.render_covers(false);
         break;
+    case 'O':
+        std::cout << "Activamos/desactivamos el sombreado" << std::endl;
+        Light::enable_lighting(true);
+        e.render_shaded(!e.is_rendering_shaded());
+        break;
+    case 'I':
+        std::cout << "Activamos/desactivamos la iluminación" << std::endl;
+        Light::enable_lighting(!Light::is_lighting_enabled());
+        break;
+    case 'Z':
+        std::cout << "Activamos GL_SMOOTH" << std::endl;
+        glShadeModel(GL_SMOOTH);
+        break;
+    case 'X':
+        std::cout << "Activamos GL_FLAT" << std::endl;
+        glShadeModel(GL_FLAT);
+        break;
     case 'C':
         std::cout << "Activamos visualización RGB si el objeto lo soporta" << std::endl;
         std::cout << "SIN IMPLEMENTAR" << std::endl;
@@ -106,6 +124,8 @@ bool Menu::visualization_mode_selection(Escena& e, unsigned char tecla, int x, i
         std::cout << "'L': Activamos/desactivamos visualización en modo líneas.\n";
         std::cout << "'S': Activamos/desactivamos visualización en modo sólido.\n";
         std::cout << "'A': Activamos/desactivamos visualización en modo ajedrez.\n";
+        std::cout << "'O': Activamos/desactivamos visualización en modo sombreado.\n";
+        std::cout << "'I': Activamos/desactivamos la iluminación.\n";
         std::cout << "'C': Activamos visualización RGB si el objeto lo soporta.\n";
         std::cout << "'T': Habilitamos la visualización de tapas.\n";
         std::cout << "'G': Deshabilitamos la visualización de tapas.\n";
