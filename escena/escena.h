@@ -14,6 +14,8 @@
 #include "renderer.h"
 #include "renderer_immediate.h"
 #include "renderer_buffered.h"
+#include "directional_light.h"
+#include "positional_light.h"
 #include <vector>
 
 class Escena {
@@ -41,7 +43,8 @@ class Escena {
     Cube* cubo {nullptr};           
     Tetrahedron* tetraedro {nullptr};
     RevolutionObject* lata {nullptr};
-    RevolutionObject* peon {nullptr};
+    RevolutionObject* peon_blanco {nullptr};
+    RevolutionObject* peon_negro {nullptr};
     Cylinder* cilindro {nullptr};
     Cone* cono {nullptr};
     Sphere* esfera {nullptr};
@@ -55,8 +58,15 @@ class Escena {
 
     Menu menu;
 
+    // Luces
+    DirectionalLight* directional_light_0 {nullptr};
+    PositionalLight* positional_light_0 {nullptr};
+
+    // Almacenes de referencias a objetos de la escena
     std::vector<RevolutionObject*> revobjects;
     std::vector<Mesh3D*> objects;
+    std::vector<Light*> lights;
+    std::vector<DirectionalLight*> directional_lights;
   public:
     
     Escena();
@@ -73,11 +83,13 @@ class Escena {
     void render_lines(bool t);
     void render_solid(bool t);
     void render_chess(bool t);
+    void render_shaded(bool t);
 
     inline bool is_rendering_points(void) { return objeto_actual->get_polygon_modes().find(GL_POINT) != objeto_actual->get_polygon_modes().end();}
     inline bool is_rendering_lines(void) { return objeto_actual->get_polygon_modes().find(GL_LINE) != objeto_actual->get_polygon_modes().end();}
     inline bool is_rendering_solid(void) { return objeto_actual->get_polygon_modes().find(GL_FILL) != objeto_actual->get_polygon_modes().end();}
     inline bool is_rendering_chess(void) { return objeto_actual->is_chess_mode_enabled(); }
+    inline bool is_rendering_shaded(void) { return objeto_actual->is_shade_mode_enabled(); }
 
     inline void enable_cube(bool t) { objeto_actual = t ? cubo : nullptr; }
     inline void enable_tetrahedron(bool t) { objeto_actual = t ? tetraedro : nullptr; }
@@ -86,6 +98,9 @@ class Escena {
     inline bool is_tetrahedron_enabled(void) { return tetraedro != nullptr && tetraedro == objeto_actual; }
 
     void render_covers(bool t);
+    
+    Light* get_light(int n);
+    DirectionalLight* get_directional_light(int n);
 
     bool teclaPulsada(unsigned char tecla1, int x, int y);
     void teclaEspecial(int tecla1, int x, int y);
