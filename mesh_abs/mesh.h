@@ -43,6 +43,7 @@ public:
     /* Métodos get para obtener la información a renderizar */
     inline const std::list<BufferedData>& get_buffer_data_list(void) const { return current_buffered_data_list; }
     inline const std::list<RawData>& get_raw_data_list(void) const { return current_raw_data_list; }
+    inline void set_material(const Material& m) { material = &m; }
 
 protected:
     Mesh3D();
@@ -87,7 +88,7 @@ protected:
     std::vector<Tupla3f> vertices;
     std::vector<Tupla3u> indices;
     std::vector<Tupla3f> vertices_normal;    // normal to every vertice in vertices
-    const Material& material;
+    const Material* material;
 
     std::list<BufferedData> current_buffered_data_list;
     std::list<RawData> current_raw_data_list;

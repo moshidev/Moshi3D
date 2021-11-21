@@ -9,7 +9,7 @@
 #include <iostream>
 
 Mesh3D::Mesh3D()
-:material{Material::get_default()}
+:material{&Material::get_default()}
 {}
 
 Mesh3D::~Mesh3D() {}
@@ -65,7 +65,7 @@ void Mesh3D::make_current_buffered_data_list(void) {
     std::vector<std::list<Mesh3D::BufferedData>> render_lists {
         mklist_buffered_polygon_mode(get_indices_IB()),
         mklist_buffered_chess_mode(get_indices_IB()),
-        mklist_buffered_shaded_mode(get_indices_IB(), material)
+        mklist_buffered_shaded_mode(get_indices_IB(), *material)
     };
     
     list.clear();
@@ -79,7 +79,7 @@ void Mesh3D::make_current_raw_data_list(void) {
     std::vector<std::list<Mesh3D::RawData>> render_lists {
         mklist_raw_polygon_mode(indices),
         mklist_raw_chess_mode(indices),
-        mklist_raw_shaded_mode(indices, material)
+        mklist_raw_shaded_mode(indices, *material)
     };
 
     list.clear();
