@@ -10,7 +10,7 @@
 
 exe             := pracs_exe
 obj				:= obj
-units_cc        := $(wildcard *.cpp) $(wildcard renderers/*.cpp) $(wildcard primitives/*.cpp) $(wildcard gl_abs/*.cpp) $(wildcard gl_abs/lights/*.cpp) $(wildcard mesh_abs/*.cpp) $(wildcard file_io/*.cpp) $(wildcard escena/*.cpp)
+units_cc        := $(wildcard *.cpp) $(wildcard renderers/*.cpp) $(wildcard primitives/*.cpp) $(wildcard gl_abs/*.cpp) $(wildcard gl_abs/transformations/*.cpp) $(wildcard gl_abs/lights/*.cpp) $(wildcard mesh_abs/*.cpp) $(wildcard file_io/*.cpp) $(wildcard escena/*.cpp)
 units_o         := $(addprefix $(obj)/, $(addsuffix .o, $(basename $(units_cc))))
 headers         := $(wildcard *.h*) $(wildcard include/*.h*)
 uname           := $(shell uname -s)
@@ -19,7 +19,7 @@ en_linux        := $(findstring Linux,$(uname))
 compiler        := $(if $(en_linux), g++, clang++ )
 sistoper        := $(if $(en_macos), macOS, Linux )
 
-cc_flags_common := -std=c++17 -Wall -g -I/usr/include -I. -I./include -I./primitives -I./gl_abs -I./gl_abs/lights -I./mesh_abs -I./renderers -I./escena
+cc_flags_common := -std=c++17 -Wall -g -I/usr/include -I. -I./include -I./primitives -I./gl_abs -I./gl_abs/transformations -I./gl_abs/lights -I./mesh_abs -I./renderers -I./escena
 cc_flags_linux  := -DLINUX
 cc_flags_macos  := -DMACOS
 cc_flags        := $(cc_flags_common) $(if $(en_linux), $(cc_flags_linux), $(cc_flags_macos))
