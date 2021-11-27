@@ -20,10 +20,8 @@
 #ifndef MOSHI3D_ROOTED_DAG_H_
 #define MOSHI3D_ROOTED_DAG_H_
 
-#include <memory>
 #include <vector>
 #include <stack>
-#include <iostream>
 
 template<typename _Tp>
 class RootedDAG {
