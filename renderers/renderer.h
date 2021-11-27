@@ -10,7 +10,7 @@ class Mesh3D;
 
 class Renderer {
     public:
-    virtual void render(Mesh3D& m) const = 0;
+    virtual void render(const Mesh3D& m) const = 0;
 };
 
 #endif /* MOSHI3D_RENDERER_H_ */

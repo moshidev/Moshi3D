@@ -42,7 +42,7 @@ static void update_lighting_status(bool lighting_enabled, bool affected_by_light
     }
 }
 
-void RendererBuffered::render(Mesh3D& m) const {
+void RendererBuffered::render(const Mesh3D& m) const {
     glEnable(GL_CULL_FACE);
     glEnable(GL_POLYGON_OFFSET_LINE);
     glPolygonOffset(-25.0, 12.5);
