@@ -87,6 +87,7 @@ public:
         inline bool operator!=(const iterator& i) const {
             return node_ptr != i.node_ptr;
         }
+        // Esto crea como 547389675432 iteradores sin necesidad pero bueno xd
         iterator& operator++() {    /// preorder traversal
             auto null_iterator{iterator{}};
             auto rbrother_it{get_rbrother(*this)};
@@ -94,10 +95,10 @@ public:
             if (rbrother_it != null_iterator) {
                 *this = rbrother_it;
 
-                auto fchild_it{get_first_child(rbrother_it)};
+                auto fchild_it{get_first_child(*this)};
                 while (fchild_it != null_iterator) {
                     *this = fchild_it;
-                    fchild_it = get_first_child(fchild_it);
+                    fchild_it = get_first_child(*this);
                 }
             }
             else if (parent_it != null_iterator) {
