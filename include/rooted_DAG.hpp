@@ -78,6 +78,9 @@ public:
         inline _Tp& operator*() {
             return node_ptr->data;
         }
+        inline const _Tp& operator*() const {
+            return node_ptr->data;
+        }
         inline bool operator<(const iterator& i) const {
             return node_ptr < i.node_ptr;
         }
@@ -90,15 +93,15 @@ public:
         // Esto crea como 547389675432 iteradores sin necesidad pero bueno xd
         iterator& operator++() {    /// preorder traversal
             auto null_iterator{iterator{}};
-            auto rbrother_it{get_rbrother(*this)};
-            auto parent_it{get_last_parent(*this)};
+            auto rbrother_it{get_rbrother()};
+            auto parent_it{get_last_parent()};
             if (rbrother_it != null_iterator) {
                 *this = rbrother_it;
 
-                auto fchild_it{get_first_child(*this)};
+                auto fchild_it{get_first_child()};
                 while (fchild_it != null_iterator) {
                     *this = fchild_it;
-                    fchild_it = get_first_child(*this);
+                    fchild_it = get_first_child();
                 }
             }
             else if (parent_it != null_iterator) {
@@ -115,7 +118,8 @@ public:
             ++(*this);
             return ret;
         }
-        iterator get_last_parent(const iterator& child) {
+        iterator get_last_parent(void) const {
+            const iterator& child = *this;
             if (child.last_parent_ptr.empty()) {
                 return {};
             }
@@ -126,7 +130,8 @@ public:
                 return ret;
             }
         }
-        iterator get_first_child(const iterator& parent) {
+        iterator get_first_child(void) const {
+            const iterator& parent = *this;
             if (parent.node_ptr->childs.empty()) {
                 return {};
             }
@@ -134,7 +139,8 @@ public:
                 return {parent, *parent.node_ptr->childs.front()};
             }
         }
-        iterator get_rbrother(const iterator& lbrother) {
+        iterator get_rbrother(void) const {
+            const iterator& lbrother = *this;
             if (last_parent_ptr.empty()) {
                 return {};
             }
@@ -145,22 +151,22 @@ public:
                     return {};
                 }
                 else {
-                    auto parent{get_last_parent(lbrother)};
+                    auto parent{lbrother.get_last_parent()};
                     return {parent, **it_rbrother};
                 }
             }
         }
     };
 
-    inline iterator begin(void) {
+    inline iterator begin(void) const {
         return {*root};
     }
 
-    inline iterator end(void) {
+    inline iterator end(void) const {
         return {};
     }
 
-    inline iterator get_root(void) {
+    inline iterator get_root(void) const {
         return {{}, *root};
     }
 
