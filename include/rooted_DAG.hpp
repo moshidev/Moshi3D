@@ -14,7 +14,7 @@
  * IN THE SOFTWARE.
  * 
  * @brief DAG with a single source.
- * @warning Keep in mind that this is not STL compatible, nor a truly generic data structure. For now it is a quick draft for getting the job done.
+ * @warning Keep in mind that this is not STL compatible, nor a truly generic data structure, nor optimized for speed. For now it is a quick draft for getting the job done.
  */
 
 #ifndef MOSHI3D_ROOTED_DAG_H_
@@ -64,13 +64,15 @@ public:
             while (!childs_v->empty()) {
                 last_parent_ptr.push(node_ptr);
                 node_ptr = childs_v->front();
-                childs_v = &node_ptr->childs; // después de esto la raíz deja de tener hijos
+                childs_v = &node_ptr->childs;
             }
         }
 
         iterator(const iterator& it, NodeData& child)
         :node_ptr{&child}, last_parent_ptr{it.last_parent_ptr}
-        {   }
+        {
+            last_parent_ptr.push(it.node_ptr);
+        }
 
         iterator() {    }
 
@@ -87,34 +89,67 @@ public:
         inline bool operator!=(const iterator& i) const {
             return node_ptr != i.node_ptr;
         }
-        iterator& operator++() {
-            // Miramos a ver si nos quedan hermanos por visitar. Si nos quedan hermanos por visitar
-            // nos desplazamos al hermano y a lo más a la izquierda del árbol posible
-            if (!last_parent_ptr.empty()) {
-                const auto& parent_child_v = last_parent_ptr.top()->childs;
-                auto it_brother = ++std::find(parent_child_v.begin(), parent_child_v.end(), node_ptr);
-                if (it_brother != parent_child_v.end()) {
-                    node_ptr = *it_brother;
+        iterator& operator++() {    /// preorder traversal
+            auto null_iterator{iterator{}};
+            auto rbrother_it{get_rbrother(*this)};
+            auto parent_it{get_last_parent(*this)};
+            if (rbrother_it != null_iterator) {
+                *this = rbrother_it;
 
-                    const auto* childs_v = &node_ptr->childs;
-                    while (!childs_v->empty()) {
-                        last_parent_ptr.push(node_ptr);
-                        node_ptr = childs_v->front();
-                        childs_v = &node_ptr->childs;
-                    }
-
-                    return *this;
-                }
-                else {  // Si no pues subimos un nivel y ya
-                    node_ptr = last_parent_ptr.top();
-                    last_parent_ptr.pop();
+                auto fchild_it{get_first_child(rbrother_it)};
+                while (fchild_it != null_iterator) {
+                    *this = fchild_it;
+                    fchild_it = get_first_child(fchild_it);
                 }
             }
-            else {  // Si estamos en la raiz es que el recorrido en preorden ha terminado
-                node_ptr = nullptr;
+            else if (parent_it != null_iterator) {
+                *this = parent_it;
+            }
+            else {
+                *this = null_iterator;
             }
 
             return *this;
+        }
+        iterator operator++(int) {
+            auto ret{*this};
+            ++(*this);
+            return ret;
+        }
+        iterator get_last_parent(const iterator& child) {
+            if (child.last_parent_ptr.empty()) {
+                return {};
+            }
+            else {
+                auto ret{child};
+                ret.node_ptr = child.last_parent_ptr.top();
+                ret.last_parent_ptr.pop();
+                return ret;
+            }
+        }
+        iterator get_first_child(const iterator& parent) {
+            if (parent.node_ptr->childs.empty()) {
+                return {};
+            }
+            else {
+                return {parent, *parent.node_ptr->childs.front()};
+            }
+        }
+        iterator get_rbrother(const iterator& lbrother) {
+            if (last_parent_ptr.empty()) {
+                return {};
+            }
+            else {
+                const auto& parent_childs_vector = last_parent_ptr.top()->childs;
+                auto it_rbrother = ++std::find(parent_childs_vector.begin(), parent_childs_vector.end(), lbrother.node_ptr);
+                if (it_rbrother == parent_childs_vector.end()) {
+                    return {};
+                }
+                else {
+                    auto parent{get_last_parent(lbrother)};
+                    return {parent, **it_rbrother};
+                }
+            }
         }
     };
 
@@ -132,12 +167,12 @@ public:
         return it;
     }
 
-    void add_parent(iterator& child_it, iterator& parent_it) {
+    void add_child(iterator& parent_it, iterator& child_it) {
         NodeData* child{child_it.node_ptr};
         NodeData* parent{parent_it.node_ptr};
 
         if (find_circular_dependency(*child, *parent)) {
-            throw std::logic_error("at add_parent: Circular dependency found when adding a parent to a child.");
+            throw std::logic_error("at add_child: Circular dependency found when adding a parent to a child.");
         }
 
         child->parents.push_back(parent);
