@@ -11,11 +11,10 @@
 #include "_aux.h"
 #include "vertex_buffer.h"
 #include "index_buffer.h"
+#include "renderizable.h"
 #include "material.h"
 
-class Renderer;
-
-class Mesh3D {
+class Mesh3D : public Renderizable{
 public:
     class BufferedData;
     class RawData;
@@ -23,7 +22,7 @@ public:
     Mesh3D(const Mesh3D& m) = delete;
     virtual ~Mesh3D() = 0;
 
-    virtual void draw(const Renderer& r);
+    void draw(const Renderer& r) const;
 
     /* Permite la visualización simultánea de cualquier combinación que se quiera de GL_FILL, GL_LINE y GL_POINT*/
     /* Si se selecciona GL_FILL y el modo ajedrez o el sombreado está activado lo desactiva */
