@@ -2,4 +2,5 @@
 *.o
 *_exe
 *.log
+*.dSYM
 .vscode
