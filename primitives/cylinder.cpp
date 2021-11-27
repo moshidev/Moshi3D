@@ -3,7 +3,7 @@
 Cylinder::Cylinder(int num_vertices_side_face, int num_instances, float height, float radius) {
     constexpr int Y_axis = 1;
     std::vector<Tupla3f> perfil;
-    float d = height/num_vertices_side_face;
+    float d = height/(num_vertices_side_face-1);
     for (int i = 0; i < num_vertices_side_face; i++) {
         perfil.emplace_back(radius, i*d, 0);
     }
