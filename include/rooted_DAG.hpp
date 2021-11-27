@@ -153,6 +153,18 @@ public:
         }
     };
 
+    inline iterator begin(void) {
+        return {*root};
+    }
+
+    inline iterator end(void) {
+        return {};
+    }
+
+    inline iterator get_root(void) {
+        return {{}, *root};
+    }
+
     iterator make_child(iterator& _parent) {
         NodeData* parent{_parent.node_ptr};
         NodeData* child{new NodeData()};
@@ -215,14 +227,6 @@ public:
     :root{new NodeData()}
     {
         root->data = root_data;
-    }
-
-    inline iterator begin(void) {
-        return {*root};
-    }
-
-    inline iterator end(void) {
-        return {};
     }
 };
 
