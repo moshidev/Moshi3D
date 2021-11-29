@@ -63,7 +63,7 @@ void HierarchicalModel::draw(const Renderer& r) const {
             draw_node(rbrother, r);
             rbrother = draw_childs(rbrother, r).get_rbrother();
         }
-        else if (parent != node_DAG.end()) {
+        else {
             rbrother = parent;
             Transformation::pop_matrix();
         }
