@@ -9,7 +9,8 @@
 #include "transformation.h"
 
 class Scaling : public Transformation {
-    Tupla3f factor;
+    Tupla3f scale_factor_val;
+    Scaling& multiply_member_data(float val);
 
 public:
     Scaling() = delete;
@@ -19,7 +20,11 @@ public:
     void mul(const Tupla3f& factor);
     void apply(void) const;
 
-    inline const Tupla3f& get(void) const { return factor; }
+    inline const Tupla3f& get(void) const { return scale_factor_val; }
+
+    friend Scaling operator+(const Scaling& lr, const Scaling& rt);
+    friend Scaling operator-(const Scaling& lr, const Scaling& rt);
+    friend Scaling interpolation(const Scaling& lr, const Scaling& rt, float percentaje, const std::function<float(float)>& f);
 };
 
 #endif /* MOSHI3D_SCALING_H_ */
