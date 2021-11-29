@@ -17,9 +17,3 @@ void Scaling::mul(const Tupla3f& factor) {
 void Scaling::apply(void) const {
     glScalef(factor(0), factor(1), factor(2));
 }
-
-Scaling Scaling::get_mul(const Tupla3f& factor) const {
-    Scaling s(*this);
-    s.mul(factor);
-    return s;
-}

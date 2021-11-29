@@ -20,7 +20,6 @@ public:
     void apply(void) const;
 
     inline const Tupla3f& get(void) const { return factor; }
-    Scaling get_mul(const Tupla3f& factor) const;
 };
 
 #endif /* MOSHI3D_SCALING_H_ */
