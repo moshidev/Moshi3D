@@ -9,6 +9,8 @@
 #include "transformation.h"
 
 class Rotation : public Transformation {
+    Rotation& multiply_member_data(float val);
+    
 protected:
     float angle_rad;
     float angle_deg;
@@ -28,6 +30,10 @@ public:
 
     inline float get_angle(void) const { return angle_rad; }
     inline const Tupla3f& get_rot_vec(void) const { return rot_vec; }
+
+    friend Rotation operator+(const Rotation& lr, const Rotation& rt);
+    friend Rotation operator-(const Rotation& lr, const Rotation& rt);
+    friend Rotation interpolation(const Rotation& lr, const Rotation& rt, float percentaje, const std::function<float(float)>& f);
 };
 
 #endif /* MOSHI3D_ROTATION_H_ */
