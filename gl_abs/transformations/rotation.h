@@ -28,9 +28,6 @@ public:
 
     inline float get_angle(void) const { return angle_rad; }
     inline const Tupla3f& get_rot_vec(void) const { return rot_vec; }
-    Rotation get_sum(float angle_rad, const Tupla3f& rot_vec) const;
-    Rotation get_sum(float angle_rad) const;
-    Rotation get_sum(const Tupla3f& rot_vec) const;
 };
 
 #endif /* MOSHI3D_ROTATION_H_ */

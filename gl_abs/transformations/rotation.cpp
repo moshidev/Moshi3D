@@ -37,21 +37,3 @@ void Rotation::sum(const Tupla3f& rot_vec) {
 void Rotation::apply(void) const {
     glRotatef(angle_deg, rot_vec(0), rot_vec(1), rot_vec(2));
 }
-
-Rotation Rotation::get_sum(float angle_rad, const Tupla3f& rot_vec) const {
-    Rotation r(*this);
-    r.sum(angle_rad, rot_vec);
-    return r;
-}
-
-Rotation Rotation::get_sum(float angle_rad) const {
-    Rotation r(*this);
-    r.sum(angle_rad);
-    return r;
-}
-
-Rotation Rotation::get_sum(const Tupla3f& rot_vec) const {
-    Rotation r(*this);
-    r.sum(rot_vec);
-    return r;
-}
