@@ -20,7 +20,6 @@ public:
     virtual void apply(void) const;
 
     inline const Tupla3f& get(void) const { return translation; }
-    Translation get_sum(const Tupla3f& t) const;
 };
 
 #endif /* MOSHI3D_TRANSLATION_H_ */
