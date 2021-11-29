@@ -23,3 +23,27 @@ void PointRotation::apply(void) const {
     glRotatef(angle_deg, rot_vec(0), rot_vec(1), rot_vec(2));
     glTranslatef(+point(0), +point(1), +point(2));
 }
+
+PointRotation& PointRotation::multiply_member_data(float val) {
+    angle_rad *= val;
+    rot_vec = rot_vec * val;
+    point = point * val;
+    normalize_variables();
+    return *this;
+}
+
+PointRotation operator+(const PointRotation& lr, const PointRotation& rt) {
+    PointRotation ret{lr};
+    ret.sum(rt.angle_rad, rt.rot_vec, rt.point);
+    return ret;
+}
+
+PointRotation operator-(const PointRotation& lr, const PointRotation& rt) {
+    PointRotation ret{lr};
+    ret.sum(-rt.angle_rad, -rt.rot_vec, -rt.point);
+    return ret;
+}
+
+PointRotation interpolation(const PointRotation& lr, const PointRotation& rt, float percentaje, const std::function<float(float)>& f) {
+    return lr + (rt - lr).multiply_member_data(f(percentaje));
+}

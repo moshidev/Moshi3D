@@ -10,6 +10,7 @@
 
 class PointRotation : public Rotation {
     Tupla3f point;  /// Representa la distancia con respecto al origen (|punto-origen|)
+    PointRotation& multiply_member_data(float val);
 
 public:
     PointRotation() = delete;
@@ -19,6 +20,10 @@ public:
     void sum(float angle_rad, Tupla3f vec_rot, Tupla3f point);
     void sum(Tupla3f point);
     void apply(void) const;
+
+    friend PointRotation operator+(const PointRotation& lr, const PointRotation& rt);
+    friend PointRotation operator-(const PointRotation& lr, const PointRotation& rt);
+    friend PointRotation interpolation(const PointRotation& lr, const PointRotation& rt, float percentaje, const std::function<float(float)>& f);
 };
 
 #endif /* MOSHI3D_POINT_ROTATION_H_ */
