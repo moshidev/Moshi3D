@@ -9,20 +9,13 @@
 #include "transformation_timeline_abs.h"
 #include <map>
 
-struct FloatCmp {
-    constexpr bool operator()(const float &lhs, const float &rhs) const 
-    {
-        return lhs < rhs;
-    }
-};
-
 template<typename _T>
 class TransformationTimeline {
 public:
     struct KeyFrame;
 
 private:
-    std::map<float,KeyFrame,FloatCmp> transformations;
+    std::map<float,KeyFrame> transformations;
 
 public:
     TransformationTimeline()    {  }
