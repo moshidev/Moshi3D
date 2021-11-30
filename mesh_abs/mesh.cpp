@@ -14,8 +14,13 @@ Mesh3D::Mesh3D()
 
 Mesh3D::~Mesh3D() {}
 
-void Mesh3D::draw(const Renderer& r) const {
+void Mesh3D::draw(const Renderer& r, const std::vector<const Transformation*>& tv) const {
+    Transformation::push_matrix();
+    for (const auto& t : tv) {
+        t->apply();
+    }
     r.render(*this);
+    Transformation::pop_matrix();
 }
 
 void Mesh3D::clear_polygon_modes(void) {

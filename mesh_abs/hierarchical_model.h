@@ -11,12 +11,12 @@
 #include "rooted_DAG.hpp"
 #include "renderizable.h"
 #include <unordered_map>
-#include <memory>
+#include <vector>
 
 class HierarchicalModel : public Renderizable {
 public:
     virtual ~HierarchicalModel() = 0;
-    void draw(const Renderer& r) const;
+    void draw(const Renderer& r, const std::vector<const Transformation*>& tv={}) const;
 
 protected:
     typedef unsigned mesh_id_t;
@@ -48,8 +48,8 @@ private:
 
     std::unordered_map<node_id_t, NodeData> rel_nodeId_nodeData;
 
-    void draw_node(const RootedDAG<node_id_t>::iterator& it, const Renderer& r) const;
-    RootedDAG<node_id_t>::iterator draw_childs(const RootedDAG<node_id_t>::iterator& it, const Renderer& r) const;
+    void draw_node(const RootedDAG<node_id_t>::iterator& it, const Renderer& r, const std::vector<const Transformation*>& tv={}) const;
+    RootedDAG<node_id_t>::iterator draw_childs(const RootedDAG<node_id_t>::iterator& it, const Renderer& r, const std::vector<const Transformation*>& tv={}) const;
 };
 
 #endif /* MOSHI3D_HIERARCHICAL_MODEL_H_*/

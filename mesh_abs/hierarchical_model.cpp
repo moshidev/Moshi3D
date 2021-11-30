@@ -27,32 +27,39 @@ void HierarchicalModel::set_node_hierarchical_models(node_id_t node_id, const st
     rel_nodeId_nodeData[node_id].hierarchical_model_ids = hierarchical_model_ids;
 }
 
-void HierarchicalModel::draw_node(const RootedDAG<node_id_t>::iterator& it, const Renderer& r) const {
+void HierarchicalModel::draw_node(const RootedDAG<node_id_t>::iterator& it, const Renderer& r, const std::vector<const Transformation*>& tv) const {
     const auto& node = rel_nodeId_nodeData.at(*it);
     for (const auto& t_id: node.transformation_ids) {
         rel_transformationId_transformation.at(t_id)->apply();
     }
+
+    Transformation::push_matrix();
+    for (const auto& t : tv) {
+        t->apply();
+    }
+    Transformation::pop_matrix();
+
     for (const auto& m_id : node.mesh_ids) {
-        rel_meshId_mesh.at(m_id)->draw(r);
+        rel_meshId_mesh.at(m_id)->draw(r, tv);
     }
     for (const auto& hm_id : node.hierarchical_model_ids) {
-        rel_hierarchicalModelId_hierarchicalModel.at(hm_id)->draw(r);
+        rel_hierarchicalModelId_hierarchicalModel.at(hm_id)->draw(r, tv);
     }
 }
 
-RootedDAG<HierarchicalModel::node_id_t>::iterator HierarchicalModel::draw_childs(const RootedDAG<node_id_t>::iterator& it, const Renderer& r) const {
+RootedDAG<HierarchicalModel::node_id_t>::iterator HierarchicalModel::draw_childs(const RootedDAG<node_id_t>::iterator& it, const Renderer& r, const std::vector<const Transformation*>& tv) const {
     auto ret = it;
     auto child = it.get_first_child();
     while (child != node_DAG.end()) {
         Transformation::push_matrix();
-        draw_node(child, r);
+        draw_node(child, r, tv);
         ret = child;
         child = child.get_first_child();
     }
     return ret;
 }
 
-void HierarchicalModel::draw(const Renderer& r) const {
+void HierarchicalModel::draw(const Renderer& r, const std::vector<const Transformation*>& tv) const {
     auto it = node_DAG.get_root();
     auto parent = it;
     auto rbrother = it;
@@ -60,8 +67,8 @@ void HierarchicalModel::draw(const Renderer& r) const {
     while (parent != node_DAG.end() || rbrother != node_DAG.end()) {
         parent = rbrother.get_last_parent();
         if (rbrother != node_DAG.end()) {
-            draw_node(rbrother, r);
-            rbrother = draw_childs(rbrother, r).get_rbrother();
+            draw_node(rbrother, r, tv);
+            rbrother = draw_childs(rbrother, r, tv).get_rbrother();
         }
         else {
             rbrother = parent;
