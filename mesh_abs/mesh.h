@@ -22,7 +22,7 @@ public:
     Mesh3D(const Mesh3D& m) = delete;
     virtual ~Mesh3D() = 0;
 
-    void draw(const Renderer& r, const std::vector<const Transformation*>& tv={}) const;
+    void draw(const Renderer& r) const;
 
     /* Permite la visualización simultánea de cualquier combinación que se quiera de GL_FILL, GL_LINE y GL_POINT*/
     /* Si se selecciona GL_FILL y el modo ajedrez o el sombreado está activado lo desactiva */
