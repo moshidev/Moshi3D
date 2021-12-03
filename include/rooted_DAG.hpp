@@ -178,7 +178,7 @@ public:
         return {_parent, *child};
     }
 
-    iterator make_child(iterator& _parent, _Tp data) {
+    iterator make_child(iterator& _parent, const _Tp& data) {
         auto it = make_child(_parent);
         *it = data;
         return it;
@@ -194,6 +194,16 @@ public:
 
         child->parents.push_back(parent);
         parent->childs.push_back(child);
+    }
+
+    iterator own_child(iterator& parent_it, RootedDAG<_Tp>&& r) {   // esto rompería los iteradores del grafo que estamos añadiendo
+        NodeData* child{r.root};
+        NodeData* parent{parent_it.node_ptr};
+
+        child->parents.clear();
+        child->parents.push_back(parent);
+        parent->childs.push_back(child);
+        return {parent_it, *child};
     }
 
     void erase_leaf(iterator leaf) {
