@@ -14,7 +14,8 @@ class PointRotation : public Rotation {
 
 public:
     PointRotation() = delete;
-    PointRotation(float angle_rad, const Tupla3f&  vec_rot, const Tupla3f&  point);
+    PointRotation(float angle_rad, const Tupla3f& rot_vec, const Tupla3f& point);
+    static void apply(float angle_rad, const Tupla3f& rot_vec, const Tupla3f& point);
 
     void set(float angle_rad, const Tupla3f&  vec_rot, const Tupla3f&  point);
     void sum(float angle_rad, const Tupla3f&  vec_rot, const Tupla3f&  point);

@@ -4,6 +4,10 @@ Translation::Translation(const Tupla3f& t)
 :translation_val{t}
 {   }
 
+void Translation::apply(const Tupla3f& t) {
+    glTranslatef(t[0], t[1], t[2]);
+}
+
 void Translation::set(const Tupla3f& t) {
     translation_val = t;
 }
@@ -13,7 +17,7 @@ void Translation::sum(const Tupla3f& t) {
 }
 
 void Translation::apply(void) const {
-    glTranslatef(translation_val[0], translation_val[1], translation_val[2]);
+    Translation::apply(translation_val);
 }
 
 Translation& Translation::multiply_member_data(float val) {

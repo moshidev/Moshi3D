@@ -17,6 +17,8 @@ public:
     Translation() = delete;
     Translation(const Tupla3f& t);
 
+    static void apply(const Tupla3f& t);
+
     void set(const Tupla3f& t);
     void sum(const Tupla3f& t);
     virtual void apply(void) const;

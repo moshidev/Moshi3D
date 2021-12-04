@@ -4,6 +4,13 @@ PointRotation::PointRotation(float angle_rad, const Tupla3f&  vec_rot, const Tup
 :Rotation::Rotation{angle_rad, vec_rot}, point{point}
 {   }
 
+void apply(float angle_rad, const Tupla3f& rot_vec, const Tupla3f& point) {
+    constexpr float rad_deg_equiv = 180/M_PI;
+    glTranslatef(-point[0], -point[1], -point[2]);
+    glRotatef(angle_rad*rad_deg_equiv, rot_vec[0], rot_vec[1], rot_vec[2]);
+    glTranslatef(+point[0], +point[1], +point[2]);
+}
+
 void PointRotation::set(float angle_rad, const Tupla3f&  vec_rot, const Tupla3f&  point) {
     Rotation::set(angle_rad, vec_rot);
     this->point = point;
@@ -19,9 +26,7 @@ void PointRotation::sum(const Tupla3f&  point) {
 }
 
 void PointRotation::apply(void) const {
-    glTranslatef(-point(0), -point(1), -point(2));
-    glRotatef(angle_deg, rot_vec(0), rot_vec(1), rot_vec(2));
-    glTranslatef(+point(0), +point(1), +point(2));
+    PointRotation::apply(angle_rad, rot_vec, point);
 }
 
 PointRotation& PointRotation::multiply_member_data(float val) {

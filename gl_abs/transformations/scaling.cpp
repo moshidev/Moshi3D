@@ -4,6 +4,10 @@ Scaling::Scaling(const Tupla3f& factor)
 :scale_factor_val{factor}
 {   }
 
+void Scaling::apply(const Tupla3f& factor) {
+    glScalef(factor[0], factor[1], factor[2]);
+}
+
 void Scaling::set(const Tupla3f& factor) {
     this->scale_factor_val = factor;
 }
@@ -15,7 +19,7 @@ void Scaling::mul(const Tupla3f& factor) {
 }
 
 void Scaling::apply(void) const {
-    glScalef(scale_factor_val(0), scale_factor_val(1), scale_factor_val(2));
+    Scaling::apply(scale_factor_val);
 }
 
 Scaling& Scaling::multiply_member_data(float val) {

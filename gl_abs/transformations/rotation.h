@@ -13,7 +13,6 @@ class Rotation : public Transformation {
     
 protected:
     float angle_rad;
-    float angle_deg;
     Tupla3f rot_vec;
 
     void normalize_variables(void);
@@ -21,6 +20,8 @@ protected:
 public:
     Rotation() = delete;
     Rotation(float angle_rad, const Tupla3f& rot_vec);
+    static void apply(float angle_rad, const Tupla3f& rot_vec);
+    static void apply(float angle_rad_alpha, float angle_rad_beta);
 
     void set(float angle_rad, const Tupla3f& rot_vec);
     void sum(float angle_rad, const Tupla3f& rot_vec);

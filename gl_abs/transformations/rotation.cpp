@@ -6,11 +6,20 @@ Rotation::Rotation(float angle_rad, const Tupla3f& rot_vec)
     normalize_variables();
 }
 
+void Rotation::apply(float angle_rad, const Tupla3f& rot_vec) {
+    constexpr float rad_deg_equiv = 180/M_PI;
+    glRotatef(angle_rad*rad_deg_equiv, rot_vec[0], rot_vec[1], rot_vec[2]);
+}
+
+void Rotation::apply(float angle_rad_alpha, float angle_rad_beta) {
+    Rotation::apply(angle_rad_alpha, {0,0,1});
+    Rotation::apply(angle_rad_beta, {0,1,0});
+}
+
 void Rotation::normalize_variables(void) {
     angle_rad = angle_rad > 2*M_PI ? angle_rad-M_PI : angle_rad;
     angle_rad = angle_rad < -2*M_PI ? angle_rad+M_PI : angle_rad;
     rot_vec = rot_vec.normalized();
-    angle_deg = angle_rad*180/M_PI;
 }
 
 Rotation& Rotation::multiply_member_data(float val) {
@@ -42,7 +51,7 @@ void Rotation::sum(const Tupla3f& rot_vec) {
 }
 
 void Rotation::apply(void) const {
-    glRotatef(angle_deg, rot_vec(0), rot_vec(1), rot_vec(2));
+    Rotation::apply(angle_rad, rot_vec);
 }
 
 Rotation operator+(const Rotation& lr, const Rotation& rt) {

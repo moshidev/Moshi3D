@@ -16,6 +16,8 @@ public:
     Scaling() = delete;
     Scaling(const Tupla3f& factor);
 
+    static void apply(const Tupla3f& factor);
+
     void set(const Tupla3f& factor);
     void mul(const Tupla3f& factor);
     void apply(void) const;
