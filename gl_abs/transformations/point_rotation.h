@@ -14,11 +14,11 @@ class PointRotation : public Rotation {
 
 public:
     PointRotation() = delete;
-    PointRotation(float angle_rad, Tupla3f vec_rot, Tupla3f point);
+    PointRotation(float angle_rad, const Tupla3f&  vec_rot, const Tupla3f&  point);
 
-    void set(float angle_rad, Tupla3f vec_rot, Tupla3f point);
-    void sum(float angle_rad, Tupla3f vec_rot, Tupla3f point);
-    void sum(Tupla3f point);
+    void set(float angle_rad, const Tupla3f&  vec_rot, const Tupla3f&  point);
+    void sum(float angle_rad, const Tupla3f&  vec_rot, const Tupla3f&  point);
+    void sum(const Tupla3f&  point);
     void apply(void) const;
 
     friend PointRotation operator+(const PointRotation& lr, const PointRotation& rt);

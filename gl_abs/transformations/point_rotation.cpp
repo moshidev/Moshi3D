@@ -1,20 +1,20 @@
 #include "point_rotation.h"
 
-PointRotation::PointRotation(float angle_rad, Tupla3f vec_rot, Tupla3f point)
+PointRotation::PointRotation(float angle_rad, const Tupla3f&  vec_rot, const Tupla3f&  point)
 :Rotation::Rotation{angle_rad, vec_rot}, point{point}
 {   }
 
-void PointRotation::set(float angle_rad, Tupla3f vec_rot, Tupla3f point) {
+void PointRotation::set(float angle_rad, const Tupla3f&  vec_rot, const Tupla3f&  point) {
     Rotation::set(angle_rad, vec_rot);
     this->point = point;
 }
 
-void PointRotation::sum(float angle_rad, Tupla3f vec_rot, Tupla3f point) {
+void PointRotation::sum(float angle_rad, const Tupla3f&  vec_rot, const Tupla3f&  point) {
     Rotation::sum(angle_rad, vec_rot);
     this->point = this->point + point;
 }
 
-void PointRotation::sum(Tupla3f point) {
+void PointRotation::sum(const Tupla3f&  point) {
     this->point = this->point + point;
 }
 
