@@ -23,8 +23,8 @@ void DirectionalLight::increment_beta(float value) {
 }
 
 void DirectionalLight::set_position(float alpha, float beta) {
-    position[2] = cos(alpha);
-    position[1] = sin(alpha);
-    position[0] = sin(beta);
-    position[2] *= cos(beta);
+    const float x_hip = sin(alpha);
+    position[1] = cos(alpha);
+    position[0] = x_hip * sin(beta);
+    position[2] = x_hip * cos(beta);
 }
