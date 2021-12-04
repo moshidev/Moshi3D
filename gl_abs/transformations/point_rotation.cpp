@@ -28,7 +28,9 @@ PointRotation& PointRotation::multiply_member_data(float val) {
     angle_rad *= val;
     rot_vec = rot_vec * val;
     point = point * val;
-    normalize_variables();
+    if (val != 0) {
+        normalize_variables();
+    }
     return *this;
 }
 
@@ -45,5 +47,6 @@ PointRotation operator-(const PointRotation& lr, const PointRotation& rt) {
 }
 
 PointRotation interpolation(const PointRotation& lr, const PointRotation& rt, float percentaje, const std::function<float(float)>& f) {
-    return lr + (rt - lr).multiply_member_data(f(percentaje));
+    PointRotation _lr{lr}, _rt{rt};
+    return _lr.multiply_member_data(1-f(percentaje)) + _rt.multiply_member_data(f(percentaje));
 }

@@ -58,5 +58,6 @@ Rotation operator-(const Rotation& lr, const Rotation& rt) {
 }
 
 Rotation interpolation(const Rotation& lr, const Rotation& rt, float percentaje, const std::function<float(float)>& f) {
-    return lr + (rt - lr).multiply_member_data(f(percentaje));
+    Rotation _lr{lr}, _rt{rt};
+    return _lr.multiply_member_data(1-f(percentaje)) + _rt.multiply_member_data(f(percentaje));
 }
