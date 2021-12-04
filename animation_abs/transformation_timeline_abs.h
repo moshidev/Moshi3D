@@ -10,13 +10,8 @@
 
 class TransformationTimelineAbs {
 public:
-    virtual ~TransformationTimelineAbs() = 0;
-
     virtual bool empty(void) const = 0;
-    virtual Transformation get_transformation_abs(float time_point) const = 0;
+    virtual Transformation&& get_transformation_abs(float time_point, bool loop) const = 0;
 };
-
-TransformationTimelineAbs::~TransformationTimelineAbs()
-{   }
 
 #endif /* MOSHI3D_TRANSFORMATION_TIMELINE_ABS_H_ */

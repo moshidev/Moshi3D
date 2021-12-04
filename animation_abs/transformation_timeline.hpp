@@ -10,17 +10,26 @@
 #include <map>
 
 template<typename _T>
-class TransformationTimeline {
+class TransformationTimeline : public TransformationTimelineAbs {
 public:
     struct KeyFrame;
 
 private:
     std::map<float,KeyFrame> transformations;
 
+    float calc_time_point(float time_point, bool loop) const {
+        if (loop && !transformations.empty()) {
+            const auto fin = transformations.rbegin();
+            if (time_point > fin->first) {
+                time_point = time_point - (long)(time_point/fin->first) * fin->first;
+            }
+        }
+        return time_point;
+    }
+
 public:
     TransformationTimeline()    {  }
     TransformationTimeline(const TransformationTimeline& tt) : transformations{tt.transformations}  {   }
-    TransformationTimeline(TransformationTimeline&& tt) : transformations{tt.transformations}  {   }
 
     void add_key_frame(const KeyFrame& kf) {
         transformations.insert_or_assign(kf.pos, kf);
@@ -28,7 +37,8 @@ public:
     
     bool empty(void) const { return transformations.empty(); }
 
-    _T get_transformation(float time_point) const {
+    _T get_transformation(float time_point, bool loop) const {
+        time_point = calc_time_point(time_point, loop);
         auto upper_it = transformations.upper_bound(time_point);
         auto lower_it = upper_it;
         --lower_it;
@@ -49,8 +59,8 @@ public:
         return interpolation(lower_keyf.transformation, upper_keyf.transformation, percentaje, lower_keyf.interpolation_function);
     }
 
-    Transformation get_transformation_abs(float time_point) const {
-        return get_transformation(time_point);
+    Transformation&& get_transformation_abs(float time_point, bool loop) const {
+        return get_transformation(time_point, loop);
     }
 };
 
