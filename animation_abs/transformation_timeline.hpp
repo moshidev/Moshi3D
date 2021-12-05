@@ -6,26 +6,15 @@
 #ifndef MOSHI3D_TRANSFORMATION_TIMELINE_H_
 #define MOSHI3D_TRANSFORMATION_TIMELINE_H_
 
-#include "transformation_timeline_abs.h"
 #include <map>
 
 template<typename _T>
-class TransformationTimeline : public TransformationTimelineAbs {
+class TransformationTimeline {
 public:
     struct KeyFrame;
 
 private:
     std::map<float,KeyFrame> transformations;
-
-    float calc_time_point(float time_point, bool loop) const {
-        if (loop && !transformations.empty()) {
-            const auto fin = transformations.rbegin();
-            if (time_point > fin->first) {
-                time_point = time_point - (long)(time_point/fin->first) * fin->first;
-            }
-        }
-        return time_point;
-    }
 
 public:
     TransformationTimeline()    {  }
@@ -37,30 +26,27 @@ public:
     
     bool empty(void) const { return transformations.empty(); }
 
-    _T get_transformation(float time_point, bool loop) const {
-        time_point = calc_time_point(time_point, loop);
+    _T get_transformation(float time_point) const {
+        auto last_it = transformations.rbegin();
+        if (time_point > last_it->first || transformations.size() < 2) {
+            return last_it->second.transformation;
+        }
+        auto first_it = transformations.begin();
+        if (time_point < first_it->first) {
+            return first_it->second.transformation;
+        }
+
         auto upper_it = transformations.upper_bound(time_point);
         auto lower_it = upper_it;
         --lower_it;
         const KeyFrame& upper_keyf = upper_it->second;
         const KeyFrame& lower_keyf = lower_it->second;
 
-        if (lower_it == transformations.end()) {
-            return upper_keyf.transformation;
-        }
-        else if (upper_it == transformations.end()) {
-            return lower_keyf.transformation;
-        }
-
         const float percentaje = (time_point - lower_keyf.pos)/(upper_keyf.pos - lower_keyf.pos);
         if (percentaje < 0) {
             return lower_keyf.transformation;
         }
         return interpolation(lower_keyf.transformation, upper_keyf.transformation, percentaje, lower_keyf.interpolation_function);
-    }
-
-    Transformation&& get_transformation_abs(float time_point, bool loop) const {
-        return get_transformation(time_point, loop);
     }
 };
 
