@@ -12,7 +12,7 @@ class Renderer;
 
 class Renderizable {
 public:
-    virtual void draw(const Renderer& r) const = 0;
+    virtual void draw(const Renderer& r, float time_point=0) const = 0;
 };
 
 #endif /* MOSHI3D_RENDERIZABLE_H_ */
