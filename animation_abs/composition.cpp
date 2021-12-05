@@ -1,42 +1,42 @@
 #include "composition.h"
-
-void Composition::draw_node(const Renderer& r, const iterator& it, float time_point) const {
-    auto obj = (*it).begin_objects();
-    while (obj != (*it).end_objects()) {
-        auto p = it;
-        Transformation::push_matrix();
-        while (p != rooted_DAG.end()) {
-            (*p).get_atributes().apply();
-            (*p).get_animation().apply(time_point, true);
-            p = p.get_last_parent();
-        }
-        (*obj).renderizable_ptr->draw(r);
-        ++obj;
-        Transformation::pop_matrix();
-    }
-}
+#include <queue>
 
 void Composition::draw(const Renderer& r) const {
     auto it = rooted_DAG.begin();
     while (it != rooted_DAG.end()) {
-        static float prueba = 0;
-        prueba += 0.01;
-        if (prueba > 10) {
-            prueba = 0.01;
+        auto parent = it;
+        auto child = it;
+        while (parent != rooted_DAG.end()) {
+            const auto& v {(*parent).child_atributes};
+            auto atributes_it = std::find(v.begin(), v.end(), child);
+            (*child).node_data.get_atributes(); //<--- nos falta un ".apply" o algo parecido;
+            //aquí tendríamos que manejar de algua forma el "si es o no visible", si está en loop o no...
         }
-        draw_node(r, it, prueba);
-        ++it;
     }
 }
 
-Composition::iterator Composition::adquire_ownership(iterator& parent_it, Composition&& c) {
-    return rooted_DAG.own_child(parent_it, std::move(c.rooted_DAG));
+Composition::iterator Composition::emplace_child(const iterator& parent, const CompositionNodeData& node) {
+    CompositionNode fnode{node};
+    rooted_DAG.make_child(parent, fnode);
 }
 
-void Composition::add_child(iterator& parent_it, iterator& child_it) {
-    rooted_DAG.add_child(parent_it, child_it);
+Composition::iterator Composition::emplace_child(const iterator& parent, const Composition& node) {
+    std::queue<Composition::iterator> queue;    // Debería ser responsabilidad de rooted_DAG
+    queue.emplace(node.get_root());
+    if (node.get_root() != node.rooted_DAG.end()) {
+        rooted_DAG.make_child(parent, *queue.front());
+    }
+    while (!queue.empty()) {
+        auto wparent = queue.front();
+        auto rbrother = parent.get_first_child();
+        while (rbrother != node.rooted_DAG.end()) {
+            queue.emplace(rbrother);
+            rooted_DAG.make_child(wparent, *rbrother);
+        }
+        queue.pop();
+    }
 }
 
-void Composition::add_child(iterator& parent_it, const CompositionNode& c) {
-    rooted_DAG.make_child(parent_it, c);
+void Composition::add_child_to_parent(const iterator& parent, const iterator& child) {
+    rooted_DAG.add_child(parent, child);
 }
