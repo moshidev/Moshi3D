@@ -40,5 +40,6 @@ Scaling operator-(const Scaling& ls, const Scaling& rs) {
 }
 
 Scaling interpolation(const Scaling& ls, const Scaling& rs, float percentaje, const std::function<float(float)>& f) {
-    return ls + (rs-ls).multiply_member_data(f(percentaje));
+    Scaling lls{ls}, rrs{rs};
+    return lls.multiply_member_data(1-f(percentaje)) + rrs.multiply_member_data(f(percentaje));
 }
