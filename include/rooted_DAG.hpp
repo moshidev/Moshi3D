@@ -170,7 +170,7 @@ public:
         return {{}, *root};
     }
 
-    iterator make_child(iterator& _parent) {
+    iterator make_child(const iterator& _parent) {
         NodeData* parent{_parent.node_ptr};
         NodeData* child{new NodeData()};
         parent->childs.push_back(child);
@@ -178,13 +178,19 @@ public:
         return {_parent, *child};
     }
 
-    iterator make_child(iterator& _parent, const _Tp& data) {
+    iterator make_child(const iterator& _parent, const _Tp& data) {
         auto it = make_child(_parent);
         *it = data;
         return it;
     }
 
-    void add_child(iterator& parent_it, iterator& child_it) {
+    iterator make_child(const iterator& _parent, _Tp&& data) {
+        auto it = make_child(_parent);
+        *it = data;
+        return it;
+    }
+
+    void add_child(const iterator& parent_it, const iterator& child_it) {
         NodeData* child{child_it.node_ptr};
         NodeData* parent{parent_it.node_ptr};
 
@@ -196,7 +202,7 @@ public:
         parent->childs.push_back(child);
     }
 
-    iterator own_child(iterator& parent_it, RootedDAG<_Tp>&& r) {   // esto rompería los iteradores del grafo que estamos añadiendo
+    iterator own_child(const iterator& parent_it, const RootedDAG<_Tp>&& r) {   // esto rompería los iteradores del grafo que estamos añadiendo
         NodeData* child{r.root};
         NodeData* parent{parent_it.node_ptr};
 
