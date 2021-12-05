@@ -4,7 +4,7 @@ PointRotation::PointRotation(float angle_rad, const Tupla3f&  vec_rot, const Tup
 :Rotation::Rotation{angle_rad, vec_rot}, point{point}
 {   }
 
-void apply(float angle_rad, const Tupla3f& rot_vec, const Tupla3f& point) {
+void PointRotation::apply(float angle_rad, const Tupla3f& rot_vec, const Tupla3f& point) {
     constexpr float rad_deg_equiv = 180/M_PI;
     glTranslatef(-point[0], -point[1], -point[2]);
     glRotatef(angle_rad*rad_deg_equiv, rot_vec[0], rot_vec[1], rot_vec[2]);
