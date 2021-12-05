@@ -9,22 +9,23 @@
 #include "renderizable.h"
 #include "composition_node.h"
 #include "rooted_DAG.hpp"
+#include <map>
 
 class Composition : public Renderizable {
 private:
-    RootedDAG<CompositionNode> rooted_DAG;
+    RootedDAG<CompositionNodeData> rooted_DAG;
+
 public:
-    typedef RootedDAG<CompositionNode>::iterator iterator;
-    void draw_node(const Renderer& r, const iterator& it, float time_point) const;
-    void draw(const Renderer& r) const;
+    typedef RootedDAG<CompositionNodeData>::iterator iterator;
 
-    inline iterator begin(void) { return rooted_DAG.begin(); }
-    inline iterator end(void) { return rooted_DAG.end(); }
-    inline iterator get_root(void) { return rooted_DAG.get_root(); }
+    bool apply(iterator it, float time_point) const;
 
-    iterator adquire_ownership(iterator& parent_it, Composition&& c);
-    void add_child(iterator& parent_it, iterator& child_it);
-    void add_child(iterator& parent_it, const CompositionNode& c);
+    void draw(const Renderer& r, float time_point) const;
+    inline iterator get_root(void) const { return rooted_DAG.get_root(); }
+    
+    iterator emplace_child(const iterator& parent, const CompositionNodeData& node);
+    iterator emplace_child(const iterator& parent, const Composition& node);
+    void add_child_to_parent(const iterator& parent, const iterator& child);
 };
 
 #endif /* MOSHI3D_COMPOSITION_H_ */

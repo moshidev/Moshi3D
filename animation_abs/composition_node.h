@@ -8,14 +8,10 @@
 
 #include "animation.h"
 #include "renderizable.h"
-#include "point_rotation.h"
-#include "rotation.h"
-#include "scaling.h"
-#include "translation.h"
 #include "tuplasg.h"
 #include <memory>
 #include <string>
-#include <list>
+#include <vector>
 
 class CompositionNodeData {
 public:
@@ -34,6 +30,9 @@ public:
         float duration {0};
         bool loop {false};
         Location location;
+
+        inline bool in_range(float time_point) const { return loop || (time_point >= init_time && time_point <= init_time+duration); }
+        inline bool is_visible(float time_point) const { return visible && in_range(time_point); }
     };
 
     struct Object {
@@ -43,15 +42,19 @@ public:
         };
         Atributes atributes;
         std::shared_ptr<Renderizable> renderizable_ptr;
+        Object(const std::shared_ptr<Renderizable>& renderizable_ptr) : renderizable_ptr{renderizable_ptr} {   }
+        Object(const Object& obj) : renderizable_ptr{obj.renderizable_ptr} {   }
     };
 
 private:
     typedef std::vector<Object> obj_container_t;
     obj_container_t objects;
+
+public:
     Atributes atributes;
     Animation animation;
 
-public:
+    CompositionNodeData()   {   }
     CompositionNodeData(const Atributes& atributes)
     : atributes{atributes}
     {     }
@@ -62,9 +65,6 @@ public:
     inline const obj_container_t& get_objects(void) const { return objects; }
     inline void erase_object(const obj_container_t::iterator& it) { objects.erase(it); }
     inline void emplace_object(const Object& obj) { objects.emplace_back(obj); }
-
-    inline Atributes& get_atributes(void) { return atributes; }
-    inline Animation& get_animation(void) { return animation; }
 };
 
 #endif /* MOSHI3D_COMPOSITION_NODE_H_ */
