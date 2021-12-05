@@ -13,17 +13,17 @@
 
 class Composition : public Renderizable {
 private:
-    RootedDAG<CompositionNodeData> rooted_DAG;
+    RootedDAG<CompositionNode> rooted_DAG;
 
 public:
-    typedef RootedDAG<CompositionNodeData>::iterator iterator;
+    typedef RootedDAG<CompositionNode>::iterator iterator;
 
     bool apply(iterator it, float time_point) const;
 
     void draw(const Renderer& r, float time_point) const;
     inline iterator get_root(void) const { return rooted_DAG.get_root(); }
     
-    iterator emplace_child(const iterator& parent, const CompositionNodeData& node);
+    iterator emplace_child(const iterator& parent, const CompositionNode& node);
     iterator emplace_child(const iterator& parent, const Composition& node);
     void add_child_to_parent(const iterator& parent, const iterator& child);
 };

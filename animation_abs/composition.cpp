@@ -39,7 +39,7 @@ void Composition::draw(const Renderer& r, float time_point) const {
     }
 }
 
-Composition::iterator Composition::emplace_child(const iterator& parent, const CompositionNodeData& node) {
+Composition::iterator Composition::emplace_child(const iterator& parent, const CompositionNode& node) {
     return rooted_DAG.make_child(parent, node);
 }
 

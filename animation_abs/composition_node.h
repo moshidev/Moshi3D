@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-class CompositionNodeData {
+class CompositionNode {
 public:
     struct Location {
         Tupla3f scaling {1,1,1};
@@ -54,11 +54,11 @@ public:
     Atributes atributes;
     Animation animation;
 
-    CompositionNodeData()   {   }
-    CompositionNodeData(const Atributes& atributes)
+    CompositionNode()   {   }
+    CompositionNode(const Atributes& atributes)
     : atributes{atributes}
     {     }
-    CompositionNodeData(const CompositionNodeData& c)
+    CompositionNode(const CompositionNode& c)
     : objects{c.objects}, atributes{c.atributes}, animation{c.animation}
     {   }
 
