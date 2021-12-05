@@ -16,22 +16,11 @@
 
 class Animation {
 public:
-    struct Atributes {
-        float time_offset{0};
-        bool enabled{true};
-        bool loop{false};
-    };
-
-private:
-    std::vector<const TransformationTimelineAbs*> transformation_tts;
-    
-public:
     TransformationTimeline<Translation> translation_tt;
     TransformationTimeline<Scaling> scaling_tt;
     TransformationTimeline<PointRotation> rotation_tt;
-    Atributes atributes;
     
-    void apply(float time_point, bool loop) const;
+    void apply(float time_point) const;
 };
 
 #endif /* MOSHI3D_ANIMATION_H_ */
