@@ -12,8 +12,12 @@ void Rotation::apply(float angle_rad, const Tupla3f& rot_vec) {
 }
 
 void Rotation::apply(float angle_rad_alpha, float angle_rad_beta) {
-    Rotation::apply(angle_rad_alpha, {0,0,1});
+    Rotation::apply(angle_rad_alpha, {1,0,0});
     Rotation::apply(angle_rad_beta, {0,1,0});
+}
+
+void Rotation::apply(const Tupla2f& polar_coor) {
+    apply(polar_coor[0], polar_coor[1]);
 }
 
 void Rotation::normalize_variables(void) {
@@ -57,12 +61,6 @@ void Rotation::apply(void) const {
 Rotation operator+(const Rotation& lr, const Rotation& rt) {
     Rotation ret{lr};
     ret.sum(rt.angle_rad, rt.rot_vec);
-    return ret;
-}
-
-Rotation operator-(const Rotation& lr, const Rotation& rt) {
-    Rotation ret{lr};
-    ret.sum(-rt.angle_rad, -rt.rot_vec);
     return ret;
 }
 

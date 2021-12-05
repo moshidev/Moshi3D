@@ -22,6 +22,7 @@ public:
     Rotation(float angle_rad, const Tupla3f& rot_vec);
     static void apply(float angle_rad, const Tupla3f& rot_vec);
     static void apply(float angle_rad_alpha, float angle_rad_beta);
+    static void apply(const Tupla2f& polar_coor);
 
     void set(float angle_rad, const Tupla3f& rot_vec);
     void sum(float angle_rad, const Tupla3f& rot_vec);
@@ -33,7 +34,6 @@ public:
     inline const Tupla3f& get_rot_vec(void) const { return rot_vec; }
 
     friend Rotation operator+(const Rotation& lr, const Rotation& rt);
-    friend Rotation operator-(const Rotation& lr, const Rotation& rt);
     friend Rotation interpolation(const Rotation& lr, const Rotation& rt, float percentaje, const std::function<float(float)>& f);
 };
 
