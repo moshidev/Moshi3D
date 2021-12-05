@@ -7,7 +7,6 @@
 #define MOSHI3D_ANIMATION_H_
 
 #include "tuplasg.h"
-#include "point_rotation.h"
 #include "rotation.h"
 #include "scaling.h"
 #include "translation.h"
@@ -18,7 +17,7 @@ class Animation {
 public:
     TransformationTimeline<Translation> translation_tt;
     TransformationTimeline<Scaling> scaling_tt;
-    TransformationTimeline<PointRotation> rotation_tt;
+    TransformationTimeline<Rotation> rotation_tt;
     
     void apply(float time_point) const;
 };
