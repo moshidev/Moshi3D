@@ -221,6 +221,8 @@ public:
             auto it = std::find(p->childs.begin(), p->childs.end(), leaf.node_ptr);
             p->childs.erase(it);
         }
+
+        delete leaf.node_ptr;
     }
 
     ~RootedDAG() {
@@ -228,7 +230,7 @@ public:
         auto sig = prev;
         ++sig;
         while (prev != end()) {
-            delete prev.node_ptr;
+            erase_leaf(prev);
             prev = sig;
             ++sig;
         }
