@@ -17,8 +17,19 @@ private:
     std::map<float,KeyFrame> transformations;
 
 public:
+    bool loop {false};
     TransformationTimeline()    {  }
     TransformationTimeline(const TransformationTimeline& tt) : transformations{tt.transformations}  {   }
+    TransformationTimeline(const TransformationTimeline& tt, bool loop) : transformations{tt.transformations}, loop{loop}  {   }
+
+    typedef typename std::map<float,KeyFrame>::iterator iterator;
+    typedef typename std::map<float,KeyFrame>::const_iterator const_iterator;
+    inline auto begin(void) const { return transformations.begin(); }
+    inline auto begin(void) { return transformations.begin(); }
+    inline auto end(void) const { return transformations.end(); }
+    inline auto rbegin(void) const { return transformations.rbegin(); }
+    inline auto rbegin(void) { return transformations.rbegin(); }
+    inline auto rend(void) const { return transformations.rend(); }
 
     void add_key_frame(const KeyFrame& kf) {
         transformations.insert_or_assign(kf.pos, kf);
@@ -28,6 +39,8 @@ public:
 
     _T get_transformation(float time_point) const {
         auto last_it = transformations.rbegin();
+        time_point = loop ? fmod(time_point, last_it->first) : time_point;
+        
         if (time_point > last_it->first || transformations.size() < 2) {
             return last_it->second.transformation;
         }
