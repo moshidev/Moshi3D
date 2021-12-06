@@ -12,6 +12,7 @@ class Rotation : public Transformation {
     Tupla2f polar_coordinates;
     Tupla3f rotation_point;
     void normalize_variables(void);
+    Rotation& multiply_member_data(float val);
 
 public:
     Rotation() = delete;
@@ -33,7 +34,7 @@ public:
     inline const Tupla3f& get_point(void) const { return rotation_point; }
 
     friend Rotation operator+(const Rotation& lr, const Rotation& rt);
-    friend Rotation interpolation(const Rotation& lr, const Rotation& rt, float percentaje, const std::function<float(float)>& f);
+    friend Rotation interpolation(Rotation lr, Rotation rt, float percentaje, const std::function<float(float)>& f);
 };
 
 #endif /* MOSHI3D_ROTATION_H_ */
