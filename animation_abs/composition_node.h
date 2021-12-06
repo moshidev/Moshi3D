@@ -27,8 +27,8 @@ public:
         std::string name;
         bool visible {true};
         float init_time {0};
-        float duration {0};
-        bool loop {false};
+        float duration {std::numeric_limits<float>::max()};
+        bool loop {true};
         Location location;
 
         inline bool in_range(float time_point) const { return loop || (time_point >= init_time && time_point <= init_time+duration); }
@@ -43,7 +43,7 @@ public:
         Atributes atributes;
         std::shared_ptr<Renderizable> renderizable_ptr;
         Object(const std::shared_ptr<Renderizable>& renderizable_ptr) : renderizable_ptr{renderizable_ptr} {   }
-        Object(const Object& obj) : renderizable_ptr{obj.renderizable_ptr} {   }
+        Object(const Object& obj) : atributes{obj.atributes}, renderizable_ptr{obj.renderizable_ptr} {   }
     };
 
 private:
