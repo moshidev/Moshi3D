@@ -14,10 +14,13 @@
 #include <vector>
 
 class Animation {
+    float calc_max_time_point(void) const;
+    
 public:
     TransformationTimeline<Translation> translation_tt;
     TransformationTimeline<Scaling> scaling_tt;
     TransformationTimeline<Rotation> rotation_tt;
+    bool loop {false};
     
     void apply(float time_point) const;
 };
