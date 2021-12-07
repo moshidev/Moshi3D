@@ -2,6 +2,9 @@
 #include "_aux.h" // includes de OpenGL/glut/glew, windows, y librería std de C++
 #include "mesh.h" // objetos: Cubo y otros....
 #include <vector>
+#include "translation.h"
+#include "rotation.h"
+#include "mouse.h"
 
 Escena::Escena()
 {
@@ -101,6 +104,9 @@ void Escena::dibujar()
 {
     DirectionalLight d({0,0}, {0,0,0,1}, {1,0,0,1}, {1,0,0,1});
     PositionalLight p({1,1,0}, {1,1,1,1}, {1,1,1,1}, {1,1,1,1});
+    Translation t({0, 4, 0});
+
+    //hm.test_and_touch(0, *objeto_actual);
 
     bool prev_light_status = Light::is_lighting_enabled();
     Light::enable_lighting(false);
@@ -119,9 +125,10 @@ void Escena::dibujar()
         }
     }
     
-    if (objeto_actual != nullptr) {
+    /*if (objeto_actual != nullptr) {
         glPushMatrix();
-            glTranslatef(0, 4, 0);
+            t.apply();
+            //r.apply();
             objeto_actual->draw(*renderer);
         glPopMatrix();
     }
@@ -148,7 +155,11 @@ void Escena::dibujar()
             glPopMatrix();
             i++;
         }
-    glPopMatrix();
+    glPopMatrix();*/
+    static float time_point = 0;
+    time_point += 0.1;
+    Mouse m;
+    m.draw(*renderer, time_point);
 }
 
 bool Escena::teclaPulsada(unsigned char tecla, int x, int y)
@@ -177,7 +188,7 @@ void Escena::teclaEspecial(int tecla1, int x, int y)
         observer_distance *= 1.2;
         break;
     case GLUT_KEY_PAGE_DOWN:
-        observer_distance /= 1.2;
+        //observer_distance /= 1.2;
         break;
     }
 
