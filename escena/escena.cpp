@@ -4,7 +4,6 @@
 #include <vector>
 #include "translation.h"
 #include "rotation.h"
-#include "mouse.h"
 
 Escena::Escena()
 {
@@ -158,8 +157,6 @@ void Escena::dibujar()
     glPopMatrix();*/
     static float time_point = 0;
     time_point += 0.1;
-    Mouse m;
-    m.draw(*renderer, time_point);
 }
 
 bool Escena::teclaPulsada(unsigned char tecla, int x, int y)
