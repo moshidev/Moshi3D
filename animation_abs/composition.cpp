@@ -2,50 +2,33 @@
 #include <queue>
 #include <stack>
 
-bool Composition::apply(iterator it, float time_point) const {
-    bool visible = true;
-    std::stack<Composition::iterator> stack;
-    stack.push(it);
-    auto it_parent = it.get_last_parent();
-    while (it_parent != rooted_DAG.end()) {
-        stack.push(it_parent);
-        it_parent = it_parent.get_last_parent();
+void Composition::draw_node(const RootedDAG<CompositionNode>::iterator& it, const Renderer& r) const {
+    for (auto& obj : (*it).get_objects()) {
+        obj.renderizable_ptr->draw(r);
     }
-    float init_time = 0;
-    while (visible && !stack.empty()) {
-        auto& it = stack.top();
-        const auto& atributes = (*it).atributes;
-        const auto& animation = (*it).animation;
-
-        init_time = std::max(init_time, atributes.init_time);
-        visible = atributes.is_visible(time_point);
-        if (visible) {
-            atributes.location.apply();
-
-            float local_time_point = time_point;
-            if (atributes.loop) {
-                local_time_point = fmod(local_time_point+init_time, atributes.duration);
-            }
-            animation.apply(local_time_point);
-        }
-        stack.pop();
-    }
-    return visible;
 }
 
-void Composition::draw(const Renderer& r, float time_point) const {
-    std::cout << "tp: " << time_point << std::endl;
-    auto it = rooted_DAG.begin();
-    while (it != rooted_DAG.end()) {
-        for (const auto& obj : (*it).get_objects()) {
+void Composition::draw(const Renderer& r) const {
+    const auto end = rooted_DAG.end();
+    auto it = rooted_DAG.get_root();
+    while (it != end) {
+        auto child = it;
+        while (child != end) {
             Transformation::push_matrix();
-            if (apply(it, time_point)) {
-                obj.atributes.location.apply();
-                obj.renderizable_ptr->draw(r);
-            }
-            Transformation::pop_matrix();
+            (*child).apply();
+            draw_node(child, r);
+            it = child;
+            child = it.get_first_child();
         }
-        ++it;
+
+        auto rbrother = it.get_rbrother();
+        while (it != end && rbrother == end) {
+            Transformation::pop_matrix();
+            it = it.get_last_parent();
+            rbrother = it.get_rbrother();
+        }
+        Transformation::pop_matrix();
+        it = rbrother;
     }
 }
 

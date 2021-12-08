@@ -14,13 +14,14 @@
 class Composition : public Renderizable {
 private:
     RootedDAG<CompositionNode> rooted_DAG;
+    void draw_node(const RootedDAG<CompositionNode>::iterator& it, const Renderer& r) const;
 
 public:
     typedef RootedDAG<CompositionNode>::iterator iterator;
 
-    bool apply(iterator it, float time_point) const;
+    bool apply(iterator it) const;
 
-    void draw(const Renderer& r, float time_point) const;
+    void draw(const Renderer& r) const;
     inline iterator get_root(void) const { return rooted_DAG.get_root(); }
     
     iterator emplace_child(const iterator& parent, const CompositionNode& node);

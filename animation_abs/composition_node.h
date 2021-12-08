@@ -6,7 +6,6 @@
 #ifndef MOSHI3D_COMPOSITION_NODE_H_
 #define MOSHI3D_COMPOSITION_NODE_H_
 
-#include "animation.h"
 #include "renderizable.h"
 #include "tuplasg.h"
 #include <memory>
@@ -25,20 +24,13 @@ public:
 
     struct Atributes {
         std::string name;
-        bool visible {true};
-        float init_time {0};
-        float duration {std::numeric_limits<float>::max()};
-        bool loop {true};
-        Location location;
-
-        inline bool in_range(float time_point) const { return loop || (time_point >= init_time && time_point <= init_time+duration); }
-        inline bool is_visible(float time_point) const { return visible && in_range(time_point); }
+        Location loc;
     };
 
     struct Object {
         struct Atributes {
             std::string name;
-            Location location;
+            Location loc;
         };
         Atributes atributes;
         std::shared_ptr<Renderizable> renderizable_ptr;
@@ -52,19 +44,20 @@ private:
 
 public:
     Atributes atributes;
-    Animation animation;
 
     CompositionNode()   {   }
     CompositionNode(const Atributes& atributes)
     : atributes{atributes}
     {     }
     CompositionNode(const CompositionNode& c)
-    : objects{c.objects}, atributes{c.atributes}, animation{c.animation}
+    : objects{c.objects}, atributes{c.atributes}
     {   }
 
     inline const obj_container_t& get_objects(void) const { return objects; }
     inline void erase_object(const obj_container_t::iterator& it) { objects.erase(it); }
     inline void emplace_object(const Object& obj) { objects.emplace_back(obj); }
+
+    void apply(void) const;
 };
 
 #endif /* MOSHI3D_COMPOSITION_NODE_H_ */
