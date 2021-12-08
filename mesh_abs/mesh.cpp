@@ -14,7 +14,7 @@ Mesh3D::Mesh3D()
 
 Mesh3D::~Mesh3D() {}
 
-void Mesh3D::draw(const Renderer& r, float time_point) const {
+void Mesh3D::draw(const Renderer& r) const {
     r.render(*this);
 }
 
