@@ -7,6 +7,7 @@
 #include "mesh.h"
 #include "tetrahedron.h"
 #include "revolution_object.h"
+#include "chipmunk.h"
 #include "cylinder.h"
 #include "cone.h"
 #include "sphere.h"
@@ -50,6 +51,7 @@ class Escena {
     Sphere* esfera {nullptr};
     ObjPLY* necoarc {nullptr};
     Mesh3D* objeto_actual {nullptr};
+    Chipmunk* chipmunk {nullptr};
 
     // Renderizadores
     RendererImmediate immediate_renderer;

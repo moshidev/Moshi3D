@@ -42,6 +42,7 @@ Escena::~Escena() {
     delete esfera;
     delete directional_light_0;
     delete positional_light_0;
+    delete chipmunk;
 }
 
 //**************************************************************************
@@ -69,6 +70,7 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
     change_projection(float(UI_window_width) / float(UI_window_height));
     glViewport(0, 0, UI_window_width, UI_window_height);
 
+    chipmunk = new Chipmunk();
     revobjects.push_back(lata);
     revobjects.push_back(cono);
     revobjects.push_back(peon_blanco);
@@ -159,8 +161,7 @@ void Escena::dibujar()
     static float time_point = 0;
     time_point += 0.1;
 
-    Chipmunk chip;
-    chip.draw(*renderer);
+    chipmunk->draw(*renderer);
 }
 
 bool Escena::teclaPulsada(unsigned char tecla, int x, int y)
@@ -189,7 +190,7 @@ void Escena::teclaEspecial(int tecla1, int x, int y)
         observer_distance *= 1.2;
         break;
     case GLUT_KEY_PAGE_DOWN:
-        //observer_distance /= 1.2;
+        observer_distance /= 1.2;
         break;
     }
 
@@ -269,30 +270,35 @@ static void enable_polygon_mode(bool t, std::vector<Mesh3D*>& objects, int mode)
 
 void Escena::render_points(bool t) {
     enable_polygon_mode(t, objects, GL_POINT);
+    chipmunk->apply_to_meshes([t] (ObjPLY& obj) { t ? obj.enable_polygon_modes(GL_POINT) : obj.disable_polygon_modes(GL_POINT); });
 }
 
 void Escena::render_lines(bool t) {
     enable_polygon_mode(t, objects, GL_LINE);
+    chipmunk->apply_to_meshes([t] (ObjPLY& obj) { t ? obj.enable_polygon_modes(GL_LINE) : obj.disable_polygon_modes(GL_LINE); });
 }
 
 void Escena::render_solid(bool t) {
     enable_polygon_mode(t, objects, GL_FILL);
+    chipmunk->apply_to_meshes([t] (ObjPLY& obj) { t ? obj.enable_polygon_modes(GL_FILL) : obj.disable_polygon_modes(GL_FILL); });
 }
 
 void Escena::render_chess(bool t) {
     for (auto obj : objects) {
         obj->enable_chess_mode(t);
     }
+    chipmunk->apply_to_meshes([t] (ObjPLY& obj) { obj.enable_chess_mode(t); });
 }
 
 void Escena::render_covers(bool t) {
     for (auto rv : revobjects) {
         rv->enable_covers_visibility(t);
-    }   
+    }
 }
 
 void Escena::render_shaded(bool t) {
     for (auto obj : objects) {
         obj->enable_shaded_mode(t);
     }
+    chipmunk->apply_to_meshes([t] (ObjPLY& obj) { obj.enable_shaded_mode(t); });
 }
