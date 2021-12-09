@@ -1,6 +1,6 @@
 #include "chipmunk.h"
 
-CompositionNode Chipmunk::build_leg(float x, float z, const std::shared_ptr<ObjPLY>& leg_mesh) {
+/*CompositionNode Chipmunk::build_leg(float x, float z, const std::shared_ptr<ObjPLY>& leg_mesh) {
     CompositionNode::Object leg_obj{leg_mesh};
     CompositionNode leg;
     
@@ -38,10 +38,10 @@ CompositionNode Chipmunk::build_body(float y, const std::shared_ptr<ObjPLY>& bod
     c.emplace_object(body_obj);
 
     return c;
-}
+}*/
 
 Chipmunk::Chipmunk() {
-    nodes.resize(9, composition.get_root());
+    /*nodes.resize(9, composition.get_root());
 
     nodes[BODY] = composition.get_root();
     *nodes[BODY] = build_body(1, body_mesh);
@@ -60,9 +60,9 @@ Chipmunk::Chipmunk() {
 
     for (auto& m : meshes) {
         m.lock()->enable_chess_mode(true);
-    }
+    }*/
 }
 
 void Chipmunk::draw(const Renderer& r) const {
-    composition.draw(r);
+    //composition.draw(r);
 }

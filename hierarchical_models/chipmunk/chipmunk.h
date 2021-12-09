@@ -7,14 +7,12 @@
 #define MOSHI3D_CHIPMUNK_H_
 
 #include "renderizable.h"
-#include "composition.h"
-#include "composition_node.h"
 #include "objply.h"
 #include <memory>
 #include <vector>
 
 class Chipmunk : public Renderizable {
-    std::shared_ptr<ObjPLY> body_mesh {std::make_shared<ObjPLY>("resources/chipmunk/body.ply")};
+    /*std::shared_ptr<ObjPLY> body_mesh {std::make_shared<ObjPLY>("resources/chipmunk/body.ply")};
     std::shared_ptr<ObjPLY> leg_mesh {std::make_shared<ObjPLY>("resources/chipmunk/leg.ply")};
     std::shared_ptr<ObjPLY> ear_R_mesh {std::make_shared<ObjPLY>("resources/chipmunk/ear_R.ply")};
     std::shared_ptr<ObjPLY> ear_L_mesh {std::make_shared<ObjPLY>("resources/chipmunk/ear_L.ply")};
@@ -31,7 +29,7 @@ class Chipmunk : public Renderizable {
     static CompositionNode build_leg(float x, float z, const std::shared_ptr<ObjPLY>& leg_mesh);
     static Composition build_tail(const std::shared_ptr<ObjPLY>& tail_1_mesh, const std::shared_ptr<ObjPLY>& tail_2_mesh);
     static CompositionNode build_ear(const std::shared_ptr<ObjPLY>& ear_mesh);
-    static CompositionNode build_body(float y, const std::shared_ptr<ObjPLY>& body_mesh);
+    static CompositionNode build_body(float y, const std::shared_ptr<ObjPLY>& body_mesh);*/
 public:
     Chipmunk();
 
