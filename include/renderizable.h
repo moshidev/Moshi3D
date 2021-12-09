@@ -6,12 +6,11 @@
 #ifndef MOSHI3D_RENDERIZABLE_H_
 #define MOSHI3D_RENDERIZABLE_H_
 
-#include "transformation.h"
-
 class Renderer;
 
 class Renderizable {
 public:
+    virtual ~Renderizable() = 0;
     virtual void draw(const Renderer& r) const = 0;
 };
 

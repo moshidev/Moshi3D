@@ -10,7 +10,7 @@
 
 exe             := pracs_exe
 obj				:= obj
-units_cc        := $(wildcard *.cpp) $(wildcard renderers/*.cpp) $(wildcard primitives/*.cpp) $(wildcard gl_abs/*.cpp) $(wildcard gl_abs/transformations/*.cpp) $(wildcard gl_abs/lights/*.cpp) $(wildcard mesh_abs/*.cpp) $(wildcard file_io/*.cpp) $(wildcard escena/*.cpp) $(wildcard animation_abs/*.cpp) $(wildcard hierarchical_models/chipmunk/*.cpp)
+units_cc        := $(wildcard *.cpp) $(wildcard include/*.cpp) $(wildcard renderers/*.cpp) $(wildcard primitives/*.cpp) $(wildcard gl_abs/*.cpp) $(wildcard gl_abs/transformations/*.cpp) $(wildcard gl_abs/lights/*.cpp) $(wildcard mesh_abs/*.cpp) $(wildcard file_io/*.cpp) $(wildcard escena/*.cpp) $(wildcard animation_abs/*.cpp) $(wildcard hierarchical_models/chipmunk/*.cpp)
 units_o         := $(addprefix $(obj)/, $(addsuffix .o, $(basename $(units_cc))))
 headers         := $(wildcard *.h*) $(wildcard include/*.h*)
 uname           := $(shell uname -s)
