@@ -9,6 +9,9 @@ void Rotation::normalize_variables(void) {
     if (polar_coordinates[1] >= 2*M_PI || polar_coordinates[1] <= -2*M_PI) {
         polar_coordinates[1] = fmod(polar_coordinates[1], 2*M_PI);
     }
+    if (polar_coordinates[2] >= 2*M_PI || polar_coordinates[2] <= -2*M_PI) {
+        polar_coordinates[2] = fmod(polar_coordinates[2], 2*M_PI);
+    }
 }
 
 Rotation& Rotation::multiply_member_data(float val) {
@@ -18,13 +21,13 @@ Rotation& Rotation::multiply_member_data(float val) {
     return *this;
 }
 
-Rotation::Rotation(const Tupla2f& polar_coor)
+Rotation::Rotation(const Tupla3f& polar_coor)
 :polar_coordinates{polar_coor}, rotation_point{Tupla3f{0,0,0}}
 {
     normalize_variables();
 }
 
-Rotation::Rotation(const Tupla2f& polar_coor, const Tupla3f& rotation_point)
+Rotation::Rotation(const Tupla3f& polar_coor, const Tupla3f& rotation_point)
 :polar_coordinates{polar_coor}, rotation_point{rotation_point}
 {
    normalize_variables();
@@ -36,12 +39,13 @@ void Rotation::apply(float angle_rad, const Tupla3f& rot_vec) {
     glRotatef(angle_rad*deg_rad_equiv, rot_vec[0], rot_vec[1], rot_vec[2]);
 }
 
-void Rotation::apply(const Tupla2f& polar_coor) {
-    apply(polar_coor[0], {1,0,0});
-    apply(polar_coor[1], {0,1,0});
+void Rotation::apply(const Tupla3f& polar_coor) {
+    apply(-polar_coor[0], {1,0,0});
+    apply(-polar_coor[1], {0,1,0});
+    apply(-polar_coor[2], {0,0,1});
 }
 
-void Rotation::apply(const Tupla2f& polar_coordinates, const Tupla3f& rotation_point) {
+void Rotation::apply(const Tupla3f& polar_coordinates, const Tupla3f& rotation_point) {
     const auto& p = rotation_point;
     glTranslatef(-p[0], -p[1], -p[2]);
     apply(polar_coordinates);
@@ -50,31 +54,31 @@ void Rotation::apply(const Tupla2f& polar_coordinates, const Tupla3f& rotation_p
 
 /* end static methods */
 
-void Rotation::set(const Tupla2f& polar_coor, const Tupla3f& rotation_point) {
-    set(polar_coor);
-    set(rotation_point);
+void Rotation::set(const Tupla3f& polar_coor, const Tupla3f& rotation_point) {
+    set_rota(polar_coor);
+    set_rotp(rotation_point);
 }
 
-void Rotation::set(const Tupla2f& polar_coordinates) {
+void Rotation::set_rota(const Tupla3f& polar_coordinates) {
     this->polar_coordinates = polar_coordinates;
     normalize_variables();
 }
 
-void Rotation::set(const Tupla3f& rotation_point) {
+void Rotation::set_rotp(const Tupla3f& rotation_point) {
     this->rotation_point = rotation_point;
 }
 
-void Rotation::sum(const Tupla2f& polar_coor, const Tupla3f& rotation_point) {
-    sum(polar_coor);
-    sum(rotation_point);
+void Rotation::sum(const Tupla3f& polar_coor, const Tupla3f& rotation_point) {
+    sum_rota(polar_coor);
+    sum_rotp(rotation_point);
 }
 
-void Rotation::sum(const Tupla2f& polar_coordinates) {
+void Rotation::sum_rota(const Tupla3f& polar_coordinates) {
     this->polar_coordinates = this->polar_coordinates + polar_coordinates;
     normalize_variables();
 }
 
-void Rotation::sum(const Tupla3f& rotation_point) {
+void Rotation::sum_rotp(const Tupla3f& rotation_point) {
     this->rotation_point = this->rotation_point + rotation_point;
 }
 

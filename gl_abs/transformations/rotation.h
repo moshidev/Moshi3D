@@ -9,28 +9,28 @@
 #include "transformation.h"
 
 class Rotation : public Transformation {
-    Tupla2f polar_coordinates;
+    Tupla3f polar_coordinates;
     Tupla3f rotation_point;
     void normalize_variables(void);
     Rotation& multiply_member_data(float val);
 
 public:
     Rotation() = delete;
-    Rotation(const Tupla2f& polar_coor);
-    Rotation(const Tupla2f& polar_coor, const Tupla3f& rotation_point);
+    Rotation(const Tupla3f& angls_rad);
+    Rotation(const Tupla3f& angls_rad, const Tupla3f& rotation_point);
     static void apply(float angle_rad, const Tupla3f& rot_vec);
-    static void apply(const Tupla2f& polar_coor);
-    static void apply(const Tupla2f& polar_coor, const Tupla3f& rotation_point);
+    static void apply(const Tupla3f& angls_rad);
+    static void apply(const Tupla3f& angls_rad, const Tupla3f& rotation_point);
 
-    void set(const Tupla2f& polar_coor, const Tupla3f& rotation_point);
-    void set(const Tupla2f& polar_coor);
-    void set(const Tupla3f& rotation_point);
-    void sum(const Tupla2f& polar_coor, const Tupla3f& rotation_point);
-    void sum(const Tupla2f& polar_coor);
-    void sum(const Tupla3f& rotation_point);
+    void set(const Tupla3f& angls_rad, const Tupla3f& rotation_point);
+    void set_rota(const Tupla3f& angls_rad);
+    void set_rotp(const Tupla3f& rotation_point);
+    void sum(const Tupla3f& angls_rad, const Tupla3f& rotation_point);
+    void sum_rota(const Tupla3f& angls_rad);
+    void sum_rotp(const Tupla3f& rotation_point);
     virtual void apply(void) const;
 
-    inline const Tupla2f& get_angle(void) const { return polar_coordinates; }
+    inline const Tupla3f& get_angle(void) const { return polar_coordinates; }
     inline const Tupla3f& get_point(void) const { return rotation_point; }
 
     friend Rotation operator+(const Rotation& lr, const Rotation& rt);
