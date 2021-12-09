@@ -4,6 +4,7 @@
 #include <vector>
 #include "translation.h"
 #include "rotation.h"
+#include "chipmunk.h"
 
 Escena::Escena()
 {
@@ -157,6 +158,9 @@ void Escena::dibujar()
     glPopMatrix();*/
     static float time_point = 0;
     time_point += 0.1;
+
+    Chipmunk chip;
+    chip.draw(*renderer);
 }
 
 bool Escena::teclaPulsada(unsigned char tecla, int x, int y)

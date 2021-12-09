@@ -69,7 +69,9 @@ public:
         iterator(const iterator& it, NodeData& child)
         :node_ptr{&child}, last_parent_ptr{it.last_parent_ptr}
         {
-            last_parent_ptr.push(it.node_ptr);
+            if (it.node_ptr != nullptr) {
+                last_parent_ptr.push(it.node_ptr);
+            }
         }
 
         iterator() {    }
@@ -243,7 +245,9 @@ public:
     RootedDAG(const RootedDAG& r) = delete;     // hard-copy not implemented
 
     RootedDAG(RootedDAG&& r) {
-        std::swap(*this, r);
+        NodeData* root_to_be_deleted = this->root;
+        this->root = r.root;
+        r.root = root_to_be_deleted;
     }
 
     RootedDAG(_Tp root_data)
