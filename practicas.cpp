@@ -89,6 +89,13 @@ void special_keys(int tecla, int x, int y)
     glutPostRedisplay();
 }
 
+void glut_idle_handler(void) {
+    if (escena != NULL) {
+        escena->animar_modelo_jerarquico();
+    }
+    glutPostRedisplay();
+}
+
 //***************************************************************************
 // Programa principal
 //
@@ -139,6 +146,8 @@ int main(int argc, char **argv)
     // asignación de la funcion llamada "tecla_Especial" al evento
     // correspondiente
     glutSpecialFunc(special_keys);
+
+    glutIdleFunc(glut_idle_handler);
 
 // inicialización de librería GLEW (solo en Linux)
 #ifdef LINUX
