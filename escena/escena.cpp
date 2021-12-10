@@ -160,7 +160,6 @@ void Escena::dibujar()
     glPopMatrix();*/
     static float time_point = 0;
     time_point += 0.1;
-
     chipmunk->draw(*renderer);
 }
 
@@ -221,6 +220,10 @@ void Escena::redimensionar(int new_width, int new_height)
     window_height = new_height / 10;
     change_projection(float(new_height) / float(new_width));
     glViewport(0, 0, new_width, new_height);
+}
+
+void Escena::animar_modelo_jerarquico(void) {
+    chipmunk->increment_animation_aut();
 }
 
 //**************************************************************************

@@ -75,6 +75,7 @@ class Escena {
     ~Escena();
     void inicializar(int UI_window_width, int UI_window_height);
     void redimensionar(int new_width, int new_height);
+    void animar_modelo_jerarquico(void);
 
     void dibujar();
 
