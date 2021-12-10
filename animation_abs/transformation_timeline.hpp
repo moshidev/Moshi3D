@@ -17,10 +17,8 @@ private:
     std::map<float,KeyFrame> transformations;
 
 public:
-    bool loop {false};
-    TransformationTimeline()    {  }
-    TransformationTimeline(const TransformationTimeline& tt) : transformations{tt.transformations}  {   }
-    TransformationTimeline(const TransformationTimeline& tt, bool loop) : transformations{tt.transformations}, loop{loop}  {   }
+    TransformationTimeline() = default;
+    TransformationTimeline(const TransformationTimeline& tt) = default;
 
     typedef typename std::map<float,KeyFrame>::iterator iterator;
     typedef typename std::map<float,KeyFrame>::const_iterator const_iterator;
@@ -37,16 +35,12 @@ public:
     
     bool empty(void) const { return transformations.empty(); }
 
-    _T get_transformation(float time_point) const {
+    _T get_transformation(float percentaje) const {
         auto last_it = transformations.rbegin();
-        time_point = loop ? fmod(time_point, last_it->first) : time_point;
+        float time_point = percentaje * last_it->first;
         
-        if (time_point > last_it->first || transformations.size() < 2) {
+        if (transformations.size() < 2) {
             return last_it->second.transformation;
-        }
-        auto first_it = transformations.begin();
-        if (time_point < first_it->first) {
-            return first_it->second.transformation;
         }
 
         auto upper_it = transformations.upper_bound(time_point);
@@ -55,11 +49,11 @@ public:
         const KeyFrame& upper_keyf = upper_it->second;
         const KeyFrame& lower_keyf = lower_it->second;
 
-        const float percentaje = (time_point - lower_keyf.pos)/(upper_keyf.pos - lower_keyf.pos);
-        if (percentaje < 0) {
+        const float inter_percentaje = (time_point - lower_keyf.pos)/(upper_keyf.pos - lower_keyf.pos);
+        if (inter_percentaje < 0) {
             return lower_keyf.transformation;
         }
-        return interpolation(lower_keyf.transformation, upper_keyf.transformation, percentaje, lower_keyf.interpolation_function);
+        return interpolation(lower_keyf.transformation, upper_keyf.transformation, inter_percentaje, lower_keyf.interpolation_function);
     }
 };
 
@@ -77,9 +71,7 @@ struct TransformationTimeline<_T>::KeyFrame {
     KeyFrame(float pos, const _T& transformation, const std::function<float(float)>& interpolation_function)
     : pos{pos}, transformation{transformation}, interpolation_function{interpolation_function}
     {   }
-    KeyFrame(const KeyFrame& kf)
-    : pos{kf.pos}, transformation{kf.transformation}, interpolation_function{kf.interpolation_function}
-    {   }
+    KeyFrame(const KeyFrame& kf) = default;
 };
 
 #endif /* MOSHI3D_TRANSFORMATION_TIMELINE_H_ */
