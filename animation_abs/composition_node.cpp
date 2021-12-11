@@ -18,24 +18,32 @@ CompositionNode::CompositionNode(CompositionNode&& n) {
 
 void CompositionNode::apply_location(const Location& l) const {
     Translation::apply(l.position);
-    Rotation::apply(l.rotation);
+    Rotation::apply(l.rotation, l.position);
     Scaling::apply(l.scaling);
 }
 
 void CompositionNode::draw(const Renderer& r) const {
     Transformation::push_matrix();
     apply_location(this->location);
-    for (const auto& c : childs) {
-        Transformation::push_matrix();
-        apply_location(c.first);
-        c.second->draw(r);
-        Transformation::pop_matrix();
-    }
+    animation.apply();
     for (const auto& obj : objects) {
         Transformation::push_matrix();
         apply_location(obj.loc);
         obj.renderizable->draw(r);
         Transformation::pop_matrix();
     }
+    for (const auto& c : childs) {
+        Transformation::push_matrix();
+        apply_location(c.first);
+        c.second->draw(r);
+        Transformation::pop_matrix();
+    }
     Transformation::pop_matrix();
+}
+
+void CompositionNode::execute_preorder(const std::function<void(CompositionNode&)>& f) {
+    for (const auto& c : childs) {
+        c.second->execute_preorder(f);
+    }
+    f(*this);
 }

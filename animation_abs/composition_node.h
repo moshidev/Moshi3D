@@ -7,6 +7,7 @@
 #define MOSHI3D_COMPOSITION_NODE_H_
 
 #include "renderizable.h"
+#include "animation.h"
 #include "tuplasg.h"
 #include <memory>
 #include <list>
@@ -45,6 +46,7 @@ private:
     node_container_t childs;
     obj_container_t objects;
     Location location;
+    Animation animation;
 
     void apply_location(const Location& l) const;
 
@@ -61,7 +63,13 @@ public:
     inline iterator add_child(const Location& loc, const std::shared_ptr<CompositionNode>& c) { return childs.insert(childs.begin(), {loc, c}); }
     inline obj_iterator add_obj(const Object& obj) { return objects.insert(objects.begin(), obj); }
 
+    inline Location& get_location(void) { return location; }
+    inline const Location& get_location(void) const { return location; }
+    inline Animation& get_animation(void) { return animation; }
+    inline const Animation& get_animation(void) const { return animation; }
+
     void draw(const Renderer& r) const;
+    void execute_preorder(const std::function<void(CompositionNode&)>& f);
 };
 
 #endif /* MOSHI3D_COMPOSITION_NODE_H_ */
