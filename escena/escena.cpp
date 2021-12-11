@@ -71,6 +71,7 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
     glViewport(0, 0, UI_window_width, UI_window_height);
 
     chipmunk = new Chipmunk();
+    chipmunk->multiply_speed_factor(2);
     revobjects.push_back(lata);
     revobjects.push_back(cono);
     revobjects.push_back(peon_blanco);
