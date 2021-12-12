@@ -94,6 +94,11 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
     }
     peon_blanco->set_material(blanco_difuso);
     peon_negro->set_material(negro_brillo);
+
+    Light::enable_lighting(true);
+    this->render_shaded(true);
+
+    menu.update(*this, 0, 0, 0);
 }
 
 // **************************************************************************
@@ -128,15 +133,14 @@ void Escena::dibujar()
         }
     }
     
-    /*if (objeto_actual != nullptr) {
-        glPushMatrix();
+    if (objeto_actual != nullptr) {
+        Transformation::push_matrix();
             t.apply();
-            //r.apply();
             objeto_actual->draw(*renderer);
-        glPopMatrix();
+        Transformation::pop_matrix();
     }
 
-    int i = 0;
+    /*int i = 0;
     glPushMatrix();
         glTranslatef(0, 0, 0);
         for (auto o : revobjects) {
@@ -159,6 +163,7 @@ void Escena::dibujar()
             i++;
         }
     glPopMatrix();*/
+    
     static float time_point = 0;
     time_point += 0.1;
     chipmunk->draw(*renderer);
@@ -224,7 +229,9 @@ void Escena::redimensionar(int new_width, int new_height)
 }
 
 void Escena::animar_modelo_jerarquico(void) {
-    chipmunk->increment_animation_aut();
+    if (chipmunk_aut_anim) {
+        chipmunk->increment_animation_aut();
+    }
 }
 
 //**************************************************************************

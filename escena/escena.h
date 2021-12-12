@@ -52,6 +52,7 @@ class Escena {
     ObjPLY* necoarc {nullptr};
     Mesh3D* objeto_actual {nullptr};
     Chipmunk* chipmunk {nullptr};
+    bool chipmunk_aut_anim {false};
 
     // Renderizadores
     RendererImmediate immediate_renderer;
@@ -76,6 +77,8 @@ class Escena {
     void inicializar(int UI_window_width, int UI_window_height);
     void redimensionar(int new_width, int new_height);
     void animar_modelo_jerarquico(void);
+    inline Chipmunk* get_chipmunk(void) { return chipmunk; }
+    inline void set_chipmunk_automatic_animation(bool t) { chipmunk_aut_anim = t; }
 
     void dibujar();
 

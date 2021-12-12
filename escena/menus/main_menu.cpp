@@ -19,6 +19,23 @@ bool MainMenu::handler(Escena& e, unsigned char tecla, int x, int y) {
         current_menu = &render;
         current_menu->update(e, 0, x, y);
         break;
+    case 'M':
+        std::cout << "\n +++ Entramos al menú animación manual +++ " << std::endl;
+        current_menu = &manual;
+        current_menu->update(e, 0, x, y);
+        break;
+    case 'A':
+        std::cout << "Activamos animación automática." << std::endl;
+        e.set_chipmunk_automatic_animation(true);
+        break;
+    case '+':
+        std::cout << "Aumentamos velocidad animación automática." << std::endl;
+        e.get_chipmunk()->multiply_speed_factor(1.1);
+        break;
+    case '-':
+        std::cout << "Disminuimos velocidad animación automática." << std::endl;
+        e.get_chipmunk()->multiply_speed_factor(0.9);
+        break;
     case 'Q':
         std::cout << "\n +++ Presionada la letra Q -> finalizamos programa +++ " << std::endl;
         return true;
@@ -27,7 +44,12 @@ bool MainMenu::handler(Escena& e, unsigned char tecla, int x, int y) {
         std::cout << "Opciones disponibles:\n";
         std::cout << "[ O ] - Menú selección de objeto.\n";
         std::cout << "[ V ] - Menú selección de modo de visualización.\n";
-        std::cout << "[ D ] - Menú selección de modo de dibujado." << std::endl;
+        std::cout << "[ D ] - Menú selección de modo de dibujado.\n";
+        std::cout << "[ M ] - Menú selección animación manual.\n";
+        std::cout << "[ A ] - Activamos/desactivamos animación automática.\n";
+        std::cout << "[ + ] - Aumentamos velocidad animación automática.\n";
+        std::cout << "[ - ] - Disminuímos velocidad animación automática.\n";
+        std::cout << "[ Q ] - Salimos del programa." << std::endl;
         break;
     }
 
