@@ -115,10 +115,6 @@ Chipmunk::Chipmunk() {
     parts[kEar_R] = build_ear_R(body, {+0.175, 0.5, 0.65}, 0, 1.8);
 
     init_meshes_vector();
-
-    for (auto& m : meshes) {
-        m.lock()->enable_polygon_modes(GL_FILL);
-    }
 }
 
 void Chipmunk::draw(const Renderer& r) const {
