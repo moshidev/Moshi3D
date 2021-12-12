@@ -193,6 +193,10 @@ void Chipmunk::increment_animation_man_ears(void) {
     increment_animation_man(parts[kEar_L]);
 }
 
+void Chipmunk::increment_animation_man_tail(void) {
+    increment_animation_man(parts[kTail]);
+}
+
 void Chipmunk::decrement_animation_man_body(void) {
     decrement_animation_man(parts[kBody]);
 }
@@ -207,4 +211,8 @@ void Chipmunk::decrement_animation_man_legs(void) {
 void Chipmunk::decrement_animation_man_ears(void) {
     decrement_animation_man(parts[kEar_R]);
     decrement_animation_man(parts[kEar_L]);
+}
+
+void Chipmunk::decrement_animation_man_tail(void) {
+    decrement_animation_man(parts[kTail]);
 }
