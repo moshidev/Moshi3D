@@ -2,7 +2,7 @@
 #define _ESCENA_H
 
 #include "cube.h"
-#include "menu.h"
+#include "main_menu.h"
 #include "ejes.h"
 #include "mesh.h"
 #include "tetrahedron.h"
@@ -58,7 +58,7 @@ class Escena {
     RendererBuffered buffered_renderer;
     Renderer* renderer;
 
-    Menu menu;
+    MainMenu menu;
 
     // Luces
     DirectionalLight* directional_light_0 {nullptr};
