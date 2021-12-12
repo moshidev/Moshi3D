@@ -11,19 +11,21 @@
 #include "render_mode_selection.h"
 #include "object_selection.h"
 #include "manual.h"
+#include "aut.h"
 
 class MainMenu : public Menu {
     VisualizationModeSelection visual;
     RenderModeSelection render;
     ObjectSelection object;
     Manual manual;
+    Aut aut;
 
 protected:
     virtual bool handler(Escena& e, unsigned char tecla, int x, int y);
 
 public:
     MainMenu()
-    : Menu{this}, visual{this}, render{this}, object{this}, manual{this}
+    : Menu{this}, visual{this}, render{this}, object{this}, manual{this}, aut{this}
     {   }
 };
 
