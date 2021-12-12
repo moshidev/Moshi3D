@@ -145,6 +145,10 @@ void Chipmunk::increment_animation_man(void) {
     root.execute_preorder(func);
 }
 
+void Chipmunk::increment_animation_man(enum Parts part) {
+    increment_animation_man(parts[part]);
+}
+
 void Chipmunk::increment_animation_man(CompositionNode::iterator& it) {
     auto& a = it->second->get_animation();
     a.set_speed_factor(std::abs(a.get_speed_factor()));
@@ -158,6 +162,10 @@ void Chipmunk::decrement_animation_man(void) {
         a.increment_anim_loop(manual_step_size);
     };
     root.execute_preorder(func);
+}
+
+void Chipmunk::decrement_animation_man(enum Parts part) {
+    decrement_animation_man(parts[part]);
 }
 
 void Chipmunk::decrement_animation_man(CompositionNode::iterator& it) {
@@ -174,45 +182,7 @@ void Chipmunk::multiply_speed_factor(float factor) {
     root.execute_preorder(func);
 }
 
-
-
-
-void Chipmunk::increment_animation_man_body(void) {
-    increment_animation_man(parts[kBody]);
-}
-
-void Chipmunk::increment_animation_man_legs(void) {
-    increment_animation_man(parts[kLeg_F_R]);
-    increment_animation_man(parts[kLeg_F_L]);
-    increment_animation_man(parts[kLeg_B_R]);
-    increment_animation_man(parts[kLeg_B_L]);
-}
-
-void Chipmunk::increment_animation_man_ears(void) {
-    increment_animation_man(parts[kEar_R]);
-    increment_animation_man(parts[kEar_L]);
-}
-
-void Chipmunk::increment_animation_man_tail(void) {
-    increment_animation_man(parts[kTail]);
-}
-
-void Chipmunk::decrement_animation_man_body(void) {
-    decrement_animation_man(parts[kBody]);
-}
-
-void Chipmunk::decrement_animation_man_legs(void) {
-    decrement_animation_man(parts[kLeg_F_R]);
-    decrement_animation_man(parts[kLeg_F_L]);
-    decrement_animation_man(parts[kLeg_B_R]);
-    decrement_animation_man(parts[kLeg_B_L]);
-}
-
-void Chipmunk::decrement_animation_man_ears(void) {
-    decrement_animation_man(parts[kEar_R]);
-    decrement_animation_man(parts[kEar_L]);
-}
-
-void Chipmunk::decrement_animation_man_tail(void) {
-    decrement_animation_man(parts[kTail]);
+void Chipmunk::multiply_speed_factor(float factor, enum Parts part) {
+    auto& anim = parts[part]->second->get_animation();
+    anim.set_speed_factor(factor*std::abs(anim.get_speed_factor()));
 }

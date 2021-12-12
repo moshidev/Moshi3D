@@ -17,9 +17,6 @@ class Chipmunk : public Renderizable {
     CompositionNode root;
     float manual_step_size {0.1};
 
-    enum Parts {
-        kBody, kLeg_F_R, kLeg_F_L, kLeg_B_R, kLeg_B_L, kEar_R, kEar_L, kTail, kPARTS_SIZE
-    };
     std::vector<std::weak_ptr<ObjPLY>> meshes;
     std::vector<CompositionNode::iterator> parts;
 
@@ -28,24 +25,23 @@ class Chipmunk : public Renderizable {
     void increment_animation_man(CompositionNode::iterator& it);
     void decrement_animation_man(CompositionNode::iterator& it);
 public:
+    enum Parts {
+        kBody, kLeg_F_R, kLeg_F_L, kLeg_B_R, kLeg_B_L, kEar_R, kEar_L, kTail, kPARTS_SIZE
+    };
     Chipmunk();
 
     void draw(const Renderer& r) const;
     void apply_to_meshes(const std::function<void(ObjPLY&)>& func);
     
     void increment_animation_aut(void);
+
     void increment_animation_man(void);
-    void increment_animation_man_body(void);
-    void increment_animation_man_legs(void);
-    void increment_animation_man_ears(void);
-    void increment_animation_man_tail(void);
+    void increment_animation_man(enum Parts part);
     void decrement_animation_man(void);
-    void decrement_animation_man_body(void);
-    void decrement_animation_man_legs(void);
-    void decrement_animation_man_ears(void);
-    void decrement_animation_man_tail(void);
+    void decrement_animation_man(enum Parts part);
 
     void multiply_speed_factor(float factor);
+    void multiply_speed_factor(float factor, enum Parts part);
 
     inline float get_man_step_size(void) const { return manual_step_size; }
     inline void set_man_step_size(float step_size) { manual_step_size = step_size; }

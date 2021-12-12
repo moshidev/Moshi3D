@@ -8,16 +8,20 @@ static void decrement(Escena& e, int df) {
         e.get_chipmunk()->decrement_animation_man();
         break;
     case 1:
-        e.get_chipmunk()->decrement_animation_man_body();
+        e.get_chipmunk()->decrement_animation_man(Chipmunk::kBody);
         break;
     case 2:
-        e.get_chipmunk()->decrement_animation_man_ears();
+        e.get_chipmunk()->decrement_animation_man(Chipmunk::kTail);
         break;
     case 3:
-        e.get_chipmunk()->decrement_animation_man_legs();
+        e.get_chipmunk()->decrement_animation_man(Chipmunk::kEar_L);
+        e.get_chipmunk()->decrement_animation_man(Chipmunk::kEar_R);
         break;
     case 4:
-        e.get_chipmunk()->decrement_animation_man_tail();
+        e.get_chipmunk()->decrement_animation_man(Chipmunk::kLeg_F_R);
+        e.get_chipmunk()->decrement_animation_man(Chipmunk::kLeg_F_L);
+        e.get_chipmunk()->decrement_animation_man(Chipmunk::kLeg_B_R);
+        e.get_chipmunk()->decrement_animation_man(Chipmunk::kLeg_B_L);
         break;
     }
 }
@@ -29,16 +33,20 @@ static void increment(Escena& e, int df) {
         e.get_chipmunk()->increment_animation_man();
         break;
     case 1:
-        e.get_chipmunk()->increment_animation_man_body();
+        e.get_chipmunk()->increment_animation_man(Chipmunk::kBody);
         break;
     case 2:
-        e.get_chipmunk()->increment_animation_man_ears();
+        e.get_chipmunk()->increment_animation_man(Chipmunk::kTail);
         break;
     case 3:
-        e.get_chipmunk()->increment_animation_man_legs();
+        e.get_chipmunk()->increment_animation_man(Chipmunk::kEar_L);
+        e.get_chipmunk()->increment_animation_man(Chipmunk::kEar_R);
         break;
     case 4:
-        e.get_chipmunk()->increment_animation_man_tail();
+        e.get_chipmunk()->increment_animation_man(Chipmunk::kLeg_F_R);
+        e.get_chipmunk()->increment_animation_man(Chipmunk::kLeg_F_L);
+        e.get_chipmunk()->increment_animation_man(Chipmunk::kLeg_B_R);
+        e.get_chipmunk()->increment_animation_man(Chipmunk::kLeg_B_L);
         break;
     }
 }
@@ -51,7 +59,7 @@ bool Manual::handler(Escena& e, unsigned char tecla, int x, int y) {
         increment(e, df);
         break;
     case '-':
-        std::cout << "Disminuímos grado libertad manual para " << df << std::endl;
+        std::cout << "Disminuimos grado libertad manual para " << df << std::endl;
         decrement(e, df);
         break;
     case 'Q':
@@ -73,7 +81,7 @@ bool Manual::handler(Escena& e, unsigned char tecla, int x, int y) {
             std::cout << "Opciones disponibles:\n";
             std::cout << "[ 0-9 ] - Seleccionar grado de libertad. 0 para todo el cuerpo." << std::endl;
             std::cout << "[ + ] - Aumentamos grado libertad manual.\n";
-            std::cout << "[ - ] - Disminuímos grado libertad manual.\n";
+            std::cout << "[ - ] - Disminuimos grado libertad manual.\n";
             std::cout << "[ Q ] - Volvemos al menú principal." << std::endl;
         }
         break;
