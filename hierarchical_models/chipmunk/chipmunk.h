@@ -15,7 +15,7 @@
 
 class Chipmunk : public Renderizable {
     CompositionNode root;
-    float manual_step_size {0.5};
+    float manual_step_size {0.1};
 
     enum Parts {
         kBody, kLeg_F_R, kLeg_F_L, kLeg_B_R, kLeg_B_L, kEar_R, kEar_L, kTail, kPARTS_SIZE
@@ -38,10 +38,12 @@ public:
     void increment_animation_man_body(void);
     void increment_animation_man_legs(void);
     void increment_animation_man_ears(void);
+    void increment_animation_man_tail(void);
     void decrement_animation_man(void);
     void decrement_animation_man_body(void);
     void decrement_animation_man_legs(void);
     void decrement_animation_man_ears(void);
+    void decrement_animation_man_tail(void);
 
     void multiply_speed_factor(float factor);
 
