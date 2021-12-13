@@ -44,6 +44,8 @@ class Escena {
     Cube* cubo {nullptr};           
     Tetrahedron* tetraedro {nullptr};
     RevolutionObject* lata {nullptr};
+    RevolutionObject* lata_x {nullptr};
+    RevolutionObject* lata_z {nullptr};
     RevolutionObject* peon_blanco {nullptr};
     RevolutionObject* peon_negro {nullptr};
     Cylinder* cilindro {nullptr};

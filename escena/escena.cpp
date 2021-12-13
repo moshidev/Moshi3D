@@ -20,6 +20,8 @@ Escena::Escena()
     cubo = new Cube();
     tetraedro = new Tetrahedron();
     lata = new RevolutionObject("resources/lata-pcue.ply", 40);
+    lata_x = new RevolutionObject("resources/lata-pcueX.ply", 40, true, true, 0);
+    lata_z = new RevolutionObject("resources/lata-pcueZ.ply", 40, true, true, 2);
     peon_blanco = new RevolutionObject("resources/peon.ply", 40);
     peon_negro = new RevolutionObject("resources/peon.ply", 40);
     necoarc = new ObjPLY("resources/necoarc.ply");
@@ -27,7 +29,7 @@ Escena::Escena()
     cono = new Cone(5, 90, 1, 1);
     esfera = new Sphere(50, 50, 1);
 
-    objeto_actual = cubo;
+    objeto_actual = lata_z;
 }
 
 Escena::~Escena() {
@@ -73,6 +75,8 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
     chipmunk = new Chipmunk();
     chipmunk->multiply_speed_factor(2);
     revobjects.push_back(lata);
+    revobjects.push_back(lata_x);
+    revobjects.push_back(lata_z);
     revobjects.push_back(cono);
     revobjects.push_back(peon_blanco);
     revobjects.push_back(peon_negro);
