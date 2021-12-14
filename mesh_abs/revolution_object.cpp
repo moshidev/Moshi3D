@@ -152,18 +152,18 @@ void RevolutionObject::make_current_buffered_data_list(void) {
     list.clear();
     list.splice(list.begin(), mklist_buffered_polygon_mode(get_indices_IB()));
     list.splice(list.begin(), mklist_buffered_chess_mode(get_indices_IB()));
-    list.splice(list.begin(), mklist_buffered_shaded_mode(get_indices_IB(), *material));
+    list.splice(list.begin(), mklist_buffered_shaded_mode(get_indices_IB(), material));
     if (render_cover_south) {
         init_index_buffer(cover_south_IB, cover_south);
         list.splice(list.begin(), mklist_buffered_polygon_mode(cover_south_IB));
         list.splice(list.begin(), mklist_buffered_chess_mode(cover_south_IB));
-        list.splice(list.begin(), mklist_buffered_shaded_mode(cover_south_IB, *material));
+        list.splice(list.begin(), mklist_buffered_shaded_mode(cover_south_IB, material));
     }
     if (render_cover_north) {
         init_index_buffer(cover_north_IB, cover_north);
         list.splice(list.begin(), mklist_buffered_polygon_mode(cover_north_IB));
         list.splice(list.begin(), mklist_buffered_chess_mode(cover_north_IB));
-        list.splice(list.begin(), mklist_buffered_shaded_mode(cover_north_IB, *material));
+        list.splice(list.begin(), mklist_buffered_shaded_mode(cover_north_IB, material));
     }
 }
 
@@ -173,16 +173,16 @@ void RevolutionObject::make_current_raw_data_list(void) {
     list.clear();
     list.splice(list.begin(), mklist_raw_polygon_mode(indices));
     list.splice(list.begin(), mklist_raw_chess_mode(indices));
-    list.splice(list.begin(), mklist_raw_shaded_mode(indices, *material));
+    list.splice(list.begin(), mklist_raw_shaded_mode(indices, material));
     if (render_cover_south) {
         list.splice(list.begin(), mklist_raw_polygon_mode(cover_south));
         list.splice(list.begin(), mklist_raw_chess_mode(cover_south));
-        list.splice(list.begin(), mklist_raw_shaded_mode(cover_south, *material));
+        list.splice(list.begin(), mklist_raw_shaded_mode(cover_south, material));
     }
     if (render_cover_north) {
         list.splice(list.begin(), mklist_raw_polygon_mode(cover_north));
         list.splice(list.begin(), mklist_raw_chess_mode(cover_north));
-        list.splice(list.begin(), mklist_raw_shaded_mode(cover_north, *material));
+        list.splice(list.begin(), mklist_raw_shaded_mode(cover_north, material));
     }
 }
 

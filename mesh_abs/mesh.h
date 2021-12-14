@@ -8,11 +8,13 @@
 
 #include <set>
 #include <list>
+#include <memory>
 #include "_aux.h"
 #include "vertex_buffer.h"
 #include "index_buffer.h"
 #include "renderizable.h"
 #include "material.h"
+#include "texture.h"
 
 class Mesh3D : public Renderizable{
 public:
@@ -42,7 +44,7 @@ public:
     /* Métodos get para obtener la información a renderizar */
     inline const std::list<BufferedData>& get_buffer_data_list(void) const { return current_buffered_data_list; }
     inline const std::list<RawData>& get_raw_data_list(void) const { return current_raw_data_list; }
-    inline void set_material(const Material& m) { material = &m; }
+    inline void set_material(const Material& m) { material = m; }
 
 protected:
     Mesh3D();
@@ -87,7 +89,8 @@ protected:
     std::vector<Tupla3f> vertices;
     std::vector<Tupla3u> indices;
     std::vector<Tupla3f> vertices_normal;    // normal to every vertice in vertices
-    const Material* material;
+    Material material;
+    std::shared_ptr<const Texture> texture;
 
     std::list<BufferedData> current_buffered_data_list;
     std::list<RawData> current_raw_data_list;
