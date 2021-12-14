@@ -19,7 +19,7 @@ en_linux        := $(findstring Linux,$(uname))
 compiler        := $(if $(en_linux), g++, clang++ )
 sistoper        := $(if $(en_macos), macOS, Linux )
 
-cc_flags_common := -std=c++17 -Wall -g -I/usr/include -I. -I./include -I./primitives -I./gl_abs -I./gl_abs/transformations -I./gl_abs/lights -I./mesh_abs -I./renderers -I./escena -I./escena/menus -I./animation_abs -I./hierarchical_models/chipmunk
+cc_flags_common := -std=c++17 -Wall -g -I/usr/include -I. -I./include -I./primitives -I./gl_abs -I./gl_abs/transformations -I./gl_abs/lights -I./mesh_abs -I./renderers -I./escena -I./escena/menus -I./animation_abs -I./file_io -I./hierarchical_models/chipmunk
 cc_flags_linux  := -DLINUX
 cc_flags_macos  := -DMACOS
 cc_flags        := $(cc_flags_common) $(if $(en_linux), $(cc_flags_linux), $(cc_flags_macos))
