@@ -11,7 +11,7 @@
 #include <memory>
 #include "_aux.h"
 #include "vertex_buffer_object.h"
-#include "index_buffer.h"
+#include "index_buffer_object.h"
 #include "renderizable.h"
 #include "material.h"
 #include "texture.h"
@@ -63,9 +63,9 @@ protected:
     virtual void make_current_data_lists(void);
     virtual void make_current_buffered_data_list(void);
     virtual void make_current_raw_data_list(void);
-    std::list<BufferedData> mklist_buffered_polygon_mode(IndexBuffer& ib);
-    std::list<BufferedData> mklist_buffered_chess_mode(IndexBuffer& ib);
-    std::list<BufferedData> mklist_buffered_shaded_mode(IndexBuffer& ib, const Material& m);
+    std::list<BufferedData> mklist_buffered_polygon_mode(IndexBufferObject& ib);
+    std::list<BufferedData> mklist_buffered_chess_mode(IndexBufferObject& ib);
+    std::list<BufferedData> mklist_buffered_shaded_mode(IndexBufferObject& ib, const Material& m);
     std::list<RawData> mklist_raw_polygon_mode(const std::vector<Tupla3u>& i);
     std::list<RawData> mklist_raw_chess_mode(const std::vector<Tupla3u>& i);
     std::list<RawData> mklist_raw_shaded_mode(const std::vector<Tupla3u>& i, const Material& m);
@@ -73,14 +73,14 @@ protected:
     /* Getters para inicializar únicamente los VBO cuando los vayamos a utilizar */
     VertexBufferObject& get_vertices_VB(void);
     VertexBufferObject& get_vertices_normal_VB(void);
-    IndexBuffer& get_indices_IB(void);
+    IndexBufferObject& get_indices_IB(void);
     VertexBufferObject& get_color_fill_VB(void);
     VertexBufferObject& get_color_line_VB(void);
     VertexBufferObject& get_color_point_VB(void);
 
     /* Inicializa el [Vertex,Index]Buffer si no lo estaba ya antes */
     void init_vertex_buffer(VertexBufferObject& vb, const std::vector<Tupla3f>& v);
-    void init_index_buffer(IndexBuffer& ib, const std::vector<Tupla3u>& v);
+    void init_index_buffer(IndexBufferObject& ib, const std::vector<Tupla3u>& v);
 
     bool chess_enabled{false};
     bool shaded_enabled{false};
@@ -104,7 +104,7 @@ private:
 
     VertexBufferObject vertices_VB;
     VertexBufferObject vertices_normal_VB;
-    IndexBuffer indices_IB;
+    IndexBufferObject indices_IB;
     VertexBufferObject color_fill_VB;
     VertexBufferObject color_line_VB;
     VertexBufferObject color_point_VB;
@@ -119,7 +119,7 @@ private:
  */
 class Mesh3D::BufferedData {
     const VertexBufferObject& vertices;
-    const IndexBuffer& face_indices;
+    const IndexBufferObject& face_indices;
     const VertexBufferObject& color;
     const VertexBufferObject& vertices_normals;
     const Material& material;
@@ -129,7 +129,7 @@ class Mesh3D::BufferedData {
     int polygon_mode;
 
 public:
-    BufferedData(const VertexBufferObject& vertices, const IndexBuffer& faces, const VertexBufferObject& color, const VertexBufferObject& vertices_normals, const Material& m, int polygon_mode)
+    BufferedData(const VertexBufferObject& vertices, const IndexBufferObject& faces, const VertexBufferObject& color, const VertexBufferObject& vertices_normals, const Material& m, int polygon_mode)
         :vertices{vertices}, face_indices{faces}, color{color},
          vertices_normals{vertices_normals}, material{m},
          indices_offset{0}, indices_count{faces.get_num_indices()},
@@ -139,7 +139,7 @@ public:
     inline const VertexBufferObject& get_vertices(void) const { return vertices; }
     inline const VertexBufferObject& get_vertices_normals(void) const { return vertices_normals; }
 
-    inline const IndexBuffer& get_indices(void) const { return face_indices; }
+    inline const IndexBufferObject& get_indices(void) const { return face_indices; }
     inline unsigned get_indices_offset(void) const { return indices_offset; }
     inline unsigned get_indices_count(void) const { return indices_count; }
     inline void set_face_indices_offset(unsigned offset, unsigned count) { indices_offset = offset; indices_count = count; }

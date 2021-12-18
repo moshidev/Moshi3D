@@ -26,7 +26,7 @@ static void set_normal_pointer(const VertexBufferObject& vb) {
     vb.unbind();
 }
 
-static void draw_elements_from_indices(const IndexBuffer& ib, GLsizei count, GLsizei offset=0) {
+static void draw_elements_from_indices(const IndexBufferObject& ib, GLsizei count, GLsizei offset=0) {
     ib.bind();
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (void*)(offset*sizeof(unsigned int)));
     ib.unbind();

@@ -87,7 +87,7 @@ void Mesh3D::make_current_raw_data_list(void) {
     }
 }
 
-std::list<Mesh3D::BufferedData> Mesh3D::mklist_buffered_polygon_mode(IndexBuffer& ib) {
+std::list<Mesh3D::BufferedData> Mesh3D::mklist_buffered_polygon_mode(IndexBufferObject& ib) {
     const Material& m = Material::get_default();
     std::list<Mesh3D::BufferedData> list;
     for (const auto& mode : polygon_modes) {
@@ -108,7 +108,7 @@ std::list<Mesh3D::BufferedData> Mesh3D::mklist_buffered_polygon_mode(IndexBuffer
     return list;
 }
 
-std::list<Mesh3D::BufferedData> Mesh3D::mklist_buffered_chess_mode(IndexBuffer& ib) {
+std::list<Mesh3D::BufferedData> Mesh3D::mklist_buffered_chess_mode(IndexBufferObject& ib) {
     const Material& m = Material::get_default();
     std::list<Mesh3D::BufferedData> list;
     if (chess_enabled) {
@@ -129,7 +129,7 @@ std::list<Mesh3D::BufferedData> Mesh3D::mklist_buffered_chess_mode(IndexBuffer& 
     return list;
 }
 
-std::list<Mesh3D::BufferedData> Mesh3D::mklist_buffered_shaded_mode(IndexBuffer& ib, const Material& m) {
+std::list<Mesh3D::BufferedData> Mesh3D::mklist_buffered_shaded_mode(IndexBufferObject& ib, const Material& m) {
     std::list<Mesh3D::BufferedData> list;
     if (shaded_enabled) {
         list.emplace_back(get_vertices_VB(), ib, get_color_fill_VB(), get_vertices_normal_VB(), m, GL_FILL);
@@ -230,7 +230,7 @@ void Mesh3D::init_vertex_buffer(VertexBufferObject& vb, const std::vector<Tupla3
     }
 }
 
-void Mesh3D::init_index_buffer(IndexBuffer& ib, const std::vector<Tupla3u>& v) {
+void Mesh3D::init_index_buffer(IndexBufferObject& ib, const std::vector<Tupla3u>& v) {
     if (!ib.usable()) {
         ib.set_indices(v.size()*3, v.data());
     }
@@ -246,7 +246,7 @@ VertexBufferObject& Mesh3D::get_vertices_normal_VB(void) {
     return vertices_normal_VB;
 }
 
-IndexBuffer& Mesh3D::get_indices_IB(void) {
+IndexBufferObject& Mesh3D::get_indices_IB(void) {
     init_index_buffer(indices_IB, indices);
     return indices_IB;
 }

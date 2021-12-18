@@ -3,32 +3,32 @@
  * GPLv3 License.
  */
 
-#include "index_buffer.h"
+#include "index_buffer_object.h"
 
-IndexBuffer::IndexBuffer(bool gen_buffer) {
+IndexBufferObject::IndexBufferObject(bool gen_buffer) {
     if (gen_buffer) {
         glGenBuffers(1, &id);
     }
 }
 
-IndexBuffer::IndexBuffer(GLsizei count, const GLvoid* data, GLenum usage) {
+IndexBufferObject::IndexBufferObject(GLsizei count, const GLvoid* data, GLenum usage) {
     glGenBuffers(1, &id);
     set_indices(count, data, usage);
 }
 
-IndexBuffer::~IndexBuffer() {
+IndexBufferObject::~IndexBufferObject() {
     glDeleteBuffers(1, &id);
 }
 
-void IndexBuffer::bind(void) const {
+void IndexBufferObject::bind(void) const {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
 }
 
-void IndexBuffer::unbind(void) const {
+void IndexBufferObject::unbind(void) const {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void IndexBuffer::set_indices(GLsizei count, const GLvoid* data, GLenum usage) {
+void IndexBufferObject::set_indices(GLsizei count, const GLvoid* data, GLenum usage) {
     if (!id) {
         glGenBuffers(1, &id);
     }

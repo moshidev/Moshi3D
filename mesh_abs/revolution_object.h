@@ -25,8 +25,8 @@ protected:
     RevolutionObject();
     virtual void init_normal_vectors(void);
 
-    IndexBuffer cover_south_IB;
-    IndexBuffer cover_north_IB;
+    IndexBufferObject cover_south_IB;
+    IndexBufferObject cover_north_IB;
     std::vector<Tupla3u> cover_south;
     std::vector<Tupla3u> cover_north;
     std::vector<Tupla3f> cover_south_normal;
