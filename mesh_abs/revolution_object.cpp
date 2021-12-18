@@ -8,13 +8,13 @@ RevolutionObject::RevolutionObject(const std::string& ifile, int num_instances, 
     std::vector<Tupla3f> revolution_coordinates;
     ply::read_vertices(ifile, revolution_coordinates);
     make_revolution_surface(revolution_coordinates, num_instances, make_covers, make_covers);
-    init_color(vertices.size());
+    init_color(vertices.data.size());
     init_normal_vectors();
 }
 
 RevolutionObject::RevolutionObject(const std::vector<Tupla3f>& revolution_coordinates, int num_instances, bool make_covers) {
     make_revolution_surface(revolution_coordinates, num_instances, make_covers, make_covers);
-    init_color(vertices.size());
+    init_color(vertices.data.size());
     init_normal_vectors();
 }
 
@@ -22,13 +22,13 @@ RevolutionObject::RevolutionObject(const std::string& ifile, int num_instances, 
     std::vector<Tupla3f> revolution_coordinates;
     ply::read_vertices(ifile, revolution_coordinates);
     make_revolution_surface(revolution_coordinates, num_instances, make_cover_south, make_cover_north, axis);
-    init_color(vertices.size());
+    init_color(vertices.data.size());
     init_normal_vectors();
 }
 
 RevolutionObject::RevolutionObject(const std::vector<Tupla3f>& revolution_coordinates, int num_instances, bool make_cover_south, bool make_cover_north, int axis) {
     make_revolution_surface(revolution_coordinates, num_instances, make_cover_south, make_cover_north, axis);
-    init_color(vertices.size());
+    init_color(vertices.data.size());
     init_normal_vectors();
 }
 
@@ -67,45 +67,45 @@ void RevolutionObject::revolution_surface_make_geometry(std::vector<Tupla3f>& rv
         double _cos = cos(angle);
         for (const auto& c : rv) {
             if (eje == 0)       // X axis
-                vertices.emplace_back(c[0], c[1]*_cos-c[2]*_sin, c[1]*_sin+c[2]*_cos);
+                vertices.data.emplace_back(c[0], c[1]*_cos-c[2]*_sin, c[1]*_sin+c[2]*_cos);
             else if (eje == 1)  // Y axis
-                vertices.emplace_back(c[0]*_cos+c[2]*_sin, c[1], -c[0]*_sin+c[2]*_cos);
+                vertices.data.emplace_back(c[0]*_cos+c[2]*_sin, c[1], -c[0]*_sin+c[2]*_cos);
             else                // Z axis
-                vertices.emplace_back(c[0]*_cos-c[1]*_sin, c[0]*_sin+c[1]*_cos, c[2]);
+                vertices.data.emplace_back(c[0]*_cos-c[1]*_sin, c[0]*_sin+c[1]*_cos, c[2]);
         }
     }
 }
 
 void RevolutionObject::revolution_surface_make_topology(const std::vector<Tupla3f>& rv, int num_instances) {
     const int midpoint = num_instances*(rv.size()-1);
-    indices.resize(2*midpoint);
+    indices.data.resize(2*midpoint);
 
     for (int i = 0; i < num_instances; i++) {
         for (int j = 0; j < (rv.size()-1); j++) {
             int a = i*rv.size()+j;                      // Vértice columna i
             int b = ((i+1)%num_instances)*rv.size()+j;  // Vértice columna i+1
             int offset = i*(rv.size()-1) + j;
-            indices[offset] = {a, b, b+1};
-            indices[offset+midpoint] = {a, b+1, a+1};   // Los impares los insertamos a partir de la mitad para el modo ajedrez
+            indices.data[offset] = {a, b, b+1};
+            indices.data[offset+midpoint] = {a, b+1, a+1};   // Los impares los insertamos a partir de la mitad para el modo ajedrez
         }
     }
 }
 
 void RevolutionObject::covers_make_south(const Tupla3f& south, int num_instances) {
-    vertices.push_back(south);
-    covers_make_topology(cover_south, vertices.size()-1, num_instances, 0, false);
+    vertices.data.push_back(south);
+    covers_make_topology(cover_south_indices.data, vertices.data.size()-1, num_instances, 0, false);
 }
 
 void RevolutionObject::covers_make_north(const Tupla3f& north, int num_instances, int height) {
-    vertices.push_back(north);
-    covers_make_topology(cover_north, vertices.size()-1, num_instances, height, true);
+    vertices.data.push_back(north);
+    covers_make_topology(cover_north_indices.data, vertices.data.size()-1, num_instances, height, true);
 }
 
 void RevolutionObject::covers_make_topology(std::vector<Tupla3u>& ci, int shared_vertice_index, int num_instances, int height_offset,bool clockwise) {
     int a, b;
     int& v1 = clockwise ? a : b;
     int& v2 = clockwise ? b : a;
-    const int distance = vertices.size() / num_instances;
+    const int distance = vertices.data.size() / num_instances;
 
     ci.resize(num_instances);
     for (int i = 0; i < 2; i++) {
@@ -136,58 +136,41 @@ void RevolutionObject::covers_extract_pole(std::vector<Tupla3f>& rv, std::vector
 }
 
 void RevolutionObject::init_normal_vectors(void) {
+    std::vector<Tupla3f> cover_south_indices_normal;
+    std::vector<Tupla3f> cover_north_indices_normal;
     std::vector<Tupla3f> indices_normal;
-    compute_normal_faces(indices_normal, indices);
-    compute_normal_faces(cover_south_normal, cover_south);
-    compute_normal_faces(cover_north_normal, cover_north);
-    sum_normal_to_vertices(indices_normal, indices);
-    sum_normal_to_vertices(cover_south_normal, cover_south);
-    sum_normal_to_vertices(cover_north_normal, cover_north);
-    normalize_vertices();
+    compute_normal_faces(indices_normal, indices.data);
+    compute_normal_faces(cover_south_indices_normal, cover_south_indices.data);
+    compute_normal_faces(cover_north_indices_normal, cover_north_indices.data);
+    sum_normal_faces_to_vertices_normals(indices_normal, indices.data);
+    sum_normal_faces_to_vertices_normals(cover_south_indices_normal, cover_south_indices.data);
+    sum_normal_faces_to_vertices_normals(cover_north_indices_normal, cover_north_indices.data);
+    normalize_vertices_normals();
 }
 
-void RevolutionObject::make_current_buffered_data_list(void) {
-    auto& list = current_buffered_data_list;
+void RevolutionObject::make_current_data_list(void) {
+    auto& cl = current_data_list;
 
-    list.clear();
-    list.splice(list.begin(), mklist_buffered_polygon_mode(get_indices_IB()));
-    list.splice(list.begin(), mklist_buffered_chess_mode(get_indices_IB()));
-    list.splice(list.begin(), mklist_buffered_shaded_mode(get_indices_IB(), material));
+    cl.clear();
+    cl.splice(cl.begin(), mklist_polygon_mode(indices));
+    cl.splice(cl.begin(), mklist_chess_mode(indices));
+    cl.splice(cl.begin(), mklist_shaded_mode(indices, material));
     if (render_cover_south) {
-        init_index_buffer(cover_south_IB, cover_south);
-        list.splice(list.begin(), mklist_buffered_polygon_mode(cover_south_IB));
-        list.splice(list.begin(), mklist_buffered_chess_mode(cover_south_IB));
-        list.splice(list.begin(), mklist_buffered_shaded_mode(cover_south_IB, material));
+        init_index_buffer(cover_south_indices);
+        cl.splice(cl.begin(), mklist_polygon_mode(cover_south_indices));
+        cl.splice(cl.begin(), mklist_chess_mode(cover_south_indices));
+        cl.splice(cl.begin(), mklist_shaded_mode(cover_south_indices, material));
     }
     if (render_cover_north) {
-        init_index_buffer(cover_north_IB, cover_north);
-        list.splice(list.begin(), mklist_buffered_polygon_mode(cover_north_IB));
-        list.splice(list.begin(), mklist_buffered_chess_mode(cover_north_IB));
-        list.splice(list.begin(), mklist_buffered_shaded_mode(cover_north_IB, material));
-    }
-}
-
-void RevolutionObject::make_current_raw_data_list(void) {
-    auto& list = current_raw_data_list;
-
-    list.clear();
-    list.splice(list.begin(), mklist_raw_polygon_mode(indices));
-    list.splice(list.begin(), mklist_raw_chess_mode(indices));
-    list.splice(list.begin(), mklist_raw_shaded_mode(indices, material));
-    if (render_cover_south) {
-        list.splice(list.begin(), mklist_raw_polygon_mode(cover_south));
-        list.splice(list.begin(), mklist_raw_chess_mode(cover_south));
-        list.splice(list.begin(), mklist_raw_shaded_mode(cover_south, material));
-    }
-    if (render_cover_north) {
-        list.splice(list.begin(), mklist_raw_polygon_mode(cover_north));
-        list.splice(list.begin(), mklist_raw_chess_mode(cover_north));
-        list.splice(list.begin(), mklist_raw_shaded_mode(cover_north, material));
+        init_index_buffer(cover_north_indices);
+        cl.splice(cl.begin(), mklist_polygon_mode(cover_north_indices));
+        cl.splice(cl.begin(), mklist_chess_mode(cover_north_indices));
+        cl.splice(cl.begin(), mklist_shaded_mode(cover_north_indices, material));
     }
 }
 
 void RevolutionObject::enable_covers_visibility(bool b) {
-    render_cover_south = cover_south.empty() ? false : (force_cover_south ? true : b);
-    render_cover_north = cover_north.empty() ? false : (force_cover_north ? true : b);
+    render_cover_south = cover_south_indices.data.empty() ? false : (force_cover_south ? true : b);
+    render_cover_north = cover_north_indices.data.empty() ? false : (force_cover_north ? true : b);
     make_current_data_lists();
 }

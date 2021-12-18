@@ -28,21 +28,22 @@ void RendererImmediate::render(const Mesh3D& m) const {
     glEnableClientState(GL_NORMAL_ARRAY);
 
     bool lighting_enabled = Light::is_lighting_enabled();
-    for (const auto& r : m.get_raw_data_list()) {
-        update_lighting_status(lighting_enabled, r.get_affected_by_light());
-        glPolygonMode(GL_FRONT_AND_BACK, r.get_polygon_mode());
+    for (const auto& r : m.get_data_list()) {
+        update_lighting_status(lighting_enabled, r.affected_by_light);
+        glPolygonMode(GL_FRONT_AND_BACK, r.polygon_mode);
 
-        glVertexPointer(3, GL_FLOAT, 0, r.get_vertices_data().data());
-        if (Light::is_lighting_enabled()) {
-            glNormalPointer(GL_FLOAT, 0, r.get_vertices_normals_data().data());
-            r.get_material().set_current();
+        glVertexPointer(3, GL_FLOAT, 0, r.vertices.data.data());
+        glNormalPointer(GL_FLOAT, 0, r.vertices_normals.data.data());
+
+        if (r.color) {
+            glColorPointer(3, GL_FLOAT, 0, r.color->data.data());
         }
-        else {
-            glColorPointer(3, GL_FLOAT, 0, r.get_color_data().data());
+        if (r.material) {
+            r.material->set_current();
         }
         
-        glDrawElements(GL_TRIANGLES, r.get_indices_count(), GL_UNSIGNED_INT, r.get_indices_data().data() + r.get_indices_offset()/3);
-        update_lighting_status(lighting_enabled, r.get_affected_by_light());
+        glDrawElements(GL_TRIANGLES, r.indices_count, GL_UNSIGNED_INT, r.face_indices.data.data() + r.indices_offset/3);
+        update_lighting_status(lighting_enabled, r.affected_by_light);
     }
 
     glDisableClientState(GL_VERTEX_ARRAY);

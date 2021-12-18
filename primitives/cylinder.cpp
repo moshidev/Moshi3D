@@ -8,6 +8,6 @@ Cylinder::Cylinder(int num_vertices_side_face, int num_instances, float height, 
         perfil.emplace_back(radius, i*d, 0);
     }
     make_revolution_surface(perfil, num_instances, true, true, Y_axis);
-    init_color(vertices.size());
+    init_color(vertices.data.size());
     init_normal_vectors();
 }

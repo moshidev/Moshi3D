@@ -10,14 +10,15 @@
 #include <list>
 #include <memory>
 #include "_aux.h"
-#include "vertex_buffer_object.h"
-#include "index_buffer_object.h"
+#include "vertex_buffer.hpp"
+#include "index_buffer.h"
 #include "renderizable.h"
 #include "material.h"
 #include "texture.h"
 
 class Mesh3D : public Renderizable{
 public:
+    struct Data;
     class BufferedData;
     class RawData;
 
@@ -42,8 +43,7 @@ public:
     inline bool is_shade_mode_enabled(void) const { return shaded_enabled; }
 
     /* Métodos get para obtener la información a renderizar */
-    inline const std::list<BufferedData>& get_buffer_data_list(void) const { return current_buffered_data_list; }
-    inline const std::list<RawData>& get_raw_data_list(void) const { return current_raw_data_list; }
+    inline const std::list<Data>& get_data_list(void) const { return current_data_list; }
     inline void set_material(const Material& m) { material = m; }
 
 protected:
@@ -53,65 +53,89 @@ protected:
     void init_color(unsigned n_vertices);
     /* Inicializa la lista de normales a los vértices y a las caras */
     virtual void init_normal_vectors(void);
+    template<typename _T>
+    void init_vertex_buffer(VertexBuffer<_T>& vb);
+    void init_index_buffer(IndexBuffer& ib);
 
 
     void compute_normal_faces(std::vector<Tupla3f>& nf_dst, const std::vector<Tupla3u>& indices);
-    void sum_normal_to_vertices(const std::vector<Tupla3f>& nf, const std::vector<Tupla3u>& indices);
-    void normalize_vertices(void);
+    void sum_normal_faces_to_vertices_normals(const std::vector<Tupla3f>& nf, const std::vector<Tupla3u>& indices);
+    void normalize_vertices_normals(void);
 
     /* Crea la estructura de los datos a exportar para renderizar. Lo almacena en current_[buffered,raw]_data_list */
-    virtual void make_current_data_lists(void);
-    virtual void make_current_buffered_data_list(void);
-    virtual void make_current_raw_data_list(void);
-    std::list<BufferedData> mklist_buffered_polygon_mode(IndexBufferObject& ib);
-    std::list<BufferedData> mklist_buffered_chess_mode(IndexBufferObject& ib);
-    std::list<BufferedData> mklist_buffered_shaded_mode(IndexBufferObject& ib, const Material& m);
-    std::list<RawData> mklist_raw_polygon_mode(const std::vector<Tupla3u>& i);
-    std::list<RawData> mklist_raw_chess_mode(const std::vector<Tupla3u>& i);
-    std::list<RawData> mklist_raw_shaded_mode(const std::vector<Tupla3u>& i, const Material& m);
+    virtual void make_current_data_list(void);
+    std::list<Data> mklist_polygon_mode(IndexBuffer& ib);
+    std::list<Data> mklist_chess_mode(IndexBuffer& ib);
+    std::list<Data> mklist_shaded_mode(IndexBuffer& ib, const Material& m);
 
-    /* Getters para inicializar únicamente los VBO cuando los vayamos a utilizar */
-    VertexBufferObject& get_vertices_VB(void);
-    VertexBufferObject& get_vertices_normal_VB(void);
-    IndexBufferObject& get_indices_IB(void);
-    VertexBufferObject& get_color_fill_VB(void);
-    VertexBufferObject& get_color_line_VB(void);
-    VertexBufferObject& get_color_point_VB(void);
-
-    /* Inicializa el [Vertex,Index]Buffer si no lo estaba ya antes */
-    void init_vertex_buffer(VertexBufferObject& vb, const std::vector<Tupla3f>& v);
-    void init_index_buffer(IndexBufferObject& ib, const std::vector<Tupla3u>& v);
+    void make_current_data_lists(void);
 
     bool chess_enabled{false};
     bool shaded_enabled{false};
     std::set<int> polygon_modes;
 
-    std::vector<Tupla3f> vertices;
-    std::vector<Tupla3u> indices;
-    std::vector<Tupla3f> vertices_normal;    // normal to every vertice in vertices
+    VertexBuffer<Tupla3f> vertices;
+    VertexBuffer<Tupla3f> vertices_normal;
+    IndexBuffer indices;
+    VertexBuffer<Tupla3f> color_fill;
+    VertexBuffer<Tupla3f> color_line;
+    VertexBuffer<Tupla3f> color_point;
+    VertexBuffer<Tupla3f> color_chess_a;
+    VertexBuffer<Tupla3f> color_chess_b;
     Material material;
     std::shared_ptr<const Texture> texture;
 
-    std::list<BufferedData> current_buffered_data_list;
-    std::list<RawData> current_raw_data_list;
-
-private:
-    std::vector<Tupla3f> color_fill;
-    std::vector<Tupla3f> color_line;
-    std::vector<Tupla3f> color_point;
-    std::vector<Tupla3f> color_chess_a;
-    std::vector<Tupla3f> color_chess_b;
-
-    VertexBufferObject vertices_VB;
-    VertexBufferObject vertices_normal_VB;
-    IndexBufferObject indices_IB;
-    VertexBufferObject color_fill_VB;
-    VertexBufferObject color_line_VB;
-    VertexBufferObject color_point_VB;
-    VertexBufferObject color_chess_a_VB;
-    VertexBufferObject color_chess_b_VB;
+    std::list<Data> current_data_list;
 };
 
+struct Mesh3D::Data {
+    const VertexBuffer<Tupla3f>& vertices;
+    const VertexBuffer<Tupla3f>& vertices_normals;
+
+    const IndexBuffer& face_indices;
+    unsigned indices_offset;
+    unsigned indices_count;
+
+    const VertexBuffer<Tupla3f>* color {nullptr};
+    const Material* material {nullptr};
+    
+    bool affected_by_light;
+    const int polygon_mode;
+    
+    Data() = delete;
+    Data(const Data& d) = delete;
+
+    inline void set_face_indices_offset(unsigned offset, unsigned count) {
+        indices_offset = offset; indices_count = count;
+    }
+
+    Data(const VertexBuffer<Tupla3f>& vertices, const VertexBuffer<Tupla3f>& vertices_normals, const IndexBuffer& face_indices, int polygon_mode, const VertexBuffer<Tupla3f>& color, const Material& material)
+    : Data{vertices, vertices_normals, face_indices, polygon_mode}
+    {
+        this->color = &color;
+        this->material = &material;
+    }
+
+    Data(const VertexBuffer<Tupla3f>& vertices, const VertexBuffer<Tupla3f>& vertices_normals, const IndexBuffer& face_indices, int polygon_mode, const VertexBuffer<Tupla3f>& color)
+    : Data{vertices, vertices_normals, face_indices, polygon_mode}
+    {
+        this->color = &color;
+        affected_by_light = false;
+    }
+
+    Data(const VertexBuffer<Tupla3f>& vertices, const VertexBuffer<Tupla3f>& vertices_normals, const IndexBuffer& face_indices, int polygon_mode, const Material& material)
+    : Data{vertices, vertices_normals, face_indices, polygon_mode}
+    {
+        this->material = &material;
+    }
+
+private:
+    Data(const VertexBuffer<Tupla3f>& vertices, const VertexBuffer<Tupla3f>& vertices_normals, const IndexBuffer& face_indices, int polygon_mode)
+    : vertices{vertices}, vertices_normals{vertices_normals}, face_indices{face_indices},
+        indices_offset{0}, indices_count{face_indices.get_num_indices()},
+        affected_by_light{true}, polygon_mode{polygon_mode}
+    {   }
+};
 
 /**
  * BufferedData contiene la información necesaria para renderizar un objeto usando

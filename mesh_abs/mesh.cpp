@@ -54,214 +54,116 @@ void Mesh3D::enable_shaded_mode(bool b) {
     make_current_data_lists();
 }
 
+template<typename _T>
+void Mesh3D::init_vertex_buffer(VertexBuffer<_T>& vb) {
+    if (!vb.usable()) {
+        vb.set_vb_data();
+    }
+}
+
+void Mesh3D::init_index_buffer(IndexBuffer& ib) {
+    if (!ib.usable()) {
+        ib.set_ib_data();
+    }
+}
+
 void Mesh3D::make_current_data_lists(void) {
-    make_current_buffered_data_list();
-    make_current_raw_data_list();
+    init_vertex_buffer<Tupla3f>(vertices);
+    init_vertex_buffer<Tupla3f>(vertices_normal);
+    init_vertex_buffer<Tupla3f>(color_fill);
+    init_vertex_buffer<Tupla3f>(color_line);
+    init_vertex_buffer<Tupla3f>(color_point);
+    init_vertex_buffer<Tupla3f>(color_chess_a);
+    init_vertex_buffer<Tupla3f>(color_chess_b);
+    init_index_buffer(indices);
+    make_current_data_list();
 }
 
-void Mesh3D::make_current_buffered_data_list(void) {
-    auto& list = current_buffered_data_list;
-    std::vector<std::list<Mesh3D::BufferedData>> render_lists {
-        mklist_buffered_polygon_mode(get_indices_IB()),
-        mklist_buffered_chess_mode(get_indices_IB()),
-        mklist_buffered_shaded_mode(get_indices_IB(), material)
-    };
-    
-    list.clear();
-    for (auto& l : render_lists) {
-        list.splice(list.begin(), l);
-    }
+void Mesh3D::make_current_data_list(void) {
+    auto& cl = current_data_list;
+    cl.clear();
+    cl.splice(cl.begin(), mklist_polygon_mode(indices));
+    cl.splice(cl.begin(), mklist_chess_mode(indices));
+    cl.splice(cl.begin(), mklist_shaded_mode(indices, material));
 }
 
-void Mesh3D::make_current_raw_data_list(void) {
-    auto& list = current_raw_data_list;
-    std::vector<std::list<Mesh3D::RawData>> render_lists {
-        mklist_raw_polygon_mode(indices),
-        mklist_raw_chess_mode(indices),
-        mklist_raw_shaded_mode(indices, material)
-    };
-
-    list.clear();
-    for (auto& l : render_lists) {
-        list.splice(list.begin(), l);
-    }
-}
-
-std::list<Mesh3D::BufferedData> Mesh3D::mklist_buffered_polygon_mode(IndexBufferObject& ib) {
-    const Material& m = Material::get_default();
-    std::list<Mesh3D::BufferedData> list;
+std::list<Mesh3D::Data> Mesh3D::mklist_polygon_mode(IndexBuffer& ib) {
+    std::list<Mesh3D::Data> list;
     for (const auto& mode : polygon_modes) {
         switch (mode)
         {
         case GL_FILL:
-            list.emplace_back(get_vertices_VB(), ib, get_color_fill_VB(), get_vertices_normal_VB(), m, GL_FILL);
+            list.emplace_back(vertices, vertices_normal, ib, GL_FILL, color_fill);
             break;
         case GL_LINE:
-            list.emplace_back(get_vertices_VB(), ib, get_color_line_VB(), get_vertices_normal_VB(), m, GL_LINE);
+            list.emplace_back(vertices, vertices_normal, ib, GL_LINE, color_line);
             break;
         case GL_POINT:
-            list.emplace_back(get_vertices_VB(), ib, get_color_point_VB(), get_vertices_normal_VB(), m, GL_POINT);
+            list.emplace_back(vertices, vertices_normal, ib, GL_POINT, color_point);
         }
-
-        list.back().set_affected_by_light(false);
     }
     return list;
 }
 
-std::list<Mesh3D::BufferedData> Mesh3D::mklist_buffered_chess_mode(IndexBufferObject& ib) {
-    const Material& m = Material::get_default();
-    std::list<Mesh3D::BufferedData> list;
-    if (chess_enabled) {
-        init_vertex_buffer(color_chess_a_VB, color_chess_a);
-        init_vertex_buffer(color_chess_b_VB, color_chess_b);
-        int mid = ib.get_num_indices()/2;
+std::list<Mesh3D::Data> Mesh3D::mklist_chess_mode(IndexBuffer& ib) {
+    std::list<Mesh3D::Data> list;
+     if (chess_enabled) {
+        int mid = ib.data.size()*3/2;
         const int& count = mid;
+        list.emplace_back(vertices, vertices_normal, ib, GL_FILL, color_chess_a);
+        list.back().set_face_indices_offset(0, mid);
 
-        list.emplace_back(get_vertices_VB(), ib, color_chess_a_VB, get_vertices_normal_VB(), m, GL_FILL);
-        list.back().set_face_indices_offset(0, count);
-        list.back().set_affected_by_light(false);
-
-        list.emplace_back(get_vertices_VB(), ib, color_chess_b_VB, get_vertices_normal_VB(), m, GL_FILL);
+        list.emplace_back(vertices, vertices_normal, ib, GL_FILL, color_chess_b);
         list.back().set_face_indices_offset(mid, count);
-        list.back().set_affected_by_light(false);
-    }
-
-    return list;
-}
-
-std::list<Mesh3D::BufferedData> Mesh3D::mklist_buffered_shaded_mode(IndexBufferObject& ib, const Material& m) {
-    std::list<Mesh3D::BufferedData> list;
-    if (shaded_enabled) {
-        list.emplace_back(get_vertices_VB(), ib, get_color_fill_VB(), get_vertices_normal_VB(), m, GL_FILL);
     }
     return list;
 }
 
-std::list<Mesh3D::RawData> Mesh3D::mklist_raw_polygon_mode(const std::vector<Tupla3u>& i) {
-    const Material& m = Material::get_default();
-    std::list<Mesh3D::RawData> l;
-    for (const auto& mode : polygon_modes) {
-        switch (mode)
-        {
-        case GL_FILL:
-            l.emplace_back(vertices, i, color_fill, vertices_normal, m, GL_FILL);
-            break;
-        case GL_LINE:
-            l.emplace_back(vertices, i, color_line, vertices_normal, m, GL_LINE);
-            break;
-        case GL_POINT:
-            l.emplace_back(vertices, i, color_point, vertices_normal, m, GL_POINT);
-        }
-
-        l.back().set_affected_by_light(false);
-    }
-    return l;
-}
-
-std::list<Mesh3D::RawData> Mesh3D::mklist_raw_chess_mode(const std::vector<Tupla3u>& i) {
-    const Material& m = Material::get_default();
-    std::list<Mesh3D::RawData> l;
-    if (chess_enabled) {
-        int mid = i.size()*3/2;
-        const int& count = mid;
-        l.emplace_back(vertices, i, color_chess_a, vertices_normal, m, GL_FILL);
-        l.back().set_face_indices_offset(0, mid);
-        l.back().set_affected_by_light(false);
-
-        l.emplace_back(vertices, i, color_chess_b, vertices_normal, m, GL_FILL);
-        l.back().set_face_indices_offset(mid, count);
-        l.back().set_affected_by_light(false);
-    }
-    return l;
-}
-
-std::list<Mesh3D::RawData> Mesh3D::mklist_raw_shaded_mode(const std::vector<Tupla3u>& i, const Material& m) {
-    std::list<Mesh3D::RawData> l;
+std::list<Mesh3D::Data> Mesh3D::mklist_shaded_mode(IndexBuffer& ib, const Material& m) {
+    std::list<Mesh3D::Data> list;
     if (shaded_enabled) {
-        l.emplace_back(vertices, i, color_fill, vertices_normal, m, GL_FILL);
+        list.emplace_back(vertices, vertices_normal, ib, GL_FILL, m);
     }
-    return l;
+    return list;
+}
+
+void Mesh3D::init_normal_vectors(void) {
+    std::vector<Tupla3f> indices_normal;
+    compute_normal_faces(indices_normal, indices.data);
+    sum_normal_faces_to_vertices_normals(indices_normal, indices.data);
+    normalize_vertices_normals();  
 }
 
 void Mesh3D::init_color(unsigned n_vertices) {
-    color_fill.assign(n_vertices, {0.25, 0.5, 0.75});
-    color_line.assign(n_vertices, {1.0, 0.0, 0.0});
-    color_point.assign(n_vertices, {0.0, 1.0, 0.0});
-    color_chess_a.assign(n_vertices, {0.75, 0.25, 0.0});
-    color_chess_b.assign(n_vertices, {0.25, 0.75, 0.0});
+    color_fill.data.assign(n_vertices, {0.25, 0.5, 0.75});
+    color_line.data.assign(n_vertices, {1.0, 0.0, 0.0});
+    color_point.data.assign(n_vertices, {0.0, 1.0, 0.0});
+    color_chess_a.data.assign(n_vertices, {0.75, 0.25, 0.0});
+    color_chess_b.data.assign(n_vertices, {0.25, 0.75, 0.0});
 }
 
 void Mesh3D::compute_normal_faces(std::vector<Tupla3f>& indices_normal, const std::vector<Tupla3u>& indices) {
     indices_normal.clear();
     for (auto& f : indices) {
-        Tupla3f a = vertices[f(1)] - vertices[f(0)];
-        Tupla3f b = vertices[f(2)] - vertices[f(0)];
+        Tupla3f a = vertices.data[f(1)] - vertices.data[f(0)];
+        Tupla3f b = vertices.data[f(2)] - vertices.data[f(0)];
         indices_normal.emplace_back(a.cross(b).normalized());
     }
 }
 
-void Mesh3D::sum_normal_to_vertices(const std::vector<Tupla3f>& indices_normal, const std::vector<Tupla3u>& indices) {
-    vertices_normal.resize(vertices.size(), {0,0,0});
+void Mesh3D::sum_normal_faces_to_vertices_normals(const std::vector<Tupla3f>& indices_normal, const std::vector<Tupla3u>& indices) {
+    vertices_normal.data.resize(vertices.data.size(), {0,0,0});
     int i = 0;
     for (auto& f : indices) {
-        vertices_normal[f(0)] = vertices_normal[f(0)] + indices_normal[i];
-        vertices_normal[f(1)] = vertices_normal[f(1)] + indices_normal[i];
-        vertices_normal[f(2)] = vertices_normal[f(2)] + indices_normal[i];
+        vertices_normal.data[f(0)] = vertices_normal.data[f(0)] + indices_normal[i];
+        vertices_normal.data[f(1)] = vertices_normal.data[f(1)] + indices_normal[i];
+        vertices_normal.data[f(2)] = vertices_normal.data[f(2)] + indices_normal[i];
         i++;
     }
 }
 
-void Mesh3D::normalize_vertices(void) {
-    for (auto& v : vertices_normal) {
+void Mesh3D::normalize_vertices_normals(void) {
+    for (auto& v : vertices_normal.data) {
         v = v.normalized();
     }
-}
-
-void Mesh3D::init_normal_vectors(void) {
-    std::vector<Tupla3f> indices_normal;
-    compute_normal_faces(indices_normal, indices);
-    sum_normal_to_vertices(indices_normal, indices);
-    normalize_vertices();  
-}
-
-void Mesh3D::init_vertex_buffer(VertexBufferObject& vb, const std::vector<Tupla3f>& v) {
-    if (!vb.usable()) {
-        vb.set_data(v.size()*sizeof(Tupla3f), v.data());
-    }
-}
-
-void Mesh3D::init_index_buffer(IndexBufferObject& ib, const std::vector<Tupla3u>& v) {
-    if (!ib.usable()) {
-        ib.set_indices(v.size()*3, v.data());
-    }
-}
-
-VertexBufferObject& Mesh3D::get_vertices_VB(void) {
-    init_vertex_buffer(vertices_VB, vertices);
-    return vertices_VB;
-}
-
-VertexBufferObject& Mesh3D::get_vertices_normal_VB(void) {
-    init_vertex_buffer(vertices_normal_VB, vertices_normal);
-    return vertices_normal_VB;
-}
-
-IndexBufferObject& Mesh3D::get_indices_IB(void) {
-    init_index_buffer(indices_IB, indices);
-    return indices_IB;
-}
-
-VertexBufferObject& Mesh3D::get_color_fill_VB(void) {
-    init_vertex_buffer(color_fill_VB, color_fill);
-    return color_fill_VB;
-}
-
-VertexBufferObject& Mesh3D::get_color_line_VB(void) {
-    init_vertex_buffer(color_line_VB, color_line);
-    return color_line_VB;
-}
-
-VertexBufferObject& Mesh3D::get_color_point_VB(void) {
-    init_vertex_buffer(color_point_VB, color_point);
-    return color_point_VB;
 }

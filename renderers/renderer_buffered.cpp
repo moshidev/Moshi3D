@@ -8,25 +8,25 @@
 #include "light.h"
 #include "_aux.h"
 
-static void set_vertex_pointer(const VertexBufferObject& vb) {
+static void set_vertex_pointer(const VertexBuffer<Tupla3f>& vb) {
     vb.bind();
     glVertexPointer(3, GL_FLOAT, 0, 0);
     vb.unbind();
 }
 
-static void set_color_pointer(const VertexBufferObject& vb) {
+static void set_color_pointer(const VertexBuffer<Tupla3f>& vb) {
     vb.bind();
     glColorPointer(3, GL_FLOAT, 0, 0);
     vb.unbind();
 }
 
-static void set_normal_pointer(const VertexBufferObject& vb) {
+static void set_normal_pointer(const VertexBuffer<Tupla3f>& vb) {
     vb.bind();
     glNormalPointer(GL_FLOAT, 0, 0);
     vb.unbind();
 }
 
-static void draw_elements_from_indices(const IndexBufferObject& ib, GLsizei count, GLsizei offset=0) {
+static void draw_elements_from_indices(const IndexBuffer& ib, GLsizei count, GLsizei offset=0) {
     ib.bind();
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (void*)(offset*sizeof(unsigned int)));
     ib.unbind();
@@ -52,21 +52,21 @@ void RendererBuffered::render(const Mesh3D& m) const {
     glEnableClientState(GL_NORMAL_ARRAY);
     
     bool lighting_enabled = Light::is_lighting_enabled();
-    for (const auto& r : m.get_buffer_data_list()) {
-        update_lighting_status(lighting_enabled, r.get_affected_by_light());
-        glPolygonMode(GL_FRONT, r.get_polygon_mode());
+    for (const auto& d : m.get_data_list()) {
+        update_lighting_status(lighting_enabled, d.affected_by_light);
+        glPolygonMode(GL_FRONT, d.polygon_mode);
 
-        set_vertex_pointer(r.get_vertices());
-        if (Light::is_lighting_enabled()) {
-            set_normal_pointer(r.get_vertices_normals());
-            r.get_material().set_current();
+        set_vertex_pointer(d.vertices);
+        set_normal_pointer(d.vertices_normals);
+        if (d.color) {
+            set_color_pointer(*d.color);
         }
-        else {
-            set_color_pointer(r.get_color());
+        if (d.material) {
+            d.material->set_current();
         }
         
-        draw_elements_from_indices(r.get_indices(), r.get_indices_count(), r.get_indices_offset());
-        update_lighting_status(lighting_enabled, r.get_affected_by_light());
+        draw_elements_from_indices(d.face_indices, d.indices_count, d.indices_offset);
+        update_lighting_status(lighting_enabled, d.affected_by_light);
     }
 
     glDisableClientState(GL_VERTEX_ARRAY);

@@ -10,6 +10,6 @@ Cone::Cone(int num_vertices_side_face, int num_instances, float height, float ra
     }
     make_revolution_surface(perfil, num_instances, true, true, Y_axis);
     force_cover_north = true;
-    init_color(vertices.size());
+    init_color(vertices.data.size());
     init_normal_vectors();
 }

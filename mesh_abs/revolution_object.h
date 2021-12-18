@@ -25,20 +25,15 @@ protected:
     RevolutionObject();
     virtual void init_normal_vectors(void);
 
-    IndexBufferObject cover_south_IB;
-    IndexBufferObject cover_north_IB;
-    std::vector<Tupla3u> cover_south;
-    std::vector<Tupla3u> cover_north;
-    std::vector<Tupla3f> cover_south_normal;
-    std::vector<Tupla3f> cover_north_normal;
+    IndexBuffer cover_south_indices;
+    IndexBuffer cover_north_indices;
     bool render_cover_south {true};
     bool render_cover_north {true};
     bool force_cover_south {false};
     bool force_cover_north {false};
 
     void make_revolution_surface(std::vector<Tupla3f> revolution_coordinates, int num_instances, bool make_cover_south, bool make_cover_north, int axis=1);
-    virtual void make_current_buffered_data_list(void);
-    virtual void make_current_raw_data_list(void);
+    virtual void make_current_data_list(void);
 
 private:
     void revolution_surface_make_topology(const std::vector<Tupla3f>& rv, int num_instances);

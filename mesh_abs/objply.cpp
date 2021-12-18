@@ -8,9 +8,7 @@
 
 ObjPLY::ObjPLY(const std::string& nombre_archivo)
 {
-   ply::read(nombre_archivo, vertices, indices);
-   init_color(vertices.size());
+   ply::read(nombre_archivo, vertices.data, indices.data);
+   init_color(vertices.data.size());
    init_normal_vectors();
 }
-
-
