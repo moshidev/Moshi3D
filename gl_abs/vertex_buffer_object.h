@@ -3,8 +3,8 @@
  * GPLv3 License.
  */
 
-#ifndef MOSHI3D_VERTEX_BUFFER_H_
-#define MOSHI3D_VERTEX_BUFFER_H_
+#ifndef MOSHI3D_VERTEX_BUFFER_OBJECT_H_
+#define MOSHI3D_VERTEX_BUFFER_OBJECT_H_
 
 #include "_aux.h"
 
@@ -26,4 +26,4 @@ public:
     void set_data(GLsizeiptr size, const GLvoid* data, GLenum usage=GL_STATIC_DRAW);
 };
 
-#endif /* MOSHI3D_VERTEX_BUFFER_H_ */
+#endif /* MOSHI3D_VERTEX_BUFFER_OBJECT_H_ */
