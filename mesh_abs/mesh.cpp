@@ -224,7 +224,7 @@ void Mesh3D::init_normal_vectors(void) {
     normalize_vertices();  
 }
 
-void Mesh3D::init_vertex_buffer(VertexBuffer& vb, const std::vector<Tupla3f>& v) {
+void Mesh3D::init_vertex_buffer(VertexBufferObject& vb, const std::vector<Tupla3f>& v) {
     if (!vb.usable()) {
         vb.set_data(v.size()*sizeof(Tupla3f), v.data());
     }
@@ -236,12 +236,12 @@ void Mesh3D::init_index_buffer(IndexBuffer& ib, const std::vector<Tupla3u>& v) {
     }
 }
 
-VertexBuffer& Mesh3D::get_vertices_VB(void) {
+VertexBufferObject& Mesh3D::get_vertices_VB(void) {
     init_vertex_buffer(vertices_VB, vertices);
     return vertices_VB;
 }
 
-VertexBuffer& Mesh3D::get_vertices_normal_VB(void) {
+VertexBufferObject& Mesh3D::get_vertices_normal_VB(void) {
     init_vertex_buffer(vertices_normal_VB, vertices_normal);
     return vertices_normal_VB;
 }
@@ -251,17 +251,17 @@ IndexBuffer& Mesh3D::get_indices_IB(void) {
     return indices_IB;
 }
 
-VertexBuffer& Mesh3D::get_color_fill_VB(void) {
+VertexBufferObject& Mesh3D::get_color_fill_VB(void) {
     init_vertex_buffer(color_fill_VB, color_fill);
     return color_fill_VB;
 }
 
-VertexBuffer& Mesh3D::get_color_line_VB(void) {
+VertexBufferObject& Mesh3D::get_color_line_VB(void) {
     init_vertex_buffer(color_line_VB, color_line);
     return color_line_VB;
 }
 
-VertexBuffer& Mesh3D::get_color_point_VB(void) {
+VertexBufferObject& Mesh3D::get_color_point_VB(void) {
     init_vertex_buffer(color_point_VB, color_point);
     return color_point_VB;
 }

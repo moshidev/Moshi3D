@@ -3,32 +3,32 @@
  * GPLv3 License.
  */
 
-#include "vertex_buffer.h"
+#include "vertex_buffer_object.h"
 
-VertexBuffer::VertexBuffer(bool gen_buffer) {
+VertexBufferObject::VertexBufferObject(bool gen_buffer) {
     if (gen_buffer) {
         glGenBuffers(1, &id);
     }
 }
 
-VertexBuffer::VertexBuffer(GLsizeiptr size, const GLvoid* data, GLenum usage) {
+VertexBufferObject::VertexBufferObject(GLsizeiptr size, const GLvoid* data, GLenum usage) {
     glGenBuffers(1, &id);
     set_data(size, data, usage);
 }
 
-VertexBuffer::~VertexBuffer() {
+VertexBufferObject::~VertexBufferObject() {
     glDeleteBuffers(1, &id);
 }
 
-void VertexBuffer::bind(void) const {
+void VertexBufferObject::bind(void) const {
     glBindBuffer(GL_ARRAY_BUFFER, id);
 }
 
-void VertexBuffer::unbind(void) const {
+void VertexBufferObject::unbind(void) const {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void VertexBuffer::set_data(GLsizeiptr size, const GLvoid* data, GLenum usage) {
+void VertexBufferObject::set_data(GLsizeiptr size, const GLvoid* data, GLenum usage) {
     if (!id) {
         glGenBuffers(1, &id);
     }

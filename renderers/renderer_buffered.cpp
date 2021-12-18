@@ -8,19 +8,19 @@
 #include "light.h"
 #include "_aux.h"
 
-static void set_vertex_pointer(const VertexBuffer& vb) {
+static void set_vertex_pointer(const VertexBufferObject& vb) {
     vb.bind();
     glVertexPointer(3, GL_FLOAT, 0, 0);
     vb.unbind();
 }
 
-static void set_color_pointer(const VertexBuffer& vb) {
+static void set_color_pointer(const VertexBufferObject& vb) {
     vb.bind();
     glColorPointer(3, GL_FLOAT, 0, 0);
     vb.unbind();
 }
 
-static void set_normal_pointer(const VertexBuffer& vb) {
+static void set_normal_pointer(const VertexBufferObject& vb) {
     vb.bind();
     glNormalPointer(GL_FLOAT, 0, 0);
     vb.unbind();

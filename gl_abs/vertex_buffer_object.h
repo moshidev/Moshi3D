@@ -11,13 +11,14 @@
 /**
  * @warning should not be destroyed after GLU shuts down the OpenGL instance
  */
-class VertexBuffer {
+class VertexBufferObject {
     GLuint id {0};
 
 public:
-    VertexBuffer(bool gen_buffer=false);
-    VertexBuffer(GLsizeiptr size, const GLvoid* data, GLenum usage=GL_STATIC_DRAW);
-    ~VertexBuffer();
+    VertexBufferObject(bool gen_buffer=false);
+    VertexBufferObject(const VertexBufferObject& v) = delete;
+    VertexBufferObject(GLsizeiptr size, const GLvoid* data, GLenum usage=GL_STATIC_DRAW);
+    ~VertexBufferObject();
 
     inline bool usable(void) const { return id; };
     void bind(void) const;
