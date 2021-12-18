@@ -14,13 +14,11 @@
 #include "index_buffer.h"
 #include "renderizable.h"
 #include "material.h"
-#include "texture.h"
+#include "texture_object.h"
 
 class Mesh3D : public Renderizable{
 public:
     struct Data;
-    class BufferedData;
-    class RawData;
 
     Mesh3D(const Mesh3D& m) = delete;
     virtual ~Mesh3D() = 0;
@@ -83,7 +81,7 @@ protected:
     VertexBuffer<Tupla3f> color_chess_a;
     VertexBuffer<Tupla3f> color_chess_b;
     Material material;
-    std::shared_ptr<const Texture> texture;
+    std::shared_ptr<const TextureObject> texture;
 
     std::list<Data> current_data_list;
 };
@@ -135,84 +133,6 @@ private:
         indices_offset{0}, indices_count{face_indices.get_num_indices()},
         affected_by_light{true}, polygon_mode{polygon_mode}
     {   }
-};
-
-/**
- * BufferedData contiene la información necesaria para renderizar un objeto usando
- * VBOs
- */
-class Mesh3D::BufferedData {
-    const VertexBufferObject& vertices;
-    const IndexBufferObject& face_indices;
-    const VertexBufferObject& color;
-    const VertexBufferObject& vertices_normals;
-    const Material& material;
-    bool affected_by_light{true};
-    unsigned indices_offset;
-    unsigned indices_count;
-    int polygon_mode;
-
-public:
-    BufferedData(const VertexBufferObject& vertices, const IndexBufferObject& faces, const VertexBufferObject& color, const VertexBufferObject& vertices_normals, const Material& m, int polygon_mode)
-        :vertices{vertices}, face_indices{faces}, color{color},
-         vertices_normals{vertices_normals}, material{m},
-         indices_offset{0}, indices_count{faces.get_num_indices()},
-         polygon_mode{polygon_mode}
-    {}
-
-    inline const VertexBufferObject& get_vertices(void) const { return vertices; }
-    inline const VertexBufferObject& get_vertices_normals(void) const { return vertices_normals; }
-
-    inline const IndexBufferObject& get_indices(void) const { return face_indices; }
-    inline unsigned get_indices_offset(void) const { return indices_offset; }
-    inline unsigned get_indices_count(void) const { return indices_count; }
-    inline void set_face_indices_offset(unsigned offset, unsigned count) { indices_offset = offset; indices_count = count; }
-
-    inline const VertexBufferObject& get_color(void) const { return color; }
-    inline const Material& get_material(void) const { return material; }
-
-    inline int get_polygon_mode(void) const { return polygon_mode; }
-    inline bool get_affected_by_light(void) const { return affected_by_light; }
-    inline void set_affected_by_light(bool t) { affected_by_light = t; }
-};
-
-
-/**
- * RawData contiene la información necesaria para renderizar un objeto usando
- * glDrawElements
- */
-class Mesh3D::RawData {
-    const std::vector<Tupla3f>& vertices_data;
-    const std::vector<Tupla3u>& face_indices_data;
-    const std::vector<Tupla3f>& color_data;
-    const std::vector<Tupla3f>& vertices_normals_data;
-    const Material& material;
-    bool affected_by_light{true};
-    int polygon_mode;
-    unsigned indices_count;
-    unsigned indices_offset;    
-
-public:
-    RawData(const std::vector<Tupla3f>& vertices, const std::vector<Tupla3u>& faces, const std::vector<Tupla3f>& color, const std::vector<Tupla3f>& vertices_normals, const Material& m, int polygon_mode)
-        :vertices_data{vertices}, face_indices_data{faces}, color_data{color},
-         vertices_normals_data{vertices_normals}, material{m},
-         polygon_mode{polygon_mode}, indices_count{(unsigned)faces.size()*3}, indices_offset{0}
-    {}
-
-    inline const std::vector<Tupla3f>& get_vertices_data(void) const {return vertices_data; }
-    inline const std::vector<Tupla3f>& get_vertices_normals_data(void) const { return vertices_normals_data; }
-
-    inline const std::vector<Tupla3u>& get_indices_data(void) const { return face_indices_data; };
-    inline unsigned get_indices_offset(void) const { return indices_offset; }
-    inline unsigned get_indices_count(void) const { return indices_count; }
-    inline void set_face_indices_offset(unsigned offset, unsigned count) { indices_offset = offset; indices_count = count; }
-
-    inline const std::vector<Tupla3f>& get_color_data(void) const { return color_data; }
-    inline const Material& get_material(void) const { return material; }
-
-    inline int get_polygon_mode(void) const { return polygon_mode; }
-    inline bool get_affected_by_light(void) const { return affected_by_light; }
-    inline void set_affected_by_light(bool t) { affected_by_light = t; }
 };
 
 #endif /* MOSHI3D_MESH3D_H_ */
