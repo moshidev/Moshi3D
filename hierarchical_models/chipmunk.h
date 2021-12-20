@@ -10,7 +10,6 @@
 #include "composition_node.h"
 #include "objply.h"
 #include <memory>
-#include <chrono>
 #include <vector>
 
 class Chipmunk : public Renderizable {
