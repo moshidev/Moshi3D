@@ -123,6 +123,10 @@ std::list<Mesh3D::Data> Mesh3D::mklist_shaded_mode(IndexBuffer& ib, const Materi
     std::list<Mesh3D::Data> list;
     if (shaded_enabled) {
         list.emplace_back(vertices, vertices_normal, ib, GL_FILL, m);
+        if (texture) {
+            init_vertex_buffer<Tupla2f>(texture->texture_coordinates);
+            list.back().set_texture(*texture);
+        }
     }
     return list;
 }

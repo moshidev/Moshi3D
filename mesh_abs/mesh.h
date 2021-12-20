@@ -14,7 +14,7 @@
 #include "index_buffer.h"
 #include "renderizable.h"
 #include "material.h"
-#include "texture_object.h"
+#include "texture.h"
 
 class Mesh3D : public Renderizable{
 public:
@@ -43,6 +43,7 @@ public:
     /* Métodos get para obtener la información a renderizar */
     inline const std::list<Data>& get_data_list(void) const { return current_data_list; }
     inline void set_material(const Material& m) { material = m; }
+    void set_texture(const std::shared_ptr<TextureObject>& texture);
 
 protected:
     Mesh3D();
@@ -81,7 +82,7 @@ protected:
     VertexBuffer<Tupla3f> color_chess_a;
     VertexBuffer<Tupla3f> color_chess_b;
     Material material;
-    std::shared_ptr<const TextureObject> texture;
+    std::unique_ptr<Texture> texture;
 
     std::list<Data> current_data_list;
 };
@@ -96,6 +97,7 @@ struct Mesh3D::Data {
 
     const VertexBuffer<Tupla3f>* color {nullptr};
     const Material* material {nullptr};
+    const Texture* texture {nullptr};
     
     bool affected_by_light;
     const int polygon_mode;
@@ -105,6 +107,10 @@ struct Mesh3D::Data {
 
     inline void set_face_indices_offset(unsigned offset, unsigned count) {
         indices_offset = offset; indices_count = count;
+    }
+
+    inline void set_texture(const Texture& texture) {
+        this->texture = &texture;
     }
 
     Data(const VertexBuffer<Tupla3f>& vertices, const VertexBuffer<Tupla3f>& vertices_normals, const IndexBuffer& face_indices, int polygon_mode, const VertexBuffer<Tupla3f>& color, const Material& material)
