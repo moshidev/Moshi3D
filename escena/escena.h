@@ -8,6 +8,7 @@
 #include "tetrahedron.h"
 #include "revolution_object.h"
 #include "chipmunk.h"
+#include "bouncy_ball.h"
 #include "cylinder.h"
 #include "cone.h"
 #include "sphere.h"
@@ -55,6 +56,7 @@ class Escena {
     Mesh3D* objeto_actual {nullptr};
     Chipmunk* chipmunk {nullptr};
     bool chipmunk_aut_anim {false};
+    BouncyBall* bouncy_ball {nullptr};
     std::shared_ptr<TextureObject> tex_123;
     std::shared_ptr<TextureObject> tex_wood;
 

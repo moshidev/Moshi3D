@@ -45,6 +45,7 @@ Escena::~Escena() {
     delete directional_light_0;
     delete positional_light_0;
     delete chipmunk;
+    delete bouncy_ball;
 }
 
 //**************************************************************************
@@ -72,8 +73,19 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
     change_projection(float(UI_window_width) / float(UI_window_height));
     glViewport(0, 0, UI_window_width, UI_window_height);
 
+    std::shared_ptr<Sphere> bball_sphere = std::make_shared<Sphere>(60, 60, 1);
+    std::shared_ptr<PositionalLight> bball_light = std::make_shared<PositionalLight>(Tupla3f{0,0,0});
+    tex_123 = std::make_shared<TextureObject>("resources/text-123.jpg");
+    bball_sphere->set_material(blanco_difuso);
+    bball_sphere->set_texture(tex_123);
+    bball_sphere->enable_shaded_mode(true);
+    bball_light->activate(true);
+    bball_light->set_color_ambient(Tupla4f{1,1,1,1});
+
     chipmunk = new Chipmunk();
+    bouncy_ball = new BouncyBall(bball_sphere, bball_light);
     chipmunk->multiply_speed_factor(2);
+
     revobjects.push_back(lata);
     revobjects.push_back(lata_x);
     revobjects.push_back(lata_z);
@@ -100,12 +112,9 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
     lights.insert(lights.begin(), directional_lights.begin(), directional_lights.end());
 
     for (auto l : lights) {
-        l->activate(true);
+        l->activate(false);
     }
 
-    tex_123 = std::make_shared<TextureObject>("resources/text-123.jpg");
-    esfera->set_texture(tex_123);
-    esfera->set_material(blanco_difuso);
     tex_wood = std::make_shared<TextureObject>("resources/text-madera.jpg");
     cubo->set_texture(tex_wood);
 
@@ -177,7 +186,11 @@ void Escena::dibujar()
     
     chipmunk->draw(*renderer);*/
 
-    esfera->draw(*renderer);
+    //esfera->draw(*renderer);
+    //std::shared_ptr<PositionalLight> bball_light = std::make_shared<PositionalLight>(Tupla3f{0,0,0});
+    //bball_light->activate(true);
+    //bball_light->apply();
+    bouncy_ball->draw(*renderer);
     cubo->draw(*renderer);
 }
 
@@ -243,6 +256,7 @@ void Escena::redimensionar(int new_width, int new_height)
 void Escena::animar_modelo_jerarquico(void) {
     if (chipmunk_aut_anim) {
         chipmunk->increment_animation_aut();
+        bouncy_ball->increment_animation_aut();
     }
 }
 
