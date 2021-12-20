@@ -26,6 +26,12 @@ static void set_normal_pointer(const VertexBuffer<Tupla3f>& vb) {
     vb.unbind();
 }
 
+static void set_texture_coordinates(const VertexBuffer<Tupla2f>& vb) {
+    vb.bind();
+    glTexCoordPointer(2, GL_FLOAT, 0, 0);
+    vb.unbind();
+}
+
 static void draw_elements_from_indices(const IndexBuffer& ib, GLsizei count, GLsizei offset=0) {
     ib.bind();
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (void*)(offset*sizeof(unsigned int)));
@@ -48,7 +54,6 @@ void RendererBuffered::render(const Mesh3D& m) const {
     glPolygonOffset(-25.0, 12.5);
 
     glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
     
     bool lighting_enabled = Light::is_lighting_enabled();
@@ -59,19 +64,29 @@ void RendererBuffered::render(const Mesh3D& m) const {
         set_vertex_pointer(d.vertices);
         set_normal_pointer(d.vertices_normals);
         if (d.color) {
+            glEnableClientState(GL_COLOR_ARRAY);
             set_color_pointer(*d.color);
         }
         if (d.material) {
             d.material->set_current();
         }
+        if (d.texture) {
+            glEnable(GL_TEXTURE_2D);
+            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+            set_texture_coordinates(d.texture->texture_coordinates);
+            d.texture->texture->bind();
+        }
         
         draw_elements_from_indices(d.face_indices, d.indices_count, d.indices_offset);
         update_lighting_status(lighting_enabled, d.affected_by_light);
+
+        glDisable(GL_TEXTURE_2D);
     }
 
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
     glDisable(GL_POLYGON_OFFSET_LINE);
     glDisable(GL_CULL_FACE);
