@@ -41,14 +41,23 @@ void RendererImmediate::render(const Mesh3D& m) const {
         if (r.material) {
             r.material->set_current();
         }
+        if (r.texture) {
+            glEnable(GL_TEXTURE_2D);
+            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+            glTexCoordPointer(2, GL_FLOAT, 0, r.texture->texture_coordinates.data.data());
+            r.texture->texture->bind();
+        }
         
         glDrawElements(GL_TRIANGLES, r.indices_count, GL_UNSIGNED_INT, r.face_indices.data.data() + r.indices_offset/3);
         update_lighting_status(lighting_enabled, r.affected_by_light);
+
+        glDisable(GL_TEXTURE_2D);
     }
 
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
     glDisable(GL_POLYGON_OFFSET_LINE);
     glDisable(GL_CULL_FACE);
