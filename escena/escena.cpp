@@ -88,14 +88,27 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
     objects.insert(objects.end(), revobjects.begin(), revobjects.end());
 
     directional_light_0 = new DirectionalLight({M_PI_4/3, -M_PI_4/3});
+    directional_light_1 = new DirectionalLight({M_PI, 0});
+    directional_light_2 = new DirectionalLight({0, M_PI/2});
+    directional_light_3 = new DirectionalLight({0, M_PI*3/2});
     positional_light_0 = new PositionalLight({0,0,0});
     directional_lights.push_back(directional_light_0);
+    directional_lights.push_back(directional_light_1);
+    directional_lights.push_back(directional_light_2);
+    directional_lights.push_back(directional_light_3);
     lights.push_back(positional_light_0);
     lights.insert(lights.begin(), directional_lights.begin(), directional_lights.end());
 
     for (auto l : lights) {
         l->activate(true);
     }
+
+    tex_123 = std::make_shared<TextureObject>("resources/text-123.jpg");
+    esfera->set_texture(tex_123);
+    esfera->set_material(blanco_difuso);
+    tex_wood = std::make_shared<TextureObject>("resources/text-madera.jpg");
+    cubo->set_texture(tex_wood);
+
     peon_blanco->set_material(blanco_difuso);
     peon_negro->set_material(negro_brillo);
 
@@ -114,12 +127,6 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
 
 void Escena::dibujar()
 {
-    DirectionalLight d({0,0}, {0,0,0,1}, {1,0,0,1}, {1,0,0,1});
-    PositionalLight p({1,1,0}, {1,1,1,1}, {1,1,1,1}, {1,1,1,1});
-    Translation t({0, 4, 0});
-
-    //hm.test_and_touch(0, *objeto_actual);
-
     bool prev_light_status = Light::is_lighting_enabled();
     Light::enable_lighting(false);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla
@@ -137,14 +144,14 @@ void Escena::dibujar()
         }
     }
     
-    if (objeto_actual != nullptr) {
+    /*if (objeto_actual != nullptr) {
         Transformation::push_matrix();
             t.apply();
             objeto_actual->draw(*renderer);
         Transformation::pop_matrix();
     }
 
-    /*int i = 0;
+    int i = 0;
     glPushMatrix();
         glTranslatef(0, 0, 0);
         for (auto o : revobjects) {
@@ -166,11 +173,12 @@ void Escena::dibujar()
             glPopMatrix();
             i++;
         }
-    glPopMatrix();*/
+    glPopMatrix();
     
-    static float time_point = 0;
-    time_point += 0.1;
-    chipmunk->draw(*renderer);
+    chipmunk->draw(*renderer);*/
+
+    esfera->draw(*renderer);
+    cubo->draw(*renderer);
 }
 
 bool Escena::teclaPulsada(unsigned char tecla, int x, int y)

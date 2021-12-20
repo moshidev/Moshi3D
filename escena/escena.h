@@ -55,6 +55,8 @@ class Escena {
     Mesh3D* objeto_actual {nullptr};
     Chipmunk* chipmunk {nullptr};
     bool chipmunk_aut_anim {false};
+    std::shared_ptr<TextureObject> tex_123;
+    std::shared_ptr<TextureObject> tex_wood;
 
     // Renderizadores
     RendererImmediate immediate_renderer;
@@ -65,6 +67,9 @@ class Escena {
 
     // Luces
     DirectionalLight* directional_light_0 {nullptr};
+    DirectionalLight* directional_light_1 {nullptr};
+    DirectionalLight* directional_light_2 {nullptr};
+    DirectionalLight* directional_light_3 {nullptr};
     PositionalLight* positional_light_0 {nullptr};
 
     // Almacenes de referencias a objetos de la escena
