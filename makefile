@@ -30,9 +30,8 @@ ld_libs_macos  := -framework OpenGL -framework GLUT
 ld_libs        := $(ld_libs_common) $(if $(en_linux), $(ld_libs_linux), $(ld_libs_macos))
 
 
-x: $(exe)
+all: $(exe)
 	@echo Enlazando para: $(sistoper)
-	./$(exe)
 
 $(exe): $(units_o) makefile
 	$(compiler) -o $(exe) $(addprefix $(obj)/, $(notdir $(units_o))) $(ld_libs)
