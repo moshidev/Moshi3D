@@ -7,6 +7,18 @@
 #include "mesh.h"
 #include "cube.h"
 
+void Cube::cube_init_texture_coordinates(std::vector<Tupla2f>& tc) {
+   tc.reserve(8);
+   tc.emplace_back(1, 1);
+   tc.emplace_back(0, 0);
+   tc.emplace_back(1, 0);
+   tc.emplace_back(0, 1);
+   tc.emplace_back(0, 0);
+   tc.emplace_back(1, 0);
+   tc.emplace_back(0, 1);
+   tc.emplace_back(1, 1);
+}
+
 void Cube::cube_init_vertices(std::vector<Tupla3f>& v, float lado) {
    const float offset = lado/2;
    v.reserve(8);
@@ -43,6 +55,11 @@ void Cube::cube_init_indices(std::vector<Tupla3u>& i) {
 Cube::Cube(float lado) {
    cube_init_vertices(vertices.data, lado);
    cube_init_indices(indices.data);
+   cube_init_texture_coordinates(texture_coordinates.data);
    init_color(vertices.data.size());
    init_normal_vectors();
+}
+
+void Cube::set_texture(const std::shared_ptr<TextureObject>& texture) {
+    this->texture = std::make_unique<Texture>(texture, texture_coordinates);
 }
