@@ -9,6 +9,7 @@
 #include "renderizable.h"
 #include "animation.h"
 #include "tuplasg.h"
+#include "light.h"
 #include <memory>
 #include <list>
 
@@ -29,14 +30,25 @@ public:
     struct Object {
         Location loc;
         std::shared_ptr<Renderizable> renderizable;
-        Object(const Object& obj)
-        : loc{obj.loc}, renderizable{obj.renderizable}
-        {   }
+        std::shared_ptr<Light> light;
+        Object(const Object& obj) = default;
         Object(const std::shared_ptr<Renderizable>& r)
         : renderizable{r}
         {   }
+        Object(const std::shared_ptr<Light>& l)
+        : light{l}
+        {   }
+        Object(const std::shared_ptr<Renderizable>& r, const std::shared_ptr<Light>& l)
+        : renderizable{r}, light{l}
+        {   }
         Object(const Location& loc, const std::shared_ptr<Renderizable>& r)
         : loc{loc}, renderizable{r}
+        {   }
+        Object(const Location& loc, const std::shared_ptr<Light>& l)
+        : loc{loc}, light{l}
+        {   }
+        Object(const Location& loc, const std::shared_ptr<Renderizable>& r, const std::shared_ptr<Light>& l)
+        : loc{loc}, renderizable{r}, light{l}
         {   }
     };
 
