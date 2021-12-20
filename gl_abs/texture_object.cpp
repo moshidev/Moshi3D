@@ -24,6 +24,10 @@ std::unique_ptr<unsigned char[]> TextureObject::init_data_from_image(const std::
     return img;
 }
 
+TextureObject::TextureObject(const std::string& texture_fname) {
+    set_texture(texture_fname);
+}
+
 TextureObject::~TextureObject() {
     glDeleteTextures(1, &id);
 }

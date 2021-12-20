@@ -20,6 +20,7 @@ class TextureObject {
     static std::unique_ptr<unsigned char[]> init_data_from_image(const std::string& texture_name, unsigned int& width, unsigned int& height);
 
 public:
+    TextureObject(const std::string& texture_fname);
     ~TextureObject();
 
     inline bool usable(void) const { return id; }
