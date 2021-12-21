@@ -46,6 +46,27 @@ void CompositionNode::draw(const Renderer& r) const {
     Transformation::pop_matrix();
 }
 
+void CompositionNode::apply_lights(void) const {
+    Transformation::push_matrix();
+    apply_location(this->location);
+    animation.apply();
+    for (const auto& c : childs) {
+        Transformation::push_matrix();
+        apply_location(c.first);
+        c.second->apply_lights();
+        Transformation::pop_matrix();
+    }
+    for (const auto& obj : objects) {
+        Transformation::push_matrix();
+        apply_location(obj.loc);
+        if (obj.light) {
+            obj.light->apply();
+        }
+        Transformation::pop_matrix();
+    }
+    Transformation::pop_matrix();
+}
+
 void CompositionNode::execute_preorder(const std::function<void(CompositionNode&)>& f) {
     for (const auto& c : childs) {
         c.second->execute_preorder(f);
