@@ -26,6 +26,7 @@ public:
     BouncyBall(const std::shared_ptr<Sphere>& sphere, const std::shared_ptr<PositionalLight>& light);
 
     void draw(const Renderer& r) const;
+    void apply_lights(void) const;
     void increment_animation_aut(void);
 };
 

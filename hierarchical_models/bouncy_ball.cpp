@@ -31,6 +31,10 @@ void BouncyBall::draw(const Renderer& r) const {
     root.draw(r);
 }
 
+void BouncyBall::apply_lights(void) const {
+    root.apply_lights();
+}
+
 void BouncyBall::increment_animation_aut(void) {
     ball->second->get_animation().increment_anim_loop();
 }
@@ -49,11 +53,11 @@ void BouncyBall::set_ball_bouncing(Animation& anim, float percentaje_offset, flo
     TransformationTimeline<Translation>::KeyFrame post_a{0, Tupla3f{0,0,0}, func_up};
     TransformationTimeline<Translation>::KeyFrame post_b{1, Tupla3f{0,distance,0}, func_down};
     TransformationTimeline<Translation>::KeyFrame post_c{2, Tupla3f{0,0,0}};
-    TransformationTimeline<Scaling>::KeyFrame poss_a{0, Tupla3f{1,0.75,1}};
+    TransformationTimeline<Scaling>::KeyFrame poss_a{0, Tupla3f{1,0.5,1}};
     TransformationTimeline<Scaling>::KeyFrame poss_b{0.2, Tupla3f{1,1.25,1}};
     TransformationTimeline<Scaling>::KeyFrame poss_c{0.3, Tupla3f{1,1,1}};
     TransformationTimeline<Scaling>::KeyFrame poss_d{1.8, Tupla3f{1,1,1}};
-    TransformationTimeline<Scaling>::KeyFrame poss_f{2, Tupla3f{1,0.75,1}};
+    TransformationTimeline<Scaling>::KeyFrame poss_f{2, Tupla3f{1,0.5,1}};
     anim.translation_tt.add_key_frame(post_a);
     anim.translation_tt.add_key_frame(post_b);
     anim.translation_tt.add_key_frame(post_c);
