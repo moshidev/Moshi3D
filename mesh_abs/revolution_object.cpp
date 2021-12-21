@@ -202,4 +202,5 @@ void RevolutionObject::enable_covers_visibility(bool b) {
 
 void RevolutionObject::set_texture(const std::shared_ptr<TextureObject>& texture) {
     this->texture = std::make_unique<Texture>(texture, texture_coordinates);
+    make_current_data_lists();
 }
