@@ -59,6 +59,7 @@ class Escena {
     BouncyBall* bouncy_ball {nullptr};
     std::shared_ptr<TextureObject> tex_123;
     std::shared_ptr<TextureObject> tex_wood;
+    std::shared_ptr<TextureObject> tex_cola_can;
 
     // Renderizadores
     RendererImmediate immediate_renderer;

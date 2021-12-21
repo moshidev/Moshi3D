@@ -26,7 +26,7 @@ Escena::Escena()
     peon_negro = new RevolutionObject("resources/peon.ply", 40);
     necoarc = new ObjPLY("resources/necoarc.ply");
     cilindro = new Cylinder(5, 90, 1, 1);
-    cono = new Cone(5, 90, 1, 1);
+    cono = new Cone(90, 180 , 1, 1);
     esfera = new Sphere(50, 50, 1);
 
     objeto_actual = lata_z;
@@ -57,7 +57,7 @@ Escena::~Escena() {
 void Escena::inicializar(int UI_window_width, int UI_window_height)
 {
     static Material blanco_difuso{{1, 1, 1, 1}, {0, 0, 0, 1}, {0.5, 0.5, 0.5, 1}, 64};  // src: http://devernay.free.fr/cours/opengl/materials.html
-    static Material negro_brillo{{0.1, 0.1, 0.1, 1}, {1, 1, 1, 1}, {0.5, 0.5, 0.5, 1}, 128};
+    static Material negro_brillo{{0, 0, 0, 1}, {0.1, 0.1, 0.1, 1}, {0, 0, 0, 1}, 128};
     glClearColor(1.0, 1.0, 1.0, 1.0); // se indica cual sera el color para
                                       // limpiar la ventana	(r,v,a,al)
 
@@ -74,13 +74,14 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
     glViewport(0, 0, UI_window_width, UI_window_height);
 
     std::shared_ptr<Sphere> bball_sphere = std::make_shared<Sphere>(60, 60, 1);
-    std::shared_ptr<PositionalLight> bball_light = std::make_shared<PositionalLight>(Tupla3f{0,0,0});
+    std::shared_ptr<PositionalLight> bball_light = std::make_shared<PositionalLight>(Tupla3f{0,0,0}, Tupla4f{1,1,1,1}, Tupla4f{0.8,0.8,0.2,1}, Tupla4f{0,0,0,0});
+    lights.push_back(bball_light.get());
     tex_123 = std::make_shared<TextureObject>("resources/text-123.jpg");
     bball_sphere->set_material(blanco_difuso);
     bball_sphere->set_texture(tex_123);
     bball_sphere->enable_shaded_mode(true);
     bball_light->activate(true);
-    bball_light->set_color_ambient(Tupla4f{1,1,1,1});
+    //bball_light->set_color_ambient(Tupla4f{1,1,1,1});
 
     chipmunk = new Chipmunk();
     bouncy_ball = new BouncyBall(bball_sphere, bball_light);
@@ -105,17 +106,18 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
     directional_light_3 = new DirectionalLight({0, M_PI*3/2});
     positional_light_0 = new PositionalLight({0,0,0});
     directional_lights.push_back(directional_light_0);
-    directional_lights.push_back(directional_light_1);
-    directional_lights.push_back(directional_light_2);
-    directional_lights.push_back(directional_light_3);
-    lights.push_back(positional_light_0);
+    //directional_lights.push_back(directional_light_1);
+    //directional_lights.push_back(directional_light_2);
+    //directional_lights.push_back(directional_light_3);
+    //lights.push_back(positional_light_0);
     lights.insert(lights.begin(), directional_lights.begin(), directional_lights.end());
 
     for (auto l : lights) {
-        l->activate(false);
+        l->activate(true);
     }
 
     tex_wood = std::make_shared<TextureObject>("resources/text-madera.jpg");
+    tex_cola_can = std::make_shared<TextureObject>("resources/text-lata-1.jpg");
     cubo->set_texture(tex_wood);
 
     peon_blanco->set_material(blanco_difuso);
@@ -123,6 +125,8 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
 
     Light::enable_lighting(true);
     this->render_shaded(true);
+
+    cono->set_texture(tex_cola_can);
 
     menu.update(*this, 0, 0, 0);
 }
@@ -152,46 +156,54 @@ void Escena::dibujar()
             l->apply();
         }
     }
+
+    Transformation::push_matrix();
+        Translation::apply({2,1,0});
+        bouncy_ball->apply_lights();
+        bouncy_ball->draw(*renderer);
+        Translation::apply({0,-1,0});
+        cubo->draw(*renderer);
+    Transformation::pop_matrix();
+    Transformation::push_matrix();
+        Translation::apply({-2,0,0});
+        Rotation::apply({0,M_PI_2*3/2,0});
+        cono->draw(*renderer);
+    Transformation::pop_matrix();
+    chipmunk->draw(*renderer);
     
-    /*if (objeto_actual != nullptr) {
+    if (objeto_actual != nullptr) {
         Transformation::push_matrix();
-            t.apply();
+            Translation::apply({0,4,0});
             objeto_actual->draw(*renderer);
         Transformation::pop_matrix();
     }
 
-    int i = 0;
-    glPushMatrix();
-        glTranslatef(0, 0, 0);
-        for (auto o : revobjects) {
-            glPushMatrix();
-                glTranslatef(-5+i*2, 0, 0);
-                o->draw(*renderer);
-            glPopMatrix();
-            i++;
-        }
-    glPopMatrix();
+    Transformation::push_matrix();
+    Translation::apply({0,0,-4});
+        int i = 0;
+        glPushMatrix();
+            glTranslatef(0, 0, 0);
+            for (auto o : revobjects) {
+                glPushMatrix();
+                    glTranslatef(-5+i*2, 0, 0);
+                    o->draw(*renderer);
+                glPopMatrix();
+                i++;
+            }
+        glPopMatrix();
 
-    i = 0;
-    glPushMatrix();
-        glTranslatef(0, 0, -3);
-        for (auto o : objects) {
-            glPushMatrix();
-                glTranslatef(-5+i*3, 0, 0);
-                o->draw(*renderer);
-            glPopMatrix();
-            i++;
-        }
-    glPopMatrix();
-    
-    chipmunk->draw(*renderer);*/
-
-    //esfera->draw(*renderer);
-    //std::shared_ptr<PositionalLight> bball_light = std::make_shared<PositionalLight>(Tupla3f{0,0,0});
-    //bball_light->activate(true);
-    //bball_light->apply();
-    bouncy_ball->draw(*renderer);
-    cubo->draw(*renderer);
+        i = 0;
+        glPushMatrix();
+            glTranslatef(0, 0, -3);
+            for (auto o : objects) {
+                glPushMatrix();
+                    glTranslatef(-5+i*3, 0, 0);
+                    o->draw(*renderer);
+                glPopMatrix();
+                i++;
+            }
+        glPopMatrix();
+    Transformation::pop_matrix();
 }
 
 bool Escena::teclaPulsada(unsigned char tecla, int x, int y)
