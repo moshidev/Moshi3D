@@ -50,6 +50,11 @@ bool VisualizationModeSelection::handler(Escena& e, unsigned char tecla, int x, 
         std::cout << "Activamos GL_FLAT" << std::endl;
         glShadeModel(GL_FLAT);
         break;
+    case 'C':
+        std::cout << "\n +++ Entramos al submenú de selección de cámara +++ " << std::endl;
+        current_menu = &cameras;
+        current_menu->update(e, 0, x, y);
+        break;
     case 'Q':
         std::cout << "\n +++ Salimos del modo selección de modo de visualización +++ " << std::endl;
         parent->set_default_menu();
@@ -66,6 +71,7 @@ bool VisualizationModeSelection::handler(Escena& e, unsigned char tecla, int x, 
         std::cout << "[ C ] - Activamos visualización RGB si el objeto lo soporta.\n";
         std::cout << "[ T ] - Habilitamos la visualización de tapas.\n";
         std::cout << "[ G ] - Deshabilitamos la visualización de tapas.\n";
+        std::cout << "[ C ] - Selección de cámara.\n";
         std::cout << "[ Q ] - Volvemos al menú principal." << std::endl;
         break;
     }

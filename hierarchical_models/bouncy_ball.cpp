@@ -5,26 +5,28 @@
 
 BouncyBall::BouncyBall(unsigned n, float r) {
     std::shared_ptr<PositionalLight> light = std::make_shared<PositionalLight>(Tupla3f{0,0,0});
-    std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(n, n, r);
+    ball_mesh = std::make_shared<Sphere>(n, n, r);
     light->activate(true);
-    sphere->enable_shaded_mode(true);
-    ball = build_ball(root, sphere, light);
+    ball_mesh->enable_shaded_mode(true);
+    ball = build_ball(root, ball_mesh, light);
 }
 
 BouncyBall::BouncyBall(const std::shared_ptr<PositionalLight>& light, unsigned n, float r) {
-    std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(n, n, r);
-    sphere->enable_shaded_mode(true);
-    ball = build_ball(root, sphere, light);
+    ball_mesh = std::make_shared<Sphere>(n, n, r);
+    ball_mesh->enable_shaded_mode(true);
+    ball = build_ball(root, ball_mesh, light);
 }
 
 BouncyBall::BouncyBall(const std::shared_ptr<Sphere>& sphere) {
     std::shared_ptr<PositionalLight> light = std::make_shared<PositionalLight>(Tupla3f{0,0,0});
     light->activate(true);
-    ball = build_ball(root, sphere, light);
+    ball_mesh = sphere;
+    ball = build_ball(root, ball_mesh, light);
 }
 
 BouncyBall::BouncyBall(const std::shared_ptr<Sphere>& sphere, const std::shared_ptr<PositionalLight>& light) {
-    ball = build_ball(root, sphere, light);
+    ball_mesh = sphere;
+    ball = build_ball(root, ball_mesh, light);
 }
 
 void BouncyBall::draw(const Renderer& r) const {
@@ -37,6 +39,19 @@ void BouncyBall::apply_lights(void) const {
 
 void BouncyBall::increment_animation_aut(void) {
     ball->second->get_animation().increment_anim_loop();
+}
+
+void BouncyBall::increment_animation_man(void) {
+    ball->second->get_animation().increment_anim(manual_step_size);
+}
+
+void BouncyBall::multiply_speed_factor(float factor) {
+    auto& a = ball->second->get_animation();
+    a.set_speed_factor(factor * a.get_speed_factor());
+}
+
+void BouncyBall::apply_to_meshes(const std::function<void(Mesh3D&)>& func) {
+    func(*ball_mesh);
 }
 
 CompositionNode::iterator BouncyBall::build_ball(CompositionNode& parent, const std::shared_ptr<Sphere>& sphere, const std::shared_ptr<PositionalLight>& light) {

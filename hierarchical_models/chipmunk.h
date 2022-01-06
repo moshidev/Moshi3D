@@ -30,7 +30,7 @@ public:
     Chipmunk();
 
     void draw(const Renderer& r) const;
-    void apply_to_meshes(const std::function<void(ObjPLY&)>& func);
+    void apply_to_meshes(const std::function<void(Mesh3D&)>& func);
     
     void increment_animation_aut(void);
 
