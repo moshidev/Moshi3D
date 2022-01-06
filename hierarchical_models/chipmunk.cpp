@@ -121,7 +121,7 @@ void Chipmunk::draw(const Renderer& r) const {
     root.draw(r);
 }
 
-void Chipmunk::apply_to_meshes(const std::function<void(ObjPLY&)>& func) {
+void Chipmunk::apply_to_meshes(const std::function<void(Mesh3D&)>& func) {
     for (const auto& m : meshes) {
         func(*m.lock());
     }

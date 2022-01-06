@@ -12,9 +12,6 @@ Escena::Escena()
     renderer = &buffered_renderer;
     front_plane = 50.0;
     back_plane = 2000.0;
-    
-    
-    
 
     ejes.changeAxisSize(5000);
 
@@ -334,24 +331,32 @@ static void enable_polygon_mode(bool t, std::vector<Mesh3D*>& objects, int mode)
 
 void Escena::render_points(bool t) {
     enable_polygon_mode(t, objects, GL_POINT);
-    chipmunk->apply_to_meshes([t] (ObjPLY& obj) { t ? obj.enable_polygon_modes(GL_POINT) : obj.disable_polygon_modes(GL_POINT); });
+    auto f = [t] (Mesh3D& obj) { t ? obj.enable_polygon_modes(GL_POINT) : obj.disable_polygon_modes(GL_POINT); };
+    chipmunk->apply_to_meshes(f);
+    bouncy_ball->apply_to_meshes(f);
 }
 
 void Escena::render_lines(bool t) {
     enable_polygon_mode(t, objects, GL_LINE);
-    chipmunk->apply_to_meshes([t] (ObjPLY& obj) { t ? obj.enable_polygon_modes(GL_LINE) : obj.disable_polygon_modes(GL_LINE); });
+    auto f = [t] (Mesh3D& obj) { t ? obj.enable_polygon_modes(GL_LINE) : obj.disable_polygon_modes(GL_LINE); };
+    chipmunk->apply_to_meshes(f);
+    bouncy_ball->apply_to_meshes(f);
 }
 
 void Escena::render_solid(bool t) {
     enable_polygon_mode(t, objects, GL_FILL);
-    chipmunk->apply_to_meshes([t] (ObjPLY& obj) { t ? obj.enable_polygon_modes(GL_FILL) : obj.disable_polygon_modes(GL_FILL); });
+    auto f = [t] (Mesh3D& obj) { t ? obj.enable_polygon_modes(GL_FILL) : obj.disable_polygon_modes(GL_FILL); };
+    chipmunk->apply_to_meshes(f);
+    bouncy_ball->apply_to_meshes(f);
 }
 
 void Escena::render_chess(bool t) {
     for (auto obj : objects) {
         obj->enable_chess_mode(t);
     }
-    chipmunk->apply_to_meshes([t] (ObjPLY& obj) { obj.enable_chess_mode(t); });
+    auto f = [t] (Mesh3D& obj) { obj.enable_chess_mode(t); };
+    chipmunk->apply_to_meshes(f);
+    bouncy_ball->apply_to_meshes(f);
 }
 
 void Escena::render_covers(bool t) {
@@ -364,5 +369,7 @@ void Escena::render_shaded(bool t) {
     for (auto obj : objects) {
         obj->enable_shaded_mode(t);
     }
-    chipmunk->apply_to_meshes([t] (ObjPLY& obj) { obj.enable_shaded_mode(t); });
+    auto f = [t] (Mesh3D& obj) { obj.enable_shaded_mode(t); };
+    chipmunk->apply_to_meshes(f);
+    bouncy_ball->apply_to_meshes(f);
 }
