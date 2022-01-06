@@ -5,15 +5,16 @@
 #include "translation.h"
 #include "rotation.h"
 #include "chipmunk.h"
+#include "camera.h"
 
 Escena::Escena()
 {
     renderer = &buffered_renderer;
     front_plane = 50.0;
     back_plane = 2000.0;
-    observer_distance = 4 * front_plane;
-    observer_angle_x = 0.0;
-    observer_angle_y = 0.0;
+    
+    
+    
 
     ejes.changeAxisSize(5000);
 
@@ -70,7 +71,6 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
     window_width = UI_window_width / 10;
     window_height = UI_window_height / 10;
 
-    change_projection(float(UI_window_width) / float(UI_window_height));
     glViewport(0, 0, UI_window_width, UI_window_height);
 
     std::shared_ptr<Sphere> bball_sphere = std::make_shared<Sphere>(60, 60, 1);
@@ -106,14 +106,21 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
     directional_light_3 = new DirectionalLight({0, M_PI*3/2});
     positional_light_0 = new PositionalLight({0,0,0});
     directional_lights.push_back(directional_light_0);
-    //directional_lights.push_back(directional_light_1);
-    //directional_lights.push_back(directional_light_2);
-    //directional_lights.push_back(directional_light_3);
-    //lights.push_back(positional_light_0);
     lights.insert(lights.begin(), directional_lights.begin(), directional_lights.end());
 
     for (auto l : lights) {
         l->activate(true);
+    }
+
+    camera_0 = std::make_unique<Camera>(Camera::kPerspective, window_width*2, window_height*2, front_plane, back_plane);
+    camera_1 = std::make_unique<Camera>(Camera::kPerspective, window_width*4, window_height*4, front_plane, back_plane);
+    camera_2 = std::make_unique<Camera>(Camera::kOrthographic, window_width*2, window_height*2, front_plane, back_plane);
+    cameras.push_back(camera_0.get());
+    cameras.push_back(camera_1.get());
+    cameras.push_back(camera_2.get());
+
+    for (auto c : cameras) {
+        c->displace({0,0,+200});
     }
 
     tex_wood = std::make_shared<TextureObject>("resources/text-madera.jpg");
@@ -137,15 +144,18 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
 // y dibuja los objetos
 //
 // **************************************************************************
-
 void Escena::dibujar()
 {
     bool prev_light_status = Light::is_lighting_enabled();
     Light::enable_lighting(false);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla
-    change_observer();
+    
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    cameras[current_camera]->observe();
     ejes.draw();
     glScalef(50.0, 50.0, 50.0);
+    
 
     glPointSize(10);
     glLineWidth(1.25);
@@ -214,29 +224,30 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y)
 
 void Escena::teclaEspecial(int tecla1, int x, int y)
 {
-    int mult = 4;
+    float d = 4;
     switch (tecla1) {
     case GLUT_KEY_LEFT:
-        observer_angle_y-=mult;
+        cameras[current_camera]->displace({-d, 0, 0});
         break;
     case GLUT_KEY_RIGHT:
-        observer_angle_y+=mult;
+        cameras[current_camera]->displace({+d, 0, 0});
         break;
     case GLUT_KEY_UP:
-        observer_angle_x-=mult;
+        cameras[current_camera]->displace({0, 0, -d});
         break;
     case GLUT_KEY_DOWN:
-        observer_angle_x+=mult;
+        cameras[current_camera]->displace({0, 0, +d});
         break;
     case GLUT_KEY_PAGE_UP:
-        observer_distance *= 1.2;
+        cameras[current_camera]->zoom(1.2);
+        cameras[current_camera]->project();
         break;
     case GLUT_KEY_PAGE_DOWN:
-        observer_distance /= 1.2;
+        cameras[current_camera]->zoom(1.0/1.2);
+        cameras[current_camera]->project();
         break;
     }
-
-    // std::cout << observer_distance << std::endl;
+    
 }
 
 //**************************************************************************
@@ -251,7 +262,7 @@ void Escena::change_projection(const float ratio_xy)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     const float wx = float(window_height) * ratio_xy;
-    glFrustum(-wx, wx, -window_height, window_height, front_plane, back_plane);
+    ;
 }
 //**************************************************************************
 // Funcion que se invoca cuando cambia el tamaño de la ventana
@@ -261,7 +272,11 @@ void Escena::redimensionar(int new_width, int new_height)
 {
     window_width = new_width / 10;
     window_height = new_height / 10;
-    change_projection(float(new_height) / float(new_width));
+    cameras[current_camera]->top = window_height/2;
+    cameras[current_camera]->right = window_width/2;
+    cameras[current_camera]->observe();
+    cameras[current_camera]->project();
+    
     glViewport(0, 0, new_width, new_height);
 }
 
@@ -270,20 +285,6 @@ void Escena::animar_modelo_jerarquico(void) {
         chipmunk->increment_animation_aut();
         bouncy_ball->increment_animation_aut();
     }
-}
-
-//**************************************************************************
-// Funcion para definir la transformación de vista (posicionar la camara)
-//***************************************************************************
-
-void Escena::change_observer()
-{
-    // posicion del observador
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(0.0, 0.0, -observer_distance);
-    glRotatef(observer_angle_y, 0.0, 1.0, 0.0);
-    glRotatef(observer_angle_x, 1.0, 0.0, 0.0);
 }
 
 Light* Escena::get_light(int n) {
@@ -302,6 +303,20 @@ DirectionalLight* Escena::get_directional_light(int n) {
         }
     }
     return nullptr;
+}
+
+Camera* Escena::get_camera(int n) {
+    if (n < cameras.size() && n >= 0) {
+        return cameras[n];
+    }
+    return nullptr;
+}
+
+void Escena::set_camera(int n) {
+    if (n < cameras.size() && n >= 0) {
+        current_camera = n;
+    }
+    cameras[current_camera]->project();
 }
 
 static void enable_polygon_mode(bool t, std::vector<Mesh3D*>& objects, int mode) {

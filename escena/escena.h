@@ -18,15 +18,10 @@
 #include "renderer_buffered.h"
 #include "directional_light.h"
 #include "positional_light.h"
+#include "camera.h"
 #include <vector>
 
 class Escena {
-    // ** PARÁMETROS DE LA CÁMARA (PROVISIONAL)
-
-    // variables que definen la posicion de la camara en coordenadas polares
-    GLfloat observer_distance;
-    GLfloat observer_angle_x;
-    GLfloat observer_angle_y;
 
     // variables que controlan la ventana y la transformacion de perspectiva
     GLfloat window_width;
@@ -34,9 +29,14 @@ class Escena {
     GLfloat front_plane;
     GLfloat back_plane;
 
+    std::unique_ptr<Camera> camera_0;
+    std::unique_ptr<Camera> camera_1;
+    std::unique_ptr<Camera> camera_2;
+    std::vector<Camera*> cameras;
+    int current_camera {0};
+
     // Transformación de cámara
     void change_projection(const float ratio_xy);
-    void change_observer();
 
     void clear_window();
 
@@ -117,6 +117,9 @@ class Escena {
     
     Light* get_light(int n);
     DirectionalLight* get_directional_light(int n);
+
+    Camera* get_camera(int n);
+    void set_camera(int n);
 
     bool teclaPulsada(unsigned char tecla1, int x, int y);
     void teclaEspecial(int tecla1, int x, int y);
