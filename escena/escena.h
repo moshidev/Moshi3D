@@ -35,8 +35,8 @@ class Escena {
     std::vector<Camera*> cameras;
     int current_camera {0};
 
-    // Transformación de cámara
-    void change_projection(const float ratio_xy);
+    Tupla2u mouse_last_coordinates {0,0};
+    bool mouse_displaced_since_click {false};
 
     void clear_window();
 
@@ -123,6 +123,8 @@ class Escena {
 
     bool teclaPulsada(unsigned char tecla1, int x, int y);
     void teclaEspecial(int tecla1, int x, int y);
+    void mouse_clicked(int button, int status, int x, int y);
+    void mouse_displaced(int x, int y);
 };
 
 #endif /* _ESCENA_H */

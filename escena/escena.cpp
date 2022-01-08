@@ -117,7 +117,8 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
     cameras.push_back(camera_2.get());
 
     for (auto c : cameras) {
-        c->displace({0,0,+200});
+        c->set_eye({0,0,200});
+        c->set_at({0,0,0});
     }
 
     tex_wood = std::make_shared<TextureObject>("resources/text-madera.jpg");
@@ -224,16 +225,22 @@ void Escena::teclaEspecial(int tecla1, int x, int y)
     float d = 4;
     switch (tecla1) {
     case GLUT_KEY_LEFT:
-        cameras[current_camera]->displace({-d, 0, 0});
+        cameras[current_camera]->displace_firstperson({-d, 0, 0});
         break;
     case GLUT_KEY_RIGHT:
-        cameras[current_camera]->displace({+d, 0, 0});
+        cameras[current_camera]->displace_firstperson({+d, 0, 0});
         break;
     case GLUT_KEY_UP:
-        cameras[current_camera]->displace({0, 0, -d});
+        cameras[current_camera]->displace_firstperson({0, 0, +d});
         break;
     case GLUT_KEY_DOWN:
-        cameras[current_camera]->displace({0, 0, +d});
+        cameras[current_camera]->displace_firstperson({0, 0, -d});
+        break;
+    case GLUT_KEY_F1:
+        cameras[current_camera]->displace_firstperson({0, +d, 0});
+        break;
+    case GLUT_KEY_F2:
+        cameras[current_camera]->displace_firstperson({0, -d, 0});
         break;
     case GLUT_KEY_PAGE_UP:
         cameras[current_camera]->zoom(1.2);
@@ -247,19 +254,25 @@ void Escena::teclaEspecial(int tecla1, int x, int y)
     
 }
 
-//**************************************************************************
-// Funcion para definir la transformación de proyeccion
-//
-// ratio_xy : relacción de aspecto del viewport ( == ancho(X) / alto(Y) )
-//
-//***************************************************************************
+void Escena::mouse_clicked(int button, int status, int x, int y) {
+    constexpr int button_right = 0, button_middle = 1, button_left = 2;
+    constexpr int status_clicked = 0, status_released = 1;
+    if (button == button_right) {
+        if (status == status_clicked) {
+            mouse_last_coordinates = Tupla2u{x, y};
+        }
+        else if (status == status_released) {
+            mouse_displaced_since_click = false;
+        }
+    }
+}
 
-void Escena::change_projection(const float ratio_xy)
-{
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    const float wx = float(window_height) * ratio_xy;
-    ;
+void Escena::mouse_displaced(int x, int y) {
+    mouse_displaced_since_click = true;
+    float angle_x_axis = ((float)mouse_last_coordinates[1]-y)/window_height * M_PI_4;
+    float angle_y_axis = ((float)mouse_last_coordinates[0]-x)/window_width * M_PI_4;
+    cameras[current_camera]->rotate_at(Tupla3f{angle_x_axis, angle_y_axis, 0});
+    mouse_last_coordinates = Tupla2u{x, y};
 }
 //**************************************************************************
 // Funcion que se invoca cuando cambia el tamaño de la ventana

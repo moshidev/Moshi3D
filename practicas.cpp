@@ -10,7 +10,7 @@
 #include "escena.h"
 
 // variable que contiene un puntero a la escena
-Escena *escena = nullptr;
+static Escena *escena = nullptr;
 
 //***************************************************************************
 // Funcion principal que redibuja la escena
@@ -20,7 +20,7 @@ Escena *escena = nullptr;
 // nuevo alto
 //***************************************************************************
 
-void draw_scene(void)
+static void draw_scene(void)
 {
     if (escena != nullptr) {
         escena->dibujar();
@@ -36,7 +36,7 @@ void draw_scene(void)
 // nuevo alto
 //***************************************************************************
 
-void change_window_size(int newWidth, int newHeight)
+static void change_window_size(int newWidth, int newHeight)
 {
     if (escena != nullptr) {
         escena->redimensionar(newWidth, newHeight);
@@ -53,7 +53,7 @@ void change_window_size(int newWidth, int newHeight)
 // posicion y del raton
 //***************************************************************************
 
-void normal_keys(unsigned char tecla, int x, int y)
+static void normal_keys(unsigned char tecla, int x, int y)
 {
     int salir = 0;
 
@@ -71,6 +71,20 @@ void normal_keys(unsigned char tecla, int x, int y)
     }
 }
 
+static void mouse_clicked(int button, int status, int x, int y) {
+    if (escena != nullptr) {
+        escena->mouse_clicked(button, status, x, y);
+    }
+    glutPostRedisplay();
+}
+
+static void mouse_displaced(int x, int y) {
+    if (escena != nullptr) {
+        escena->mouse_displaced(x, y);
+    }
+    glutPostRedisplay();
+}
+
 //***************************************************************************
 // Funcion llamada cuando se produce aprieta una tecla especial
 //
@@ -81,7 +95,7 @@ void normal_keys(unsigned char tecla, int x, int y)
 
 //***************************************************************************
 
-void special_keys(int tecla, int x, int y)
+static void special_keys(int tecla, int x, int y)
 {
     if (escena != NULL) {
         escena->teclaEspecial(tecla, x, y);
@@ -89,7 +103,7 @@ void special_keys(int tecla, int x, int y)
     glutPostRedisplay();
 }
 
-void glut_idle_handler(void) {
+static void glut_idle_handler(void) {
     if (escena != NULL) {
         escena->animar_modelo_jerarquico();
     }
@@ -146,6 +160,9 @@ int main(int argc, char **argv)
     // asignación de la funcion llamada "tecla_Especial" al evento
     // correspondiente
     glutSpecialFunc(special_keys);
+
+    glutMouseFunc(mouse_clicked);
+    glutMotionFunc(mouse_displaced);
 
     glutIdleFunc(glut_idle_handler);
 
