@@ -24,6 +24,7 @@ public:
     void rotate_eye(const Tupla3f& angles);
     void rotate_at(const Tupla3f& angles);
     void displace(const Tupla3f& d);
+    void displace_firstperson(const Tupla3f& d);
     void zoom(float factor);
     void observe(void) const;
     void project(void) const;

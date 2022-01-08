@@ -1,5 +1,4 @@
 #include "camera.h"
-#include <iostream>
 
 Camera::Camera(Type type, float top, float right, float near, float far)
 :type{type}, top{top}, right{right}, near{near}, far{far}
@@ -39,6 +38,17 @@ void Camera::rotate_at(const Tupla3f& angles) {
 void Camera::displace(const Tupla3f& d) {
     eye = eye + d;
     at = at + d;
+}
+
+void Camera::displace_firstperson(const Tupla3f& d) {
+    Tupla3f at_v = (at - eye).normalized();
+    Tupla3f right_v = at_v.cross(up).normalized();
+    Tupla3f up_v = right_v.cross(at_v).normalized();
+    at_v = at_v * d[2];
+    right_v = right_v * d[0];
+    up_v = up_v * d[1];
+    eye = eye + at_v + right_v + up_v;
+    at = at + at_v + right_v + up_v;
 }
 
 void Camera::zoom(float factor) {
