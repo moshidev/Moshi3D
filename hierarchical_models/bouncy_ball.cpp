@@ -37,6 +37,14 @@ void BouncyBall::apply_lights(void) const {
     root.apply_lights();
 }
 
+void BouncyBall::set_texture(const std::shared_ptr<TextureObject>& texture) {
+    ball_mesh->set_texture(texture);
+}
+
+void BouncyBall::set_material(const Material& material) {
+    ball_mesh->set_material(material);
+}
+
 void BouncyBall::increment_animation_aut(void) {
     ball->second->get_animation().increment_anim_loop();
 }

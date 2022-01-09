@@ -28,8 +28,11 @@ public:
     BouncyBall(const std::shared_ptr<Sphere>& sphere);
     BouncyBall(const std::shared_ptr<Sphere>& sphere, const std::shared_ptr<PositionalLight>& light);
 
+    inline CompositionNode& get_root(void) { return root; };
     void draw(const Renderer& r) const;
     void apply_lights(void) const;
+    void set_texture(const std::shared_ptr<TextureObject>& texture);
+    void set_material(const Material& material);
     void increment_animation_aut(void);
     void increment_animation_man(void);
     void multiply_speed_factor(float factor);
