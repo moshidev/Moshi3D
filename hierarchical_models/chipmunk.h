@@ -28,6 +28,7 @@ public:
         kBody, kLeg_F_R, kLeg_F_L, kLeg_B_R, kLeg_B_L, kEar_R, kEar_L, kTail, kPARTS_SIZE
     };
     Chipmunk();
+    inline CompositionNode& get_root(void) { return root; };
 
     void draw(const Renderer& r) const;
     void apply_to_meshes(const std::function<void(Mesh3D&)>& func);
