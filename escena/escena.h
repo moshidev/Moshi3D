@@ -18,6 +18,7 @@
 #include "renderer_buffered.h"
 #include "directional_light.h"
 #include "positional_light.h"
+#include "proj_final.h"
 #include "camera.h"
 #include <vector>
 
@@ -60,6 +61,9 @@ class Escena {
     std::shared_ptr<TextureObject> tex_123;
     std::shared_ptr<TextureObject> tex_wood;
     std::shared_ptr<TextureObject> tex_cola_can;
+    std::unique_ptr<ProjFinal> proj_final;
+
+    bool new_scene_enabled{true};
 
     // Renderizadores
     RendererImmediate immediate_renderer;
@@ -100,12 +104,14 @@ class Escena {
     void render_solid(bool t);
     void render_chess(bool t);
     void render_shaded(bool t);
+    inline void show_new_scene(bool t) { new_scene_enabled = t; }
 
     inline bool is_rendering_points(void) { return objeto_actual->get_polygon_modes().find(GL_POINT) != objeto_actual->get_polygon_modes().end();}
     inline bool is_rendering_lines(void) { return objeto_actual->get_polygon_modes().find(GL_LINE) != objeto_actual->get_polygon_modes().end();}
     inline bool is_rendering_solid(void) { return objeto_actual->get_polygon_modes().find(GL_FILL) != objeto_actual->get_polygon_modes().end();}
     inline bool is_rendering_chess(void) { return objeto_actual->is_chess_mode_enabled(); }
     inline bool is_rendering_shaded(void) { return objeto_actual->is_shade_mode_enabled(); }
+    inline bool is_showing_new_scene(void) { return new_scene_enabled; }
 
     inline void enable_cube(bool t) { objeto_actual = t ? cubo : nullptr; }
     inline void enable_tetrahedron(bool t) { objeto_actual = t ? tetraedro : nullptr; }
@@ -125,6 +131,7 @@ class Escena {
     void teclaEspecial(int tecla1, int x, int y);
     void mouse_clicked(int button, int status, int x, int y);
     void mouse_displaced(int x, int y);
+    void select_object(int x, int y);
 };
 
 #endif /* _ESCENA_H */

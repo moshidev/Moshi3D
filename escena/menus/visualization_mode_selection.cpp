@@ -42,6 +42,10 @@ bool VisualizationModeSelection::handler(Escena& e, unsigned char tecla, int x, 
             current_menu->update(e, 0, x, y);
         }
         break;
+    case 'N':
+        std::cout << "Habilitamos/deshabilitamos la escena antigua" << std::endl;
+        e.show_new_scene(!e.is_showing_new_scene());
+        break;
     case 'Z':
         std::cout << "Activamos GL_SMOOTH" << std::endl;
         glShadeModel(GL_SMOOTH);
@@ -71,6 +75,7 @@ bool VisualizationModeSelection::handler(Escena& e, unsigned char tecla, int x, 
         std::cout << "[ C ] - Activamos visualización RGB si el objeto lo soporta.\n";
         std::cout << "[ T ] - Habilitamos la visualización de tapas.\n";
         std::cout << "[ G ] - Deshabilitamos la visualización de tapas.\n";
+        std::cout << "[ N ] - Habilitamos/deshabilitamos la escena antigua.\n";
         std::cout << "[ C ] - Selección de cámara.\n";
         std::cout << "[ Q ] - Volvemos al menú principal." << std::endl;
         break;

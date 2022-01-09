@@ -5,6 +5,8 @@
 #include "translation.h"
 #include "rotation.h"
 #include "chipmunk.h"
+#include "room.h"
+#include "rectangle.h"
 #include "camera.h"
 
 Escena::Escena()
@@ -97,6 +99,8 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
     objects.push_back(necoarc);
     objects.insert(objects.end(), revobjects.begin(), revobjects.end());
 
+    proj_final = std::make_unique<ProjFinal>();
+
     directional_light_0 = new DirectionalLight({M_PI_4/3, -M_PI_4/3});
     directional_light_1 = new DirectionalLight({M_PI, 0});
     directional_light_2 = new DirectionalLight({0, M_PI/2});
@@ -117,7 +121,7 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
     cameras.push_back(camera_2.get());
 
     for (auto c : cameras) {
-        c->set_eye({0,0,200});
+        c->set_eye({200,200,400});
         c->set_at({0,0,0});
     }
 
@@ -132,6 +136,7 @@ void Escena::inicializar(int UI_window_width, int UI_window_height)
     this->render_shaded(true);
 
     cono->set_texture(tex_cola_can);
+    lata->set_texture(tex_cola_can);
 
     menu.update(*this, 0, 0, 0);
 }
@@ -165,20 +170,6 @@ void Escena::dibujar()
         }
     }
 
-    Transformation::push_matrix();
-        Translation::apply({2,1,0});
-        bouncy_ball->apply_lights();
-        bouncy_ball->draw(*renderer);
-        Translation::apply({0,-1,0});
-        cubo->draw(*renderer);
-    Transformation::pop_matrix();
-    Transformation::push_matrix();
-        Translation::apply({-2,0,0});
-        Rotation::apply({0,M_PI_2*3/2,0});
-        cono->draw(*renderer);
-    Transformation::pop_matrix();
-    chipmunk->draw(*renderer);
-    
     if (objeto_actual != nullptr) {
         Transformation::push_matrix();
             Translation::apply({0,4,0});
@@ -186,32 +177,53 @@ void Escena::dibujar()
         Transformation::pop_matrix();
     }
 
-    Transformation::push_matrix();
-    Translation::apply({0,0,-4});
-        int i = 0;
-        glPushMatrix();
-            glTranslatef(0, 0, 0);
-            for (auto o : revobjects) {
-                glPushMatrix();
-                    glTranslatef(-5+i*2, 0, 0);
-                    o->draw(*renderer);
-                glPopMatrix();
-                i++;
-            }
-        glPopMatrix();
+    if (new_scene_enabled) {
+        proj_final->apply_lights();
+        proj_final->draw(*renderer);
+    }
+    else {
+        Transformation::push_matrix();
+            Translation::apply({2,1,0});
+            bouncy_ball->apply_lights();
+            bouncy_ball->draw(*renderer);
+            Translation::apply({0,-1,0});
+            cubo->draw(*renderer);
+        Transformation::pop_matrix();
+        Transformation::push_matrix();
+            Translation::apply({-2,0,0});
+            Rotation::apply({0,M_PI_2*3/2,0});
+            cono->draw(*renderer);
+        Transformation::pop_matrix();
+        chipmunk->draw(*renderer);
 
-        i = 0;
-        glPushMatrix();
-            glTranslatef(0, 0, -3);
-            for (auto o : objects) {
-                glPushMatrix();
-                    glTranslatef(-5+i*3, 0, 0);
-                    o->draw(*renderer);
-                glPopMatrix();
-                i++;
-            }
-        glPopMatrix();
-    Transformation::pop_matrix();
+        Transformation::push_matrix();
+            Translation::apply({0,0,-4});
+            int i = 0;
+            glPushMatrix();
+                glTranslatef(0, 0, 0);
+                for (auto o : revobjects) {
+                    glPushMatrix();
+                        glTranslatef(-5+i*2, 0, 0);
+                        o->draw(*renderer);
+                    glPopMatrix();
+                    i++;
+                }
+            glPopMatrix();
+
+            i = 0;
+            glPushMatrix();
+                glTranslatef(0, 0, -3);
+                for (auto o : objects) {
+                    glPushMatrix();
+                        glTranslatef(-5+i*3, 0, 0);
+                        o->draw(*renderer);
+                    glPopMatrix();
+                    i++;
+                }
+            glPopMatrix();
+        Transformation::pop_matrix();
+    }
+    
 }
 
 bool Escena::teclaPulsada(unsigned char tecla, int x, int y)
@@ -222,7 +234,7 @@ bool Escena::teclaPulsada(unsigned char tecla, int x, int y)
 
 void Escena::teclaEspecial(int tecla1, int x, int y)
 {
-    float d = 4;
+    float d = 12;
     switch (tecla1) {
     case GLUT_KEY_LEFT:
         cameras[current_camera]->displace_firstperson({-d, 0, 0});
@@ -255,13 +267,16 @@ void Escena::teclaEspecial(int tecla1, int x, int y)
 }
 
 void Escena::mouse_clicked(int button, int status, int x, int y) {
-    constexpr int button_right = 0, button_middle = 1, button_left = 2;
+    constexpr int button_right = 0;
     constexpr int status_clicked = 0, status_released = 1;
     if (button == button_right) {
         if (status == status_clicked) {
             mouse_last_coordinates = Tupla2u{x, y};
         }
         else if (status == status_released) {
+            if (!mouse_displaced_since_click) {
+                select_object(x, y);
+            }
             mouse_displaced_since_click = false;
         }
     }
@@ -269,11 +284,16 @@ void Escena::mouse_clicked(int button, int status, int x, int y) {
 
 void Escena::mouse_displaced(int x, int y) {
     mouse_displaced_since_click = true;
-    float angle_x_axis = ((float)mouse_last_coordinates[1]-y)/window_height * M_PI_4;
-    float angle_y_axis = ((float)mouse_last_coordinates[0]-x)/window_width * M_PI_4;
-    cameras[current_camera]->rotate_at(Tupla3f{angle_x_axis, angle_y_axis, 0});
+    float angle_x_axis = ((float)mouse_last_coordinates[1]-y)/window_height * M_PI_4 / 2;
+    float angle_y_axis = ((float)mouse_last_coordinates[0]-x)/window_width * M_PI_4/ 2;
+    cameras[current_camera]->rotate_eye(Tupla3f{angle_x_axis, angle_y_axis, 0});
     mouse_last_coordinates = Tupla2u{x, y};
 }
+
+void Escena::select_object(int x, int y) {
+    
+}
+
 //**************************************************************************
 // Funcion que se invoca cuando cambia el tamaño de la ventana
 //***************************************************************************
@@ -294,6 +314,7 @@ void Escena::animar_modelo_jerarquico(void) {
     if (chipmunk_aut_anim) {
         chipmunk->increment_animation_aut();
         bouncy_ball->increment_animation_aut();
+        proj_final->increment_animation_aut();
     }
 }
 
@@ -347,6 +368,7 @@ void Escena::render_points(bool t) {
     auto f = [t] (Mesh3D& obj) { t ? obj.enable_polygon_modes(GL_POINT) : obj.disable_polygon_modes(GL_POINT); };
     chipmunk->apply_to_meshes(f);
     bouncy_ball->apply_to_meshes(f);
+    proj_final->apply_to_meshes(f);
 }
 
 void Escena::render_lines(bool t) {
@@ -354,6 +376,7 @@ void Escena::render_lines(bool t) {
     auto f = [t] (Mesh3D& obj) { t ? obj.enable_polygon_modes(GL_LINE) : obj.disable_polygon_modes(GL_LINE); };
     chipmunk->apply_to_meshes(f);
     bouncy_ball->apply_to_meshes(f);
+    proj_final->apply_to_meshes(f);
 }
 
 void Escena::render_solid(bool t) {
@@ -361,6 +384,7 @@ void Escena::render_solid(bool t) {
     auto f = [t] (Mesh3D& obj) { t ? obj.enable_polygon_modes(GL_FILL) : obj.disable_polygon_modes(GL_FILL); };
     chipmunk->apply_to_meshes(f);
     bouncy_ball->apply_to_meshes(f);
+    proj_final->apply_to_meshes(f);
 }
 
 void Escena::render_chess(bool t) {
@@ -370,6 +394,7 @@ void Escena::render_chess(bool t) {
     auto f = [t] (Mesh3D& obj) { obj.enable_chess_mode(t); };
     chipmunk->apply_to_meshes(f);
     bouncy_ball->apply_to_meshes(f);
+    proj_final->apply_to_meshes(f);
 }
 
 void Escena::render_covers(bool t) {
@@ -385,4 +410,5 @@ void Escena::render_shaded(bool t) {
     auto f = [t] (Mesh3D& obj) { obj.enable_shaded_mode(t); };
     chipmunk->apply_to_meshes(f);
     bouncy_ball->apply_to_meshes(f);
+    proj_final->apply_to_meshes(f);
 }
