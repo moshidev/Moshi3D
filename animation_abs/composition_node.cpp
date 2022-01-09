@@ -22,7 +22,7 @@ void CompositionNode::apply_location(const Location& l) const {
     Scaling::apply(l.scaling);
 }
 
-void CompositionNode::draw(const Renderer& r) const {
+void CompositionNode::draw(Renderer& r) const {
     Transformation::push_matrix();
     apply_location(this->location);
     animation.apply();

@@ -10,7 +10,7 @@
 
 class RendererBuffered : public Renderer {
     public:
-    void render(const Mesh3D& m) const;
+    void render(const Mesh3D& m);
 };
 
 #endif /* MOSHI3D_BUFFERED_RENDERER_H_ */

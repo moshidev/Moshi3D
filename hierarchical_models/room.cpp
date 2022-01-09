@@ -24,7 +24,7 @@ Room::Room(const Tupla3f& d) {
     build_wall(floor, cube_mesh, {d[1], wall_width, d[0]}, {0,d[2]+wall_width/2,0});
 }
 
-void Room::draw(const Renderer& r) const {
+void Room::draw(Renderer& r) const {
     root.draw(r);
 }
 

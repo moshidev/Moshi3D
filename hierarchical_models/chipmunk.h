@@ -30,7 +30,7 @@ public:
     Chipmunk();
     inline CompositionNode& get_root(void) { return root; };
 
-    void draw(const Renderer& r) const;
+    void draw(Renderer& r) const;
     void apply_to_meshes(const std::function<void(Mesh3D&)>& func);
     
     void increment_animation_aut(void);

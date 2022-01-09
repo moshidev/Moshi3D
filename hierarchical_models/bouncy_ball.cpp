@@ -29,7 +29,7 @@ BouncyBall::BouncyBall(const std::shared_ptr<Sphere>& sphere, const std::shared_
     ball = build_ball(root, ball_mesh, light);
 }
 
-void BouncyBall::draw(const Renderer& r) const {
+void BouncyBall::draw(Renderer& r) const {
     root.draw(r);
 }
 

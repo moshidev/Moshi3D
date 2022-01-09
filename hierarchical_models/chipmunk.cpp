@@ -117,7 +117,7 @@ Chipmunk::Chipmunk() {
     init_meshes_vector();
 }
 
-void Chipmunk::draw(const Renderer& r) const {
+void Chipmunk::draw(Renderer& r) const {
     root.draw(r);
 }
 

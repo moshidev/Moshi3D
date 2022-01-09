@@ -10,7 +10,7 @@
 
 class RendererImmediate : public Renderer {
     public:
-    void render(const Mesh3D& m) const;
+    void render(const Mesh3D& m);
 };
 
 #endif /* MOSHI3D_IMMEDIATE_RENDERER_H_ */

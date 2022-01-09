@@ -80,7 +80,7 @@ public:
     inline Animation& get_animation(void) { return animation; }
     inline const Animation& get_animation(void) const { return animation; }
 
-    void draw(const Renderer& r) const;
+    void draw(Renderer& r) const;
     void apply_lights(void) const;
     void execute_preorder(const std::function<void(CompositionNode&)>& f);
 };

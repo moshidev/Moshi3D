@@ -13,7 +13,7 @@ Mesh3D::Mesh3D()
 
 Mesh3D::~Mesh3D() {}
 
-void Mesh3D::draw(const Renderer& r) const {
+void Mesh3D::draw(Renderer& r) const {
     r.render(*this);
 }
 
