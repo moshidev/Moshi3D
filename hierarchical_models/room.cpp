@@ -27,3 +27,7 @@ Room::Room(const Tupla3f& d) {
 void Room::draw(const Renderer& r) const {
     root.draw(r);
 }
+
+void Room::apply_to_meshes(const std::function<void(Mesh3D&)>& func) {
+    func(*cube_mesh);
+}

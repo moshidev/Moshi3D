@@ -20,6 +20,7 @@ class Room : public Renderizable {
 public:
     Room(const Tupla3f& lenwidthdepth);
     inline CompositionNode& get_root(void) { return root; };
+    void apply_to_meshes(const std::function<void(Mesh3D&)>& func);
 
     void draw(const Renderer& r) const;
 };
