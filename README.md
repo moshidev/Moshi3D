@@ -1,4 +1,4 @@
-# Prácticas para la asignatura Ingeniería Gráfica
+# Prácticas para la asignatura Informática Gráfica
 
 `make configure` para inicializar la estructura necesaria para la compilación
 
