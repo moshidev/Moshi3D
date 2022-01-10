@@ -36,7 +36,6 @@ public:
     void increment_animation_man(void);
     void multiply_speed_factor(float factor);
     void apply_to_meshes(const std::function<void(Mesh3D&)>& func);
-    CompositionNode& select_object(int x, int y);
 };
 
 #endif /* MOSHI3D_PROJFINAL_H_ */

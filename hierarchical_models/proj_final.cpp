@@ -80,13 +80,3 @@ void ProjFinal::apply_to_meshes(const std::function<void(Mesh3D&)>& func) {
     func(*aurora);
     func(*cola_can);
 }
-
-CompositionNode& ProjFinal::select_object(int x, int y) {
-    Tupla3u color{254,254,254};
-    RendererSelector r{color};
-    draw(r);
-    GLubyte[3] color_read;
-    glReadPixels(x, y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, color_read);
-    
-    return root;
-}
