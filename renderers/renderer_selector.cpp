@@ -11,38 +11,10 @@ static void set_vertex_pointer(const VertexBuffer<Tupla3f>& vb) {
     vb.unbind();
 }
 
-static void set_color_pointer(const VertexBuffer<Tupla3f>& vb) {
-    vb.bind();
-    glColorPointer(3, GL_FLOAT, 0, 0);
-    vb.unbind();
-}
-
-static void set_normal_pointer(const VertexBuffer<Tupla3f>& vb) {
-    vb.bind();
-    glNormalPointer(GL_FLOAT, 0, 0);
-    vb.unbind();
-}
-
-static void set_texture_coordinates(const VertexBuffer<Tupla2f>& vb) {
-    vb.bind();
-    glTexCoordPointer(2, GL_FLOAT, 0, 0);
-    vb.unbind();
-}
-
 static void draw_elements_from_indices(const IndexBuffer& ib, GLsizei count, GLsizei offset=0) {
     ib.bind();
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (void*)(offset*sizeof(unsigned int)));
     ib.unbind();
-}
-
-static void update_lighting_status(bool lighting_enabled, bool affected_by_light) {
-    bool currently_enabled = Light::is_lighting_enabled();
-    if (currently_enabled && !affected_by_light) {
-        Light::enable_lighting(false);
-    }
-    else if (lighting_enabled && !currently_enabled) {
-        Light::enable_lighting(true);
-    }
 }
 
 RendererSelector::RendererSelector(const Tupla3u& color_ini)
