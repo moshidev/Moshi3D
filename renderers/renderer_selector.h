@@ -14,6 +14,7 @@ class RendererSelector : public Renderer {
 public:
     RendererSelector(const Tupla3u& color_ini);
     void render(const Mesh3D& m);
+    inline void set_color(const Tupla3u& color) { this->color = color; }
 };
 
 #endif /* MOSHI3D_SELECTOR_RENDERER_H_ */
