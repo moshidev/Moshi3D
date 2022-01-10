@@ -50,13 +50,6 @@ RendererSelector::RendererSelector(const Tupla3u& color_ini)
 {   }
 
 void RendererSelector::render(const Mesh3D& m) {
-    for (int i = 0; i < 3; i++) {
-        if (((int)color[i])-20 >= 0) {
-            color[i] = color[i]-20;
-            break;
-        }
-    }
-
     bool lights_enabled = Light::is_lighting_enabled();
     Light::enable_lighting(false);
     
@@ -81,4 +74,11 @@ void RendererSelector::render(const Mesh3D& m) {
     }
 
     Light::enable_lighting(lights_enabled);
+
+    for (int i = 0; i < 3; i++) {
+        if (color[i] > 0) {
+            color[i] = color[i]-1;
+            break;
+        }
+    }
 }
