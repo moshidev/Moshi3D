@@ -8,6 +8,7 @@
 #include "room.h"
 #include "rectangle.h"
 #include "camera.h"
+#include "renderer_selector.h"
 
 Escena::Escena()
 {
@@ -176,7 +177,7 @@ void Escena::dibujar()
             objeto_actual->draw(*renderer);
         Transformation::pop_matrix();
     }
-
+    
     if (new_scene_enabled) {
         proj_final->apply_lights();
         proj_final->draw(*renderer);
@@ -262,6 +263,9 @@ void Escena::teclaEspecial(int tecla1, int x, int y)
         cameras[current_camera]->zoom(1.0/1.2);
         cameras[current_camera]->project();
         break;
+    case GLUT_KEY_F3:
+        object_selected = false;
+        break;
     }
     
 }
@@ -274,8 +278,18 @@ void Escena::mouse_clicked(int button, int status, int x, int y) {
             mouse_last_coordinates = Tupla2u{x, y};
         }
         else if (status == status_released) {
-            if (!mouse_displaced_since_click) {
-                select_object(x, y);
+            if (!mouse_displaced_since_click && !new_scene_enabled) {
+                Mesh3D* mesh = select_object(x, y);
+                if (mesh == cubo) {
+                    object_selected = true;
+                    cameras[current_camera]->set_at({100,0,0});
+                    cameras[current_camera]->set_eye({100,200,200});
+                }
+                else if (mesh == cono) {
+                    object_selected = true;
+                    cameras[current_camera]->set_at({-100,0,0});
+                    cameras[current_camera]->set_eye({-100,200,200});
+                }
             }
             mouse_displaced_since_click = false;
         }
@@ -286,12 +300,60 @@ void Escena::mouse_displaced(int x, int y) {
     mouse_displaced_since_click = true;
     float angle_x_axis = ((float)mouse_last_coordinates[1]-y)/window_height * M_PI_4 / 2;
     float angle_y_axis = ((float)mouse_last_coordinates[0]-x)/window_width * M_PI_4/ 2;
-    cameras[current_camera]->rotate_eye(Tupla3f{angle_x_axis, angle_y_axis, 0});
+    Tupla3f rot{angle_x_axis, angle_y_axis, 0};
+    if (object_selected) {
+        cameras[current_camera]->rotate_at(rot);
+    }
+    else {
+        cameras[current_camera]->rotate_eye(rot);
+    }
     mouse_last_coordinates = Tupla2u{x, y};
 }
 
-void Escena::select_object(int x, int y) {
+static bool operator==(const Tupla3u& a, const Tupla3u& b) {
+    return a[0] == b[0] && a[1] == b[1] && a[2] == b[2];
+}
+
+Mesh3D* Escena::select_object(int x, int y) {
+    const Tupla3u cube_c{0,255,0}, cone_c{0,0,255};
+    RendererSelector rsel{cube_c};
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar la pantalla
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    cameras[current_camera]->observe();
+    Scaling::apply({50,50,50});
+    Transformation::push_matrix();
+        Translation::apply({2,0,0});
+        rsel.set_color(cube_c);
+        cubo->draw(rsel);
+    Transformation::pop_matrix();
+    Transformation::push_matrix();
+        Translation::apply({-2,0,0});
+        Rotation::apply({0,M_PI_2*3/2,0});
+        rsel.set_color(cone_c);
+        cono->draw(rsel);
+    Transformation::pop_matrix();
+
+    GLint viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    GLubyte color_read[3];
+    glReadPixels(x, viewport[3]-y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, color_read);
+
+    Tupla3u color_selected{color_read[0], color_read[1], color_read[2]};
+    if (x != 0) {
+        for (int i = 0; i < 3; i++) {
+            std::cout << +color_read[i] << ", ";
+        }
+        std::cout << std::endl;
+    }
     
+    if (color_selected == cube_c) {
+        return cubo;
+    }
+    else if (color_selected == cone_c) {
+        return cono;
+    }
+    return nullptr;
 }
 
 //**************************************************************************

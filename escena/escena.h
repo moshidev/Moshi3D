@@ -64,6 +64,7 @@ class Escena {
     std::unique_ptr<ProjFinal> proj_final;
 
     bool new_scene_enabled{true};
+    bool object_selected{false};
 
     // Renderizadores
     RendererImmediate immediate_renderer;
@@ -131,7 +132,7 @@ class Escena {
     void teclaEspecial(int tecla1, int x, int y);
     void mouse_clicked(int button, int status, int x, int y);
     void mouse_displaced(int x, int y);
-    void select_object(int x, int y);
+    Mesh3D* select_object(int x, int y);
 };
 
 #endif /* _ESCENA_H */
