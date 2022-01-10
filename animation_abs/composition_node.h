@@ -74,11 +74,13 @@ public:
     inline iterator add_child(const std::shared_ptr<CompositionNode>& c) { return childs.insert(childs.begin(), {{}, c}); }
     inline iterator add_child(const Location& loc, const std::shared_ptr<CompositionNode>& c) { return childs.insert(childs.begin(), {loc, c}); }
     inline obj_iterator add_obj(const Object& obj) { return objects.insert(objects.begin(), obj); }
+    inline const obj_container_t& get_objects(void) { return objects; }
 
     inline Location& get_location(void) { return location; }
     inline const Location& get_location(void) const { return location; }
     inline Animation& get_animation(void) { return animation; }
     inline const Animation& get_animation(void) const { return animation; }
+    inline const node_container_t& get_childs(void) { return childs; }
 
     void draw(Renderer& r) const;
     void apply_lights(void) const;
