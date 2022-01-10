@@ -13,6 +13,16 @@ public:
     enum Type {
         kOrthographic, kPerspective
     };
+    
+private:
+    Tupla3f eye{0,0,1};
+    Tupla3f at{0,0,0};
+    Tupla3f up{0,1,0};
+
+    Type type;
+    void rotate(const Tupla3f& angles, Tupla3f& v);
+
+public:
     float right;
     float top;
     float near;
@@ -29,14 +39,6 @@ public:
     void observe(void) const;
     void project(void) const;
     inline void set_projection_type(Type t) { type = t; };
-
-private:
-    Tupla3f eye{0,0,1};
-    Tupla3f at{0,0,0};
-    Tupla3f up{0,1,0};
-
-    Type type;
-    void rotate(const Tupla3f& angles, Tupla3f& v);
 };
 
 #endif /* MOSHI3D_CAMERA_H_ */

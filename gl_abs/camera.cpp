@@ -1,7 +1,7 @@
 #include "camera.h"
 
 Camera::Camera(Type type, float top, float right, float near, float far)
-:type{type}, top{top}, right{right}, near{near}, far{far}
+:type{type}, right{right}, top{top}, near{near}, far{far}
 {   }
 
 void Camera::rotate(const Tupla3f& angles, Tupla3f& v) {
