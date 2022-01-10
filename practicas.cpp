@@ -85,6 +85,13 @@ static void mouse_displaced(int x, int y) {
     glutPostRedisplay();
 }
 
+static void mouse_displaced_passive(int x, int y) {
+    if (escena != nullptr) {
+        escena->mouse_displaced_passive(x, y);
+    }
+    glutPostRedisplay();
+}
+
 //***************************************************************************
 // Funcion llamada cuando se produce aprieta una tecla especial
 //
@@ -163,6 +170,7 @@ int main(int argc, char **argv)
 
     glutMouseFunc(mouse_clicked);
     glutMotionFunc(mouse_displaced);
+    glutPassiveMotionFunc(mouse_displaced_passive);
 
     glutIdleFunc(glut_idle_handler);
 

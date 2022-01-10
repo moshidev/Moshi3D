@@ -65,6 +65,8 @@ class Escena {
 
     bool new_scene_enabled{true};
     bool object_selected{false};
+    Mesh3D* last_highlighted_mesh{nullptr};
+    Material last_highlighted_material;
 
     // Renderizadores
     RendererImmediate immediate_renderer;
@@ -132,6 +134,7 @@ class Escena {
     void teclaEspecial(int tecla1, int x, int y);
     void mouse_clicked(int button, int status, int x, int y);
     void mouse_displaced(int x, int y);
+    void mouse_displaced_passive(int x, int y);
     Mesh3D* select_object(int x, int y);
 };
 

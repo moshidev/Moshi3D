@@ -310,6 +310,22 @@ void Escena::mouse_displaced(int x, int y) {
     mouse_last_coordinates = Tupla2u{x, y};
 }
 
+void Escena::mouse_displaced_passive(int x, int y) {
+    if (!new_scene_enabled) {
+        Mesh3D* mesh = select_object(x, y);
+        if (last_highlighted_mesh && !mesh) {
+            last_highlighted_mesh->set_material(last_highlighted_material);
+            last_highlighted_mesh = nullptr;
+        }
+        else if (!last_highlighted_mesh && mesh) {
+            Material blanco_difuso{{1, 1, 1, 1}, {0, 0, 0, 1}, {0.5, 0.5, 0.5, 1}, 64};  // src: http://devernay.free.fr/cours/opengl/materials.html
+            last_highlighted_material = mesh->get_material();
+            last_highlighted_mesh = mesh;
+            mesh->set_material(blanco_difuso);
+        }
+    }
+}
+
 static bool operator==(const Tupla3u& a, const Tupla3u& b) {
     return a[0] == b[0] && a[1] == b[1] && a[2] == b[2];
 }
@@ -340,12 +356,6 @@ Mesh3D* Escena::select_object(int x, int y) {
     glReadPixels(x, viewport[3]-y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, color_read);
 
     Tupla3u color_selected{color_read[0], color_read[1], color_read[2]};
-    if (x != 0) {
-        for (int i = 0; i < 3; i++) {
-            std::cout << +color_read[i] << ", ";
-        }
-        std::cout << std::endl;
-    }
     
     if (color_selected == cube_c) {
         return cubo;
