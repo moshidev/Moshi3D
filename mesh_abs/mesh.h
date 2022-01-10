@@ -43,6 +43,7 @@ public:
     /* Métodos get para obtener la información a renderizar */
     inline const std::list<Data>& get_data_list(void) const { return current_data_list; }
     inline void set_material(const Material& m) { material = m; }
+    inline const Material& get_material(void) const { return material; } 
     void set_texture(const std::shared_ptr<TextureObject>& texture);
 
 protected:
